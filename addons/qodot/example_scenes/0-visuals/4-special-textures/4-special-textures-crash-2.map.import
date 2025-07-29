@@ -1,0 +1,13 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+path="res://.import/4-special-textures-crash-2.map-5a7f1e3aaf6fb2d6a1612c15fb071bee.tres"
+
+[deps]
+
+source_file="res://addons/qodot/example_scenes/0-visuals/4-special-textures/4-special-textures-crash-2.map"
+dest_files=[ "res://.import/4-special-textures-crash-2.map-5a7f1e3aaf6fb2d6a1612c15fb071bee.tres" ]
+
+[params]
+

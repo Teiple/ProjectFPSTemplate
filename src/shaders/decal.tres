@@ -1,0 +1,69 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+render_mode async_visible,blend_mix,depth_draw_never,cull_back,diffuse_burley,specular_schlick_ggx;
+
+uniform sampler2D albedo : hint_albedo;
+uniform vec4 albedo_tint : hint_color = vec4(1.0);
+uniform float texture_scale = 1.0;
+uniform float decal_thickness = 0.01;
+uniform sampler2D normal_map : hint_normal;
+uniform float normal_scale = 5.0;
+uniform float specular = 0.5;
+uniform float metallic = 0.0;
+uniform float roughness : hint_range(0,1) = 1.0;
+
+varying mat3 decal_basis;
+varying vec3 decal_position;
+varying vec3 local_scale;
+
+void vertex()
+{
+	decal_position = WORLD_MATRIX[3].xyz;
+
+	vec3 right = WORLD_MATRIX[0].xyz;
+	vec3 up = WORLD_MATRIX[1].xyz;
+	vec3 forward = WORLD_MATRIX[2].xyz;
+
+	local_scale = vec3(length(right), length(up), length(forward));
+	decal_basis = mat3(
+		normalize(right),
+		normalize(up),
+		normalize(forward)
+	);
+}
+
+void fragment()
+{
+	float depth = texture(DEPTH_TEXTURE, SCREEN_UV).r;
+	vec3 screen_color  = texture(SCREEN_TEXTURE, SCREEN_UV).rgb;
+	
+	vec3 ndc = vec3(SCREEN_UV, depth) * 2.0 - 1.0;
+	vec4 world_pos4 = CAMERA_MATRIX * INV_PROJECTION_MATRIX * vec4(ndc, 1.0);
+	vec3 world_pos = world_pos4.xyz / world_pos4.w;
+
+	vec3 rel = world_pos - decal_position;
+	vec3 local_pos = transpose(decal_basis) * rel; // inverse rotation
+
+	// Bounds check (Z limited by decal_thickness)
+	vec3 scaled_bounds = vec3(texture_scale, texture_scale, decal_thickness) * local_scale;
+	if (abs(local_pos.x) > scaled_bounds.x || abs(local_pos.y) > scaled_bounds.y || abs(local_pos.z) > scaled_bounds.z)
+		discard;
+
+	vec2 uv = (local_pos.xy / (texture_scale * local_scale.xy));
+	uv.y = -uv.y;
+	uv = uv + vec2(0.5);
+
+	vec4 albedo_tex = texture(albedo, uv).rgba;
+	ALBEDO = mix(albedo_tex.rgb * albedo_tint.rgb, screen_color, step(albedo_tex.a, 0.9) * 0.5);
+	ALPHA = texture(albedo, uv).a * albedo_tint.a;
+
+	SPECULAR = specular;
+	ROUGHNESS = roughness;
+	METALLIC = metallic;
+	
+	NORMALMAP = texture(normal_map, uv).rgb;
+	NORMALMAP_DEPTH = normal_scale;
+}
+"

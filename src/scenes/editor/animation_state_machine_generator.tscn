@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/scripts/player/animation_state_machine_generator.gd" type="Script" id=1]
+
+[node name="AnimationStateMachineGenerator" type="Node"]
+script = ExtResource( 1 )
+target = 1
+
+[node name="Tips" type="Label3D" parent="."]
+billboard = 1
+text = "This node is used for creating
+Player's view model's and weapons'
+AnimationNodeStateMachines.
+
+Use the Inspector."
+horizontal_alignment = 0

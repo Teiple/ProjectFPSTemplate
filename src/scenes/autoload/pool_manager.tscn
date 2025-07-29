@@ -1,0 +1,18 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://src/scripts/pool_manager.gd" type="Script" id=1]
+[ext_resource path="res://src/scenes/pools/hitscan_bullet_trail_pool.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/scenes/pools/default_bullet_hole_decal_pool.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/scenes/pools/default_impact_effect_pool.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/scenes/pools/bullet_projectile_pool.tscn" type="PackedScene" id=5]
+
+[node name="PoolManager" type="Node"]
+script = ExtResource( 1 )
+
+[node name="BulletProjectilePool" parent="." instance=ExtResource( 5 )]
+
+[node name="DefaultBulletHoleDecalPool" parent="." instance=ExtResource( 3 )]
+
+[node name="DefaultImpactEffectPool" parent="." instance=ExtResource( 4 )]
+
+[node name="HitscanBulletTrailPool" parent="." instance=ExtResource( 2 )]

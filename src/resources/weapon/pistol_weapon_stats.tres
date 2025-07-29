@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://src/scripts/resources/weapon_stats.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+weapon_id = "pistol"
+fire_rate = 0.14
+mag_size = 15
+max_distance = 100.0
+max_inventory_size = 100
+ammo_per_shot = 1
+projectiles_per_ammo = 1
+damage_per_projectile = 10.0
+spread_angle_degrees = 2.0
+weapon_slot = 1
+ballistic_model = 1
+projectile_speed = 50.0
+allow_rapid_fire = true
+collision_mask = 13

@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://src/scripts/effects/bullet_projectile.gd" type="Script" id=1]
+[ext_resource path="res://assets/materials/hitscan_bullet_trail_mat.tres" type="Material" id=2]
+[ext_resource path="res://src/scenes/components/poolable_node_component.tscn" type="PackedScene" id=3]
+
+[sub_resource type="QuadMesh" id=1]
+size = Vector2( 0.05, 0.5 )
+
+[node name="BulletProjectile" type="Spatial"]
+script = ExtResource( 1 )
+length = 1.0
+scale_x_multiplier_min = 0.25
+scale_x_multiplier_max = 1.2
+scale_z_multiplier_min = 0.25
+scale_z_multiplier_max = 1.25
+
+[node name="MeshPivot" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.251152 )
+
+[node name="MeshInstance" type="MeshInstance" parent="MeshPivot"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.232597 )
+mesh = SubResource( 1 )
+skeleton = NodePath("../..")
+material/0 = ExtResource( 2 )
+
+[node name="RayCast" type="RayCast" parent="."]
+cast_to = Vector3( 0, 0, -0.25 )
+collision_mask = 0
+
+[node name="PoolableNodeComponent" parent="." instance=ExtResource( 3 )]

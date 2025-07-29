@@ -1,0 +1,87 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=29 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "equip_pistol"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "fire_pistol"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "fire_intermediate"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "idle_pistol"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "reload_pistol"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "unequip_pistol"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=14]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=15]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[resource]
+states/equip/node = SubResource( 1 )
+states/equip/position = Vector2( -200, 0 )
+states/fire/node = SubResource( 2 )
+states/fire/position = Vector2( 100, 0 )
+states/fire_intermediate/node = SubResource( 3 )
+states/fire_intermediate/position = Vector2( 200, 0 )
+states/idle/node = SubResource( 4 )
+states/idle/position = Vector2( -100, 0 )
+states/reload/node = SubResource( 5 )
+states/reload/position = Vector2( 0, -100 )
+states/unequip/node = SubResource( 6 )
+states/unequip/position = Vector2( 0, 100 )
+transitions = [ "equip", "unequip", SubResource( 7 ), "equip", "idle", SubResource( 8 ), "equip", "fire", SubResource( 9 ), "equip", "reload", SubResource( 10 ), "unequip", "equip", SubResource( 11 ), "unequip", "idle", SubResource( 12 ), "unequip", "fire", SubResource( 13 ), "unequip", "reload", SubResource( 14 ), "idle", "equip", SubResource( 15 ), "idle", "unequip", SubResource( 16 ), "idle", "fire", SubResource( 17 ), "idle", "reload", SubResource( 18 ), "fire", "equip", SubResource( 19 ), "fire", "idle", SubResource( 20 ), "fire", "unequip", SubResource( 21 ), "fire", "reload", SubResource( 22 ), "fire", "fire_intermediate", SubResource( 23 ), "fire_intermediate", "fire", SubResource( 24 ), "reload", "idle", SubResource( 25 ), "reload", "equip", SubResource( 26 ), "reload", "unequip", SubResource( 27 ), "reload", "fire", SubResource( 28 ) ]
+graph_offset = Vector2( -422.791, 0 )

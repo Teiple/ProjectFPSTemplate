@@ -1,0 +1,592 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "AmmoInventory",
+"language": "GDScript",
+"path": "res://src/scripts/player/ammo_inventory.gd"
+}, {
+"base": "Reference",
+"class": "AnimationConfig",
+"language": "GDScript",
+"path": "res://src/scripts/config/animation_config.gd"
+}, {
+"base": "Node",
+"class": "AnimationOverride",
+"language": "GDScript",
+"path": "res://src/scripts/animation_override.gd"
+}, {
+"base": "Node",
+"class": "AnimationStateMachineGenerator",
+"language": "GDScript",
+"path": "res://src/scripts/player/animation_state_machine_generator.gd"
+}, {
+"base": "Reference",
+"class": "AttackOriginInfo",
+"language": "GDScript",
+"path": "res://src/scripts/data/attack_origin_info.gd"
+}, {
+"base": "Reference",
+"class": "AttackResultInfo",
+"language": "GDScript",
+"path": "res://src/scripts/data/attack_result_info.gd"
+}, {
+"base": "Spatial",
+"class": "BulletProjectile",
+"language": "GDScript",
+"path": "res://src/scripts/effects/bullet_projectile.gd"
+}, {
+"base": "Spatial",
+"class": "Component",
+"language": "GDScript",
+"path": "res://src/scripts/components/component.gd"
+}, {
+"base": "Spatial",
+"class": "Decal",
+"language": "GDScript",
+"path": "res://src/scripts/effects/decal.gd"
+}, {
+"base": "Node",
+"class": "FrameDebug",
+"language": "GDScript",
+"path": "res://src/scripts/frame_debug.gd"
+}, {
+"base": "Reference",
+"class": "GameConfig",
+"language": "GDScript",
+"path": "res://src/scripts/autoload/game_config.gd"
+}, {
+"base": "Reference",
+"class": "GameState",
+"language": "GDScript",
+"path": "res://src/scripts/data/game_state.gd"
+}, {
+"base": "Component",
+"class": "GameStateComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/game_state_component.gd"
+}, {
+"base": "Node",
+"class": "GameWorld",
+"language": "GDScript",
+"path": "res://src/scripts/game_world.gd"
+}, {
+"base": "Reference",
+"class": "GlobalData",
+"language": "GDScript",
+"path": "res://src/scripts/data/global_data.gd"
+}, {
+"base": "Component",
+"class": "HealthComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/health_component.gd"
+}, {
+"base": "Component",
+"class": "HitboxComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/hitbox_component.gd"
+}, {
+"base": "Spatial",
+"class": "HitscanBulletTrail",
+"language": "GDScript",
+"path": "res://src/scripts/effects/hitscan_bullet_trail.gd"
+}, {
+"base": "Spatial",
+"class": "ImpactEffect",
+"language": "GDScript",
+"path": "res://src/scripts/effects/impact_effect.gd"
+}, {
+"base": "LiquidLayer",
+"class": "LavaLayer",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid/lava.gd"
+}, {
+"base": "Area",
+"class": "LiquidLayer",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid.gd"
+}, {
+"base": "Reference",
+"class": "LoadingData",
+"language": "GDScript",
+"path": "res://src/scripts/data/loading_data.gd"
+}, {
+"base": "Control",
+"class": "Menu",
+"language": "GDScript",
+"path": "res://src/scripts/ui/menu.gd"
+}, {
+"base": "Spatial",
+"class": "OrbitArm",
+"language": "GDScript",
+"path": "res://addons/qodot/example_scenes/2-miscallaneous/1-runtime-map-building/orbit_arm.gd"
+}, {
+"base": "Menu",
+"class": "PauseMenu",
+"language": "GDScript",
+"path": "res://src/scripts/autoload/pause_menu.gd"
+}, {
+"base": "PhysicsEntity",
+"class": "PhysicsBall",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/fgd/point_classes/physics_ball.gd"
+}, {
+"base": "RigidBody",
+"class": "PhysicsEntity",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/fgd/solid_classes/physics.gd"
+}, {
+"base": "KinematicBody",
+"class": "Player",
+"language": "GDScript",
+"path": "res://src/scripts/player/player.gd"
+}, {
+"base": "Control",
+"class": "PlayerHud",
+"language": "GDScript",
+"path": "res://src/scripts/player/player_hud.gd"
+}, {
+"base": "Node",
+"class": "Pool",
+"language": "GDScript",
+"path": "res://src/scripts/pool.gd"
+}, {
+"base": "Component",
+"class": "PoolableNodeComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/poolable_node_component.gd"
+}, {
+"base": "Reference",
+"class": "QodotDependencies",
+"language": "GDScript",
+"path": "res://addons/qodot/src/util/qodot_dependencies.gd"
+}, {
+"base": "QodotSpatial",
+"class": "QodotEntity",
+"language": "GDScript",
+"path": "res://addons/qodot/src/nodes/qodot_entity.gd"
+}, {
+"base": "QodotFGDClass",
+"class": "QodotFGDBaseClass",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_base_class.gd"
+}, {
+"base": "Resource",
+"class": "QodotFGDClass",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_class.gd"
+}, {
+"base": "Resource",
+"class": "QodotFGDFile",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_file.gd"
+}, {
+"base": "QodotFGDClass",
+"class": "QodotFGDPointClass",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_point_class.gd"
+}, {
+"base": "QodotFGDClass",
+"class": "QodotFGDSolidClass",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_solid_class.gd"
+}, {
+"base": "QodotEntity",
+"class": "QodotLight",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/fgd/point_classes/light.gd"
+}, {
+"base": "QodotSpatial",
+"class": "QodotMap",
+"language": "GDScript",
+"path": "res://addons/qodot/src/nodes/qodot_map.gd"
+}, {
+"base": "EditorPlugin",
+"class": "QodotPlugin",
+"language": "GDScript",
+"path": "res://addons/qodot/src/qodot_plugin.gd"
+}, {
+"base": "KinematicBody",
+"class": "QodotRotateEntity",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/fgd/solid_classes/rotate.gd"
+}, {
+"base": "Spatial",
+"class": "QodotSpatial",
+"language": "GDScript",
+"path": "res://addons/qodot/src/nodes/qodot_spatial.gd"
+}, {
+"base": "Reference",
+"class": "QodotTextureLoader",
+"language": "GDScript",
+"path": "res://addons/qodot/src/util/qodot_texture_loader.gd"
+}, {
+"base": "Reference",
+"class": "QodotUtil",
+"language": "GDScript",
+"path": "res://addons/qodot/src/util/qodot_util.gd"
+}, {
+"base": "Resource",
+"class": "QodotWorldspawnLayer",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/worldspawn_layer.gd"
+}, {
+"base": "Resource",
+"class": "QuakeMapFile",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/quake_map_file.gd"
+}, {
+"base": "EditorImportPlugin",
+"class": "QuakeMapImportPlugin",
+"language": "GDScript",
+"path": "res://addons/qodot/src/import_plugins/quake_map_import_plugin.gd"
+}, {
+"base": "Resource",
+"class": "QuakePaletteFile",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/quake_palette_file.gd"
+}, {
+"base": "EditorImportPlugin",
+"class": "QuakePaletteImportPlugin",
+"language": "GDScript",
+"path": "res://addons/qodot/src/import_plugins/quake_palette_import_plugin.gd"
+}, {
+"base": "Resource",
+"class": "QuakeWadFile",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/quake_wad_file.gd"
+}, {
+"base": "EditorImportPlugin",
+"class": "QuakeWadImportPlugin",
+"language": "GDScript",
+"path": "res://addons/qodot/src/import_plugins/quake_wad_import_plugin.gd"
+}, {
+"base": "Spatial",
+"class": "ScriptedEffect",
+"language": "GDScript",
+"path": "res://src/scripts/effects/scripted_effect.gd"
+}, {
+"base": "LiquidLayer",
+"class": "SlimeLayer",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid/slime.gd"
+}, {
+"base": "Node",
+"class": "StateMachine",
+"language": "GDScript",
+"path": "res://src/scripts/state_machine/state_machine.gd"
+}, {
+"base": "Node",
+"class": "StateMachineBlackboard",
+"language": "GDScript",
+"path": "res://src/scripts/state_machine/state_machine_blackboard.gd"
+}, {
+"base": "Node",
+"class": "StateMachineState",
+"language": "GDScript",
+"path": "res://src/scripts/state_machine/state_machine_state.gd"
+}, {
+"base": "Resource",
+"class": "TrenchBroomFaceAttrib",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/trenchbroom/trenchbroom_face_attrib.gd"
+}, {
+"base": "Resource",
+"class": "TrenchBroomGameConfigFile",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/trenchbroom/trenchbroom_game_config_file.gd"
+}, {
+"base": "Resource",
+"class": "TrenchBroomGameConfigFolder",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/trenchbroom/trenchbroom_game_config_folder.gd"
+}, {
+"base": "Resource",
+"class": "TrenchBroomTag",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/trenchbroom/trenchbroom_tag.gd"
+}, {
+"base": "Node",
+"class": "ViewModelActionController",
+"language": "GDScript",
+"path": "res://src/scripts/player/view_model_action_controller.gd"
+}, {
+"base": "Spatial",
+"class": "ViewModelAnimationSpace",
+"language": "GDScript",
+"path": "res://src/scripts/editor/view_model_animation_space.gd"
+}, {
+"base": "Node",
+"class": "ViewModelMotionController",
+"language": "GDScript",
+"path": "res://src/scripts/player/view_model_motion_controller.gd"
+}, {
+"base": "LiquidLayer",
+"class": "WaterLayer",
+"language": "GDScript",
+"path": "res://addons/qodot/game_definitions/worldspawn_layers/liquid/water.gd"
+}, {
+"base": "Spatial",
+"class": "Weapon",
+"language": "GDScript",
+"path": "res://src/scripts/weapon.gd"
+}, {
+"base": "Node",
+"class": "WeaponActionController",
+"language": "GDScript",
+"path": "res://src/scripts/player/weapon_action_controller.gd"
+}, {
+"base": "Node",
+"class": "WeaponController",
+"language": "GDScript",
+"path": "res://src/scripts/player/weapon_controller.gd"
+}, {
+"base": "Component",
+"class": "WeaponProjectileComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/weapon_projectile_component.gd"
+}, {
+"base": "Component",
+"class": "WeaponRaycastComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/weapon_raycast_component.gd"
+}, {
+"base": "Resource",
+"class": "WeaponStats",
+"language": "GDScript",
+"path": "res://src/scripts/resources/weapon_stats.gd"
+} ]
+_global_script_class_icons={
+"AmmoInventory": "",
+"AnimationConfig": "",
+"AnimationOverride": "",
+"AnimationStateMachineGenerator": "",
+"AttackOriginInfo": "",
+"AttackResultInfo": "",
+"BulletProjectile": "",
+"Component": "",
+"Decal": "",
+"FrameDebug": "",
+"GameConfig": "",
+"GameState": "",
+"GameStateComponent": "",
+"GameWorld": "",
+"GlobalData": "",
+"HealthComponent": "",
+"HitboxComponent": "",
+"HitscanBulletTrail": "",
+"ImpactEffect": "",
+"LavaLayer": "",
+"LiquidLayer": "",
+"LoadingData": "",
+"Menu": "",
+"OrbitArm": "",
+"PauseMenu": "",
+"PhysicsBall": "",
+"PhysicsEntity": "",
+"Player": "",
+"PlayerHud": "",
+"Pool": "",
+"PoolableNodeComponent": "",
+"QodotDependencies": "",
+"QodotEntity": "",
+"QodotFGDBaseClass": "",
+"QodotFGDClass": "",
+"QodotFGDFile": "",
+"QodotFGDPointClass": "",
+"QodotFGDSolidClass": "",
+"QodotLight": "",
+"QodotMap": "",
+"QodotPlugin": "",
+"QodotRotateEntity": "",
+"QodotSpatial": "res://addons/qodot/icons/icon_qodot_spatial.svg",
+"QodotTextureLoader": "",
+"QodotUtil": "",
+"QodotWorldspawnLayer": "",
+"QuakeMapFile": "",
+"QuakeMapImportPlugin": "",
+"QuakePaletteFile": "",
+"QuakePaletteImportPlugin": "",
+"QuakeWadFile": "",
+"QuakeWadImportPlugin": "",
+"ScriptedEffect": "",
+"SlimeLayer": "",
+"StateMachine": "",
+"StateMachineBlackboard": "",
+"StateMachineState": "",
+"TrenchBroomFaceAttrib": "",
+"TrenchBroomGameConfigFile": "",
+"TrenchBroomGameConfigFolder": "",
+"TrenchBroomTag": "",
+"ViewModelActionController": "",
+"ViewModelAnimationSpace": "",
+"ViewModelMotionController": "",
+"WaterLayer": "",
+"Weapon": "",
+"WeaponActionController": "",
+"WeaponController": "",
+"WeaponProjectileComponent": "",
+"WeaponRaycastComponent": "",
+"WeaponStats": ""
+}
+
+[application]
+
+config/name="FPSTemplate"
+run/main_scene="res://src/scenes/world.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://src/scenes/autoload/global.tscn"
+FrameTime="*res://src/scripts/autoload/frame_time.gd"
+PoolManager="*res://src/scenes/autoload/pool_manager.tscn"
+DebugDraw="*res://addons/debug_draw_3d/debug_draw.gd"
+ShaderCacheManager="*res://addons/gd-shader-cache/src/ShaderCacheManager.gd"
+MenuManager="*res://src/scenes/autoload/menu_manager.tscn"
+
+[display]
+
+window/size/width=600
+window/size/height=480
+window/size/test_width=600
+window/size/test_height=480
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/debug_draw_3d/plugin.cfg", "res://addons/gd-shader-cache/plugin.cfg", "res://addons/qodot/plugin.cfg" )
+
+[global]
+
+window=false
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+
+[input]
+
+move_forward={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":87,"unicode":0,"echo":false,"script":null)
+ ]
+}
+move_backward={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":83,"unicode":0,"echo":false,"script":null)
+ ]
+}
+move_left={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":65,"unicode":0,"echo":false,"script":null)
+ ]
+}
+move_right={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":68,"unicode":0,"echo":false,"script":null)
+ ]
+}
+jump={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":32,"unicode":0,"echo":false,"script":null)
+ ]
+}
+frame_debug={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":70,"unicode":0,"echo":false,"script":null)
+ ]
+}
+next_frame={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":78,"unicode":0,"echo":false,"script":null)
+ ]
+}
+escape={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777217,"unicode":0,"echo":false,"script":null)
+ ]
+}
+crouch_toggle={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":67,"unicode":0,"echo":false,"script":null)
+ ]
+}
+fire={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+next_weapon={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+previous_weapon={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":4,"canceled":false,"pressed":false,"doubleclick":false,"script":null)
+ ]
+}
+weapon_slot_1={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":49,"unicode":0,"echo":false,"script":null)
+ ]
+}
+weapon_slot_2={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":50,"unicode":0,"echo":false,"script":null)
+ ]
+}
+weapon_slot_3={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":51,"unicode":0,"echo":false,"script":null)
+ ]
+}
+weapon_slot_4={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":52,"unicode":0,"echo":false,"script":null)
+ ]
+}
+reload={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":82,"unicode":0,"echo":false,"script":null)
+ ]
+}
+quick_save={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777248,"unicode":0,"echo":false,"script":null)
+ ]
+}
+quick_load={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777252,"unicode":0,"echo":false,"script":null)
+ ]
+}
+
+[layer_names]
+
+3d_render/layer_1="Enviroment"
+3d_render/layer_2="PortalPlanes"
+3d_render/layer_3="CuttingObjects"
+3d_physics/layer_1="Enviroment"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="Hitboxes"
+3d_physics/layer_4="StairProxy"
+3d_physics/layer_5="StairCollision"
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

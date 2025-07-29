@@ -1,0 +1,101 @@
+{
+	"events" : {
+		"equip": {
+			"local_animation_transition_subscribers": [],
+			"global_animation_transition_target": "equip",
+		},
+		"fire": {
+			"local_animation_transition_subscribers": [
+				"idle/fire", "fire/fire", "equip/fire"
+			],
+			"global_animation_transition_target": "fire",
+		},
+		"reload": {
+			"local_animation_transition_subscribers": [
+				"idle/reload", "fire/reload"
+			],
+			"global_animation_transition_target": "",
+		},
+	},
+	"state_machine" : {
+		"saving_directory": {
+			"player": "res://src/resources/player",
+			"weapon": "res://src/resources/weapon",
+		},
+		"default_saving_name": {
+			"player": "player_$(weapon_id)_state_machine.tres",
+			"weapon": "$(weapon_id)_state_machine.tres",
+		},
+		"animations": {
+			"equip": {
+				"pos": "Vector2(-200, 0)",
+				"transitions": [
+					{ "to": "unequip", "mode": "immediate" },
+					{ "to": "idle", "mode": "at_end" },
+					{ "to": "fire", "mode": "immediate" },
+					{ "to": "reload", "mode": "immediate" },
+				],
+				"autostart" : false,
+			},
+			"unequip": {
+				"pos": "Vector2(0, 100)",
+				"transitions": [
+					{ "to": "equip", "mode": "immediate" },
+					{ "to": "idle", "mode": "immediate" },
+					{ "to": "fire", "mode": "immediate" },
+					{ "to": "reload", "mode": "immediate" },
+				],
+				"autostart" : false,
+			},
+			"idle": {
+				"pos": "Vector2(-100, 0)",
+				"transitions": [
+					{ "to": "equip", "mode": "immediate" },
+					{ "to": "unequip", "mode": "immediate" },
+					{ "to": "fire", "mode": "immediate" },
+					{ "to": "reload", "mode": "immediate" },
+				],
+				"autostart" : false,
+			},
+			"fire": {
+				"pos": "Vector2(100, 0)",
+				"transitions": [
+					{ "to": "equip", "mode": "immediate" },
+					{ "to": "idle", "mode": "at_end" },
+					{ "to": "unequip", "mode": "immediate" },
+					{ "to": "reload", "mode": "immediate" },
+					{ "to": "fire", "mode": "immediate"},
+				],
+				"autostart" : false,
+			},
+			"reload": {
+				"pos": "Vector2(0, -100)",
+				"transitions": [
+					{ "to": "idle", "mode": "at_end" },
+					{ "to": "equip", "mode": "immediate" },
+					{ "to": "unequip", "mode": "immediate" },
+					{ "to": "fire", "mode": "immediate" },
+				],
+				"autostart" : false,
+			}
+		}
+	},
+	"animation_player": {
+		"saving_directory": "res://src/resources/player",
+		"default_saving_name": "view_model_override_animation_player.scn"
+	},
+	"animation_fallbacks": {
+		"pistol": {
+			"equip": "default",
+			"unequip": "default",
+			"idle": "default",
+		},
+		"smg": {
+			"equip": "default",
+			"unequip": "default",
+			"idle": "default",
+			"fire": "default",
+			"reload": "default",
+		},
+	}
+}

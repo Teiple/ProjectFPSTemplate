@@ -1,0 +1,101 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://src/resources/player/player_pistol_state_machine.tres" type="AnimationNodeStateMachine" id=1]
+[ext_resource path="res://src/scenes/player/view_model.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/scenes/weapons/pistol.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/scripts/player/weapon_action_controller.gd" type="Script" id=4]
+[ext_resource path="res://src/scripts/player/view_model_action_controller.gd" type="Script" id=5]
+[ext_resource path="res://src/scripts/player/weapon_controller.gd" type="Script" id=6]
+[ext_resource path="res://src/scripts/player/ammo_inventory.gd" type="Script" id=7]
+[ext_resource path="res://src/scripts/animation_override.gd" type="Script" id=8]
+[ext_resource path="res://src/scenes/components/weapon_raycast_component.tscn" type="PackedScene" id=9]
+[ext_resource path="res://src/scripts/player/view_model_motion_controller.gd" type="Script" id=10]
+[ext_resource path="res://src/scenes/components/weapon_projectile_component.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/resources/player/player_smg_state_machine.tres" type="AnimationNodeStateMachine" id=12]
+[ext_resource path="res://src/scenes/weapons/smg.tscn" type="PackedScene" id=13]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+
+[sub_resource type="AnimationNodeStateMachine" id=30]
+states/pistol/node = ExtResource( 1 )
+states/pistol/position = Vector2( 375, 16.7777 )
+states/smg/node = ExtResource( 12 )
+states/smg/position = Vector2( 551.333, 16.3333 )
+transitions = [ "pistol", "smg", SubResource( 32 ), "smg", "pistol", SubResource( 33 ) ]
+graph_offset = Vector2( -41, -60 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=27]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=29]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=31]
+
+[node name="Arms" type="Spatial"]
+
+[node name="ViewModel" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.65, 0 )
+
+[node name="armature" parent="ViewModel" index="0"]
+transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0 )
+
+[node name="Skeleton" parent="ViewModel/armature" index="0"]
+bones/29/bound_children = [ NodePath("Weapons") ]
+
+[node name="Weapons" type="BoneAttachment" parent="ViewModel/armature/Skeleton" index="1"]
+transform = Transform( 0.998417, -9.31323e-10, -0.0562501, -0.0255197, -0.891163, -0.452965, -0.050128, 0.453683, -0.889752, -0.247225, 1.00591, -0.0218807 )
+bone_name = "hand.R"
+
+[node name="Pistol" parent="ViewModel/armature/Skeleton/Weapons" instance=ExtResource( 3 )]
+transform = Transform( -0.96225, -0.0505844, -0.267425, 0.2692, -0.321569, -0.907813, -0.0400743, -0.945534, 0.323047, 0.029523, 0.0853769, -0.0441822 )
+
+[node name="Smg" parent="ViewModel/armature/Skeleton/Weapons" instance=ExtResource( 13 )]
+transform = Transform( -0.950704, -0.198832, -0.237964, 0.296236, -0.355463, -0.886505, 0.0916787, -0.913297, 0.396841, 0.00493299, 0.051854, -0.105 )
+
+[node name="AnimationOverride" type="Node" parent="."]
+script = ExtResource( 8 )
+animation_player_path = NodePath("../ViewModel/AnimationPlayer")
+
+[node name="ViewModelMotionController" type="Node" parent="."]
+script = ExtResource( 10 )
+
+[node name="ViewModelActionController" type="Node" parent="."]
+script = ExtResource( 5 )
+weapon_controller_path = NodePath("../WeaponController")
+weapon_action_controller_path = NodePath("../WeaponActionController")
+animation_tree_path = NodePath("../AnimationTree")
+
+[node name="WeaponActionController" type="Node" parent="."]
+script = ExtResource( 4 )
+weapon_controller_path = NodePath("../WeaponController")
+
+[node name="WeaponController" type="Node" parent="."]
+script = ExtResource( 6 )
+weapons_path = NodePath("../ViewModel/armature/Skeleton/Weapons")
+ammo_inventory_path = NodePath("../AmmoInventory")
+
+[node name="AimRayCast" type="RayCast" parent="WeaponController"]
+collision_mask = 9
+
+[node name="AmmoInventory" type="Node" parent="."]
+script = ExtResource( 7 )
+_ammo_pool = {
+"pistol": 120,
+"smg": 300
+}
+
+[node name="WeaponRaycastComponent" parent="." instance=ExtResource( 9 )]
+
+[node name="WeaponProjectileComponent" parent="." instance=ExtResource( 11 )]
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 30 )
+anim_player = NodePath("../ViewModel/AnimationPlayer")
+active = true
+process_mode = 0
+parameters/playback = SubResource( 27 )
+parameters/pistol/playback = SubResource( 29 )
+parameters/smg/playback = SubResource( 31 )
+
+[editable path="ViewModel"]

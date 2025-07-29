@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scripts/pool.gd" type="Script" id=1]
+[ext_resource path="res://src/scenes/effects/hitscan_bullet_trail.tscn" type="PackedScene" id=2]
+
+[node name="HitscanBulletTrailPool" type="Node"]
+script = ExtResource( 1 )
+max_pool_size = 50
+source_scenes = [ ExtResource( 2 ) ]

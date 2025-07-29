@@ -1,0 +1,11 @@
+Renderer info: Mesa Intel(R) HD Graphics 4400 (HSW GT2) version 4.6 (Compatibility Profile) Mesa 24.2.8-1ubuntu1~24.04.1 from Intel
+Depth buffer bits: 24
+Multisampling enabled
+Adding file system path /usr/share/TrenchBroom/defaults/assets
+Loading document from /home/hongphuc/Passions/Games/FPSTemplate/addons/qodot/example_scenes/0-visuals/4-special-textures/4-special-textures.map
+Loaded entity definition file Generic.fgd
+Could not load texture collection 'textures/base': Directory not found: 'textures/base'
+Could not load texture collection 'textures/shaders': Directory not found: 'textures/shaders'
+Could not load texture collection 'textures/special': Directory not found: 'textures/special'
+Loaded /home/hongphuc/Passions/Games/FPSTemplate/addons/qodot/example_scenes/0-visuals/4-special-textures/4-special-textures.map in 321ms
+Saved /home/hongphuc/Passions/Games/FPSTemplate/addons/qodot/example_scenes/0-visuals/4-special-textures/4-special-textures.map in 9ms

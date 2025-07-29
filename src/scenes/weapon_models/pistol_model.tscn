@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/materials/pistol_view.tres" type="Material" id=1]
+[ext_resource path="res://assets/models/pistol.glb" type="PackedScene" id=2]
+
+[node name="PistolModel" type="Spatial"]
+
+[node name="pistol" parent="." instance=ExtResource( 2 )]
+
+[node name="pistol_mesh_with_animations" parent="pistol/pistol_rig_with_animations/Skeleton" index="0"]
+material/0 = ExtResource( 1 )
+
+[editable path="pistol"]

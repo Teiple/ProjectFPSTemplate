@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/scripts/test.gd" type="Script" id=1]
+[ext_resource path="res://src/scripts/test_2.gd" type="Script" id=2]
+[ext_resource path="res://addons/qodot/textures/layers/slime.png" type="Texture" id=3]
+
+[node name="Test" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+scene_path = "res://src/scenes/world.tscn"
+
+[node name="Button" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -42.0
+margin_top = -10.0
+margin_right = 42.0
+margin_bottom = 10.0
+text = "Load Scene"
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 89, 76 )
+scale = Vector2( 0.113281, 0.113281 )
+texture = ExtResource( 3 )
+script = ExtResource( 2 )
+
+[node name="Loading" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = 19.0
+margin_right = 20.0
+margin_bottom = 33.0
+text = "50%"
+
+[node name="Hint" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -90.0
+margin_top = 38.0
+margin_right = 90.0
+margin_bottom = 52.0
+text = "Press any key to continue ..."
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

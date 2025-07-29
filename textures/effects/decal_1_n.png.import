@@ -1,0 +1,37 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path.s3tc="res://.import/decal_1_n.png-b739528575dcc1454e67504477e38deb.s3tc.stex"
+path.etc2="res://.import/decal_1_n.png-b739528575dcc1454e67504477e38deb.etc2.stex"
+metadata={
+"imported_formats": [ "s3tc", "etc2" ],
+"vram_texture": true
+}
+
+[deps]
+
+source_file="res://textures/effects/decal_1_n.png"
+dest_files=[ "res://.import/decal_1_n.png-b739528575dcc1454e67504477e38deb.s3tc.stex", "res://.import/decal_1_n.png-b739528575dcc1454e67504477e38deb.etc2.stex" ]
+
+[params]
+
+compress/mode=2
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=1
+flags/repeat=1
+flags/filter=false
+flags/mipmaps=true
+flags/anisotropic=false
+flags/srgb=1
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

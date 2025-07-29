@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scripts/pool.gd" type="Script" id=1]
+[ext_resource path="res://src/scenes/effects/decal_1.tscn" type="PackedScene" id=2]
+
+[node name="DefaultBulletHoleDecalPool" type="Node"]
+script = ExtResource( 1 )
+max_pool_size = 20
+source_scenes = [ ExtResource( 2 ) ]
+pool_category = 2
+reusable = true

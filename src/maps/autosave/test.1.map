@@ -1,0 +1,62 @@
+// Game: Qodot
+// Format: Standard
+// entity 0
+{
+"classname" "worldspawn"
+"_tb_mod" "tiny_texture_pack"
+"_tb_textures" "textures/tiny_texture_pack/Bricks;textures/tiny_texture_pack/Grass"
+// brush 0
+{
+( -144 -96 -16 ) ( -144 -95 -16 ) ( -144 -96 -15 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -64 -144 -16 ) ( -64 -144 -15 ) ( -63 -144 -16 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -64 -96 -16 ) ( -63 -96 -16 ) ( -64 -95 -16 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 64 32 0 ) ( 64 33 0 ) ( 65 32 0 ) tiny_texture_pack/Grass/Grass_14_-_128x128 0 0 0 0.25 0.25
+( 64 144 16 ) ( 65 144 16 ) ( 64 144 17 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 128 32 16 ) ( 128 32 17 ) ( 128 33 16 ) __TB_empty 0 0 0 0.25 0.25
+}
+// brush 1
+{
+( 112 144 64 ) ( 112 -144 64 ) ( 112 144 0 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+( 128 -144 0 ) ( 112 -144 0 ) ( 128 -144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 128 144 0 ) ( 112 144 0 ) ( 128 -144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( 128 -144 64 ) ( 112 -144 64 ) ( 128 144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 128 144 64 ) ( 112 144 64 ) ( 128 144 0 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 128 -144 64 ) ( 128 144 64 ) ( 128 -144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+}
+// brush 2
+{
+( -144 -144 0 ) ( -144 144 0 ) ( -144 -144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -144 -144 64 ) ( -128 -144 64 ) ( -144 -144 0 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -144 -144 0 ) ( -128 -144 0 ) ( -144 144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( -144 144 64 ) ( -128 144 64 ) ( -144 -144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -144 144 0 ) ( -128 144 0 ) ( -144 144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -128 -144 0 ) ( -128 -144 64 ) ( -128 144 0 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+}
+// brush 3
+{
+( -128 144 64 ) ( -128 128 64 ) ( -128 144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( 112 128 64 ) ( 112 128 0 ) ( -128 128 64 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+( -128 144 0 ) ( -128 128 0 ) ( 112 144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( 112 144 64 ) ( 112 128 64 ) ( -128 144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 112 144 64 ) ( -128 144 64 ) ( 112 144 0 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 112 144 0 ) ( 112 128 0 ) ( 112 144 64 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+}
+// brush 4
+{
+( -128 -144 0 ) ( -128 -128 0 ) ( -128 -144 64 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( 112 -144 0 ) ( -128 -144 0 ) ( 112 -144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( 112 -144 0 ) ( 112 -128 0 ) ( -128 -144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( -128 -144 64 ) ( -128 -128 64 ) ( 112 -144 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -128 -128 0 ) ( 112 -128 0 ) ( -128 -128 64 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+( 112 -144 64 ) ( 112 -128 64 ) ( 112 -144 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+}
+// brush 5
+{
+( -128 -8 0 ) ( -128 8 0 ) ( -128 -8 64 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( 112 -8 0 ) ( -128 -8 0 ) ( 112 -8 64 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+( 112 -8 0 ) ( 112 8 0 ) ( -128 -8 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+( -128 -8 64 ) ( -128 8 64 ) ( 112 -8 64 ) tiny_texture_pack/Bricks/Brick_13_-_128x128 0 0 0 0.25 0.25
+( -128 8 0 ) ( 112 8 0 ) ( -128 8 64 ) tiny_texture_pack/Bricks/Brick_9_-_128x128 0 0 0 0.25 0.25
+( 112 -8 64 ) ( 112 8 64 ) ( 112 -8 0 ) tiny_texture_pack/Bricks/Brick6-128x128 0 0 0 0.25 0.25
+}
+}
