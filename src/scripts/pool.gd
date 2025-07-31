@@ -14,6 +14,7 @@ var _overflows : int = 0
 var _pool : Array = []
 var _in_use : Array = []
 
+
 func _ready():
 	if source_scenes.size() == 0:
 		return
@@ -50,12 +51,22 @@ func _on_return_requested(node : Node, poolable_node_component : PoolableNodeCom
 	if node == null || poolable_node_component == null:
 		return
 	
+	if !is_instance_valid(node) || !is_instance_valid(poolable_node_component):
+		push_error("how could these happen?")
+		return
+	
 	if _pool.has(poolable_node_component):
 		return
 	
-	if reusable:
-		var in_use_index = _in_use.find(poolable_node_component)
-		if in_use_index > 0:
+	var in_use_index = _in_use.find(poolable_node_component)
+	if in_use_index > 0:
+		# If non-reusable, then order isn't important
+		# It's faster to swap it with the last element and pop_back()
+		if !reusable:
+			var last = _in_use.back()
+			_in_use[in_use_index] = last
+			_in_use.pop_back()
+		else:
 			_in_use.remove(in_use_index)
 	
 	node.get_parent().remove_child(node)
@@ -72,12 +83,13 @@ func _on_return_requested(node : Node, poolable_node_component : PoolableNodeCom
 	_pool.push_back(poolable_node_component)
 
 
-func take_from_pool(method : String = "", binds : Array = []) -> Node:
+func take_from_pool(method : String = "", binds : Array = [], out_poolable_comp = null) -> Node:
 	var poolable_node_component : PoolableNodeComponent = null
 	
+	var new_node = false
 	# Create new node if the pool is empty/depleted 
 	if _pool.size() == 0:
-		if reusable && _in_use.size() > 0:
+		if reusable && _in_use.size() > 0 && _first_in_use_node_valid_or_pop_front():
 			var least_recently_used = _in_use.pop_front()
 			poolable_node_component = least_recently_used
 			_hits += 1
@@ -85,7 +97,14 @@ func take_from_pool(method : String = "", binds : Array = []) -> Node:
 			# The node will be used right away, don't add it too the pool
 			poolable_node_component = _new_pooled_node()
 			_misses += 1
+			new_node = true
 	else:
+		if !_back_pool_node_valid_or_pop_back():
+			# This shouldn't happen. The way it could happen
+			# is to have "sleeping" pooled node destroyed itself,
+			# which I didn't remember being done to any of the pooled node
+			print_debug("how could these happen?")
+			return null
 		poolable_node_component = _pool.pop_back()
 		_hits += 1
 	
@@ -93,15 +112,95 @@ func take_from_pool(method : String = "", binds : Array = []) -> Node:
 	_in_use.push_back(poolable_node_component)
 	
 	var pooled_node = poolable_node_component.get_pooled_node()
-	pooled_node.callv(method, binds)
+	
+	if method != "":
+		pooled_node.callv(method, binds)
+	
+	if out_poolable_comp is Array:
+		out_poolable_comp.push_back(poolable_node_component)
 	
 	return pooled_node
 
 
 func get_efficiency() -> float:
 	var total = _hits + _misses
-	return 1.0 if total == 0 else _hits / total
+	return 1.0 if total == 0 else float(_hits) / float(total)
 
 
 func get_pool_category() -> int:
 	return pool_category
+
+
+func serialize_state() -> Dictionary:
+	var state = {"active_nodes" : []}
+	for poolable_node_comp in _in_use:
+		if !is_instance_valid(poolable_node_comp):
+			continue
+		poolable_node_comp = poolable_node_comp as PoolableNodeComponent
+		if poolable_node_comp == null:
+			continue
+		
+		var node_data = poolable_node_comp.serialize()
+		state["active_nodes"].push_back(node_data)
+	return state
+
+
+func _free_all_in_use():
+	for poolable_node_comp in _in_use:
+		if !is_instance_valid(poolable_node_comp):
+			continue
+		poolable_node_comp = poolable_node_comp as PoolableNodeComponent
+		if poolable_node_comp == null:
+			continue
+		
+		var node = poolable_node_comp.get_pooled_node()
+		if node == null:
+			continue
+		
+		node.queue_free()
+	
+	_in_use.clear()
+
+
+# Ensure front of _in_use is valid.
+# pop_front() is very inefficient, so ensure
+# they are explicitly returned to the pool instead of self-freeing.
+func _first_in_use_node_valid_or_pop_front() -> bool:
+	if _in_use.empty():
+		return false
+	if is_instance_valid(_in_use.front()):
+		return true
+	_in_use.pop_front()
+	return false
+
+
+func _back_pool_node_valid_or_pop_back() -> bool:
+	if _pool.empty():
+		return false
+	if is_instance_valid(_pool.back()):
+		return true
+	_pool.pop_back()
+	return false
+
+
+func deserialize_state(state : Dictionary):
+	if state.empty():
+		return
+	var active_nodes = state.get("active_nodes", [])
+	if !(active_nodes is Array):
+		return
+	_free_all_in_use()
+	
+	for i in active_nodes.size():
+		var out_poolable_node_comp : Array = []
+		take_from_pool("", [], out_poolable_node_comp)
+		if out_poolable_node_comp.empty():
+			continue
+		var poolable_node_comp = out_poolable_node_comp[0]
+		if poolable_node_comp == null:
+			continue
+		poolable_node_comp.deserialize(active_nodes[i])
+
+
+func get_info_str() -> String:
+	return "eff: %.2f;\nhits: %d;\nmisses: %d;\novers: %d" % [get_efficiency(), _hits, _misses, _overflows]

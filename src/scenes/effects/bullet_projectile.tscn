@@ -16,7 +16,7 @@ scale_z_multiplier_min = 0.25
 scale_z_multiplier_max = 1.25
 
 [node name="MeshPivot" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.251152 )
+transform = Transform( 0.991, 0, 0, 0, 0.991, 0, 0, 0, 2, 0, 0, -1 )
 
 [node name="MeshInstance" type="MeshInstance" parent="MeshPivot"]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0.232597 )

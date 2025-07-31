@@ -47,6 +47,7 @@ script = ExtResource( 1 )
 
 [node name="Particles" type="Particles" parent="."]
 lifetime = 0.2
+speed_scale = 0.1
 explosiveness = 0.7
 randomness = 1.0
 visibility_aabb = AABB( -1.11201, -1.32548, -1.98377, 2.20235, 2.36248, 2.98377 )

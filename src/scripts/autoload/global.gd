@@ -10,7 +10,8 @@ var _current_scene : Node = null
 var _any_key_pressed : bool = false
 var _last_any_key_pressed : float = 0.0
 
-onready var fps_label : Label = $OverlayUI/FPSLabel
+onready var fps_label : Label = $"%FPSLabel"
+onready var pool_info_label : Label = $"%PoolInfoLabel"
 
 
 func get_game_world() -> GameWorld:
@@ -36,6 +37,7 @@ func _ready():
 
 func _process(delta):
 	fps_label.text = str(int(Engine.get_frames_per_second()))
+	pool_info_label.text = PoolManager.get_info_str()
 
 
 func _load_scene(packed_scene : PackedScene):
@@ -112,3 +114,59 @@ func quit(exit_code : int = -1):
 
 func set_tree_pause(paused : bool):
 	get_tree().paused = paused
+
+
+func save_everything():
+	var saveables = get_tree().get_nodes_in_group(GlobalData.Group.SAVEABLE)
+	var save = {}
+	
+	for state_comp in saveables:
+		state_comp = state_comp as GameStateComponent
+		if state_comp == null:
+			continue
+		var state_data = state_comp.save_state()
+		var section = GlobalData.SAVE_SECTION_MAP.get(state_comp.save_section_id, "")
+		var label = state_comp.get_label()
+		if section == "":
+			if label == "":
+				continue
+			else:
+				save[label] = state_data
+		else:
+			if label == "":
+				save[section] = state_data
+			else:
+				if !save.has(section): 
+					save[section] = { label: state_data }
+				else:
+					save[section][label] = state_data
+	
+	GameState.write_save(save, GameState.SLOT_NEW)
+
+
+func load_everything():
+	var saveables = get_tree().get_nodes_in_group(GlobalData.Group.SAVEABLE)
+	var save = GameState.load_save(GameState.SLOT_LATEST)
+	
+	for state_comp in saveables:
+		state_comp = state_comp as GameStateComponent
+		if state_comp == null:
+			continue
+		var section = GlobalData.SAVE_SECTION_MAP.get(state_comp.save_section_id, "")
+		var label = state_comp.get_label()
+		var state_data = {}
+		if section == "":
+			if label == "":
+				continue
+			else:
+				state_data = save.get(label, {})
+		else:
+			if label == "":
+				state_data = save.get(section, {})
+			else:
+				state_data = save.get(section, {}).get(label, {})
+		
+		if state_data.empty():
+			continue
+		
+		state_comp.load_state(state_data)

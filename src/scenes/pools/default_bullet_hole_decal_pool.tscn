@@ -5,7 +5,7 @@
 
 [node name="DefaultBulletHoleDecalPool" type="Node"]
 script = ExtResource( 1 )
-max_pool_size = 20
+max_pool_size = 10
 source_scenes = [ ExtResource( 2 ) ]
 pool_category = 2
 reusable = true

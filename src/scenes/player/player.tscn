@@ -60,3 +60,4 @@ material/0 = SubResource( 4 )
 [node name="AnimationPlayer" parent="." instance=ExtResource( 6 )]
 
 [node name="GameStateComponent" parent="." instance=ExtResource( 7 )]
+save_section_id = 1

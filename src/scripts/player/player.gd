@@ -191,19 +191,13 @@ func serialize_state() -> Dictionary:
 
 
 func deserialize_state(state: Dictionary) -> void:
-	global_position = either(str2var(state.get("position")), global_position)
+	global_position = Utils.either(str2var(state.get("position")), global_position)
 	rotation.y = state.get("rotation_y", rotation.y)
 	_rotation_x_degrees = state.get("rotation_x_degrees", _rotation_x_degrees)
 	head.rotation.x = deg2rad(_rotation_x_degrees)
 	
-	_velocity = either(str2var(state.get("velocity")), _velocity)
+	_velocity = Utils.either(str2var(state.get("velocity")), _velocity)
 	_is_crouching = state.get("is_crouching", _is_crouching)
 	_current_height = state.get("current_height", _current_height)
 	head.position.y = _current_height - HEAD_OFFSET
 	_resize_capsule_collision(_current_height)
-
-
-func either(a, b):
-	if a == null:
-		return b
-	return a

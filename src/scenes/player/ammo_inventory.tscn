@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scripts/player/ammo_inventory.gd" type="Script" id=1]
+[ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=2]
+
+[node name="AmmoInventory" type="Node"]
+script = ExtResource( 1 )
+_ammo_pool = {
+"pistol": 120,
+"smg": 300
+}
+
+[node name="GameStateComponent" parent="." instance=ExtResource( 2 )]
+save_section_id = 1

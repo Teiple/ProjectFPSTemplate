@@ -189,6 +189,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_file.gd"
 }, {
+"base": "QodotFGDPointClass",
+"class": "QodotFGDModelPointClass",
+"language": "GDScript",
+"path": "res://addons/qodot/src/resources/game-definitions/fgd/qodot_fgd_model_point_class.gd"
+}, {
 "base": "QodotFGDClass",
 "class": "QodotFGDPointClass",
 "language": "GDScript",
@@ -315,6 +320,11 @@ _global_script_classes=[ {
 "path": "res://addons/qodot/src/resources/game-definitions/trenchbroom/trenchbroom_tag.gd"
 }, {
 "base": "Node",
+"class": "Utils",
+"language": "GDScript",
+"path": "res://src/scripts/data/utils.gd"
+}, {
+"base": "Node",
 "class": "ViewModelActionController",
 "language": "GDScript",
 "path": "res://src/scripts/player/view_model_action_controller.gd"
@@ -401,6 +411,7 @@ _global_script_class_icons={
 "QodotFGDBaseClass": "",
 "QodotFGDClass": "",
 "QodotFGDFile": "",
+"QodotFGDModelPointClass": "",
 "QodotFGDPointClass": "",
 "QodotFGDSolidClass": "",
 "QodotLight": "",
@@ -426,6 +437,7 @@ _global_script_class_icons={
 "TrenchBroomGameConfigFile": "",
 "TrenchBroomGameConfigFolder": "",
 "TrenchBroomTag": "",
+"Utils": "",
 "ViewModelActionController": "",
 "ViewModelAnimationSpace": "",
 "ViewModelMotionController": "",

@@ -10,7 +10,7 @@ var _menu_stack : Array = []
 
 
 func _ready():
-	# Let this node run even if the scene tree is paused
+	# Let this node run even when the game tree is paused
 	pause_mode = Node.PAUSE_MODE_PROCESS
 	
 	for i in get_child_count():

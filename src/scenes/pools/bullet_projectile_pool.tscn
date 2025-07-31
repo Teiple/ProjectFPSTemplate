@@ -1,10 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://src/scripts/pool.gd" type="Script" id=1]
 [ext_resource path="res://src/scenes/effects/bullet_projectile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=3]
 
 [node name="BulletProjectilePool" type="Node"]
 script = ExtResource( 1 )
-max_pool_size = 20
+max_pool_size = 30
 source_scenes = [ ExtResource( 2 ) ]
 pool_category = 1
+
+[node name="GameStateComponent" parent="." instance=ExtResource( 3 )]
+save_section_id = 2

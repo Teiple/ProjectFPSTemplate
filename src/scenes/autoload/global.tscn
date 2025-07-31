@@ -11,6 +11,13 @@ anchor_bottom = 1.0
 mouse_filter = 2
 
 [node name="FPSLabel" type="Label" parent="OverlayUI"]
+unique_name_in_owner = true
 margin_right = 40.0
 margin_bottom = 14.0
 text = "60"
+
+[node name="PoolInfoLabel" type="Label" parent="OverlayUI"]
+unique_name_in_owner = true
+margin_top = 18.0
+margin_right = 40.0
+margin_bottom = 32.0

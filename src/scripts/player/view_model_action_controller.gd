@@ -48,13 +48,16 @@ func _process(delta):
 	
 	# Reset _start_press_time when player finishes hold-firing
 	if Input.is_action_just_released("fire"):
+		print_debug("hi")
 		_start_press_time = 0.0
 	
-	if Input.is_action_pressed("fire") && !short_press && _weapon_controller.can_fire_or_play_empty_click():
-		# Must mark before fire event. Or else pressing triggers will overlap and anitiomation will always be stuck at the start
-		_weapon_controller.mark_fire()
-		_trigger_event("fire")
-		return
+	if Input.is_action_pressed("fire"):
+		if !short_press:
+			if _weapon_controller.can_fire_or_play_empty_click():
+				# Must mark before fire event. Or else pressing triggers will overlap and anitiomation will always be stuck at the start
+				_weapon_controller.mark_fire()
+				_trigger_event("fire")
+				return
 	
 	if Input.is_action_pressed("reload") && _weapon_controller.can_reload():
 		_trigger_event("reload")

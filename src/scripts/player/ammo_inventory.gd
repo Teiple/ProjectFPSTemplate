@@ -66,3 +66,11 @@ func can_reload_weapon(weapon : Weapon, fake_current_ammo : int = -1) -> bool:
 		return false
 	
 	return true
+
+
+func serialize_state() -> Dictionary:
+	return _ammo_pool.duplicate()
+
+
+func deserialize_state(state : Dictionary):
+	_ammo_pool = state.duplicate()

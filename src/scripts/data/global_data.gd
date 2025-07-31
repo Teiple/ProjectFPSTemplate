@@ -34,12 +34,20 @@ enum MenuPauseOption {
 	UNPAUSE,
 }
 
-enum SaveSection {
+
+class Group:
+	const SAVEABLE := "saveable"
+
+
+enum SaveSectionId {
 	DEFAULT,
 	PLAYER,
+	POOL,
 }
 
-const SAVE_SECTION_MAPPING : Dictionary = {
-	SaveSection.DEFAULT : "",
-	SaveSection.PLAYER : "player",
+
+const SAVE_SECTION_MAP := {
+	SaveSectionId.DEFAULT : "",
+	SaveSectionId.PLAYER : "player",
+	SaveSectionId.POOL : "pool",
 }

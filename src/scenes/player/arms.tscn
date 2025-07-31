@@ -6,7 +6,7 @@
 [ext_resource path="res://src/scripts/player/weapon_action_controller.gd" type="Script" id=4]
 [ext_resource path="res://src/scripts/player/view_model_action_controller.gd" type="Script" id=5]
 [ext_resource path="res://src/scripts/player/weapon_controller.gd" type="Script" id=6]
-[ext_resource path="res://src/scripts/player/ammo_inventory.gd" type="Script" id=7]
+[ext_resource path="res://src/scenes/player/ammo_inventory.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/scripts/animation_override.gd" type="Script" id=8]
 [ext_resource path="res://src/scenes/components/weapon_raycast_component.tscn" type="PackedScene" id=9]
 [ext_resource path="res://src/scripts/player/view_model_motion_controller.gd" type="Script" id=10]
@@ -78,12 +78,7 @@ ammo_inventory_path = NodePath("../AmmoInventory")
 [node name="AimRayCast" type="RayCast" parent="WeaponController"]
 collision_mask = 9
 
-[node name="AmmoInventory" type="Node" parent="."]
-script = ExtResource( 7 )
-_ammo_pool = {
-"pistol": 120,
-"smg": 300
-}
+[node name="AmmoInventory" parent="." instance=ExtResource( 7 )]
 
 [node name="WeaponRaycastComponent" parent="." instance=ExtResource( 9 )]
 

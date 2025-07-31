@@ -39,11 +39,11 @@ func _on_resume_button_pressed():
 
 
 func _on_save_button_pressed():
-	print_debug("save")
+	Global.save_everything()
 
 
 func _on_load_button_pressed():
-	print_debug("load")
+	Global.load_everything()
 
 
 func _on_quit_button_pressed():

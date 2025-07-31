@@ -4,6 +4,10 @@ extends Component
 signal return_requested
 
 
+var _serialization_func_ref : FuncRef  = null
+var _deserialization_func_ref : FuncRef  = null
+
+
 static func get_component_name() -> String:
 	return "PoolableNodeComponent"
 
@@ -40,3 +44,23 @@ func enable_pooled_node():
 
 func return_to_pool():
 	emit_signal("return_requested")
+
+
+func init_serialization_func(func_ref : FuncRef):
+	_serialization_func_ref = func_ref
+
+
+func init_deserialization_func(func_ref : FuncRef):
+	_deserialization_func_ref = func_ref
+
+
+func serialize() -> Dictionary:
+	if _serialization_func_ref == null:
+		return {}
+	return _serialization_func_ref.call_func()
+
+
+func deserialize(data : Dictionary):
+	if _deserialization_func_ref == null:
+		return {}
+	return _deserialization_func_ref.call_func(data)

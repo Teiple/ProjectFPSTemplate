@@ -11,3 +11,14 @@ func _ready():
 
 func get_pool_by_category(category : int) -> Pool:
 	return _pools.get(category, null) as Pool
+
+
+func get_info_str() -> String:
+	var info = ""
+	for pool in get_children():
+		pool = pool as Pool
+		if pool == null:
+			continue
+		
+		info += "%s:\n%s\n" % [pool.name, pool.get_info_str()]
+	return info
