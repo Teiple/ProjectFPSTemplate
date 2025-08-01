@@ -129,6 +129,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/qodot/example_scenes/2-miscallaneous/1-runtime-map-building/orbit_arm.gd"
 }, {
+"base": "CPUParticles",
+"class": "PausableParticles",
+"language": "GDScript",
+"path": "res://src/scripts/effects/pausable_particles.gd"
+}, {
 "base": "Menu",
 "class": "PauseMenu",
 "language": "GDScript",
@@ -399,6 +404,7 @@ _global_script_class_icons={
 "LoadingData": "",
 "Menu": "",
 "OrbitArm": "",
+"PausableParticles": "",
 "PauseMenu": "",
 "PhysicsBall": "",
 "PhysicsEntity": "",
@@ -481,6 +487,8 @@ enabled=PoolStringArray( "res://addons/debug_draw_3d/plugin.cfg", "res://addons/
 [global]
 
 window=false
+stdou=false
+stdout=false
 
 [gui]
 
@@ -594,6 +602,11 @@ quick_load={
 3d_physics/layer_3="Hitboxes"
 3d_physics/layer_4="StairProxy"
 3d_physics/layer_5="StairCollision"
+
+[network]
+
+limits/debugger_stdout/max_chars_per_second=10000
+limits/debugger_stdout/max_messages_per_frame=100
 
 [physics]
 

@@ -83,11 +83,11 @@ func get_last_fire() -> float:
 
 func serialize_state() -> Dictionary:
 	return {
-		"last_fire" : _last_fire,
+		"last_fire_offset" : FrameTime.process_time() - _last_fire,
 		"current_ammo" : current_ammo
 	}
 
 
 func deserialize_state(state : Dictionary):
-	_last_fire = state.get("last_fire", -1.0)
+	_last_fire = FrameTime.process_time() - max(state.get("last_fire_offset", 0.0), 0.0)
 	current_ammo = state.get("current_ammo", 0)

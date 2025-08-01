@@ -1,11 +1,10 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/scripts/player/player.gd" type="Script" id=1]
 [ext_resource path="res://src/scenes/player/arms.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/scenes/player/player_hud.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/shaders/decal_fade.tres" type="Shader" id=4]
 [ext_resource path="res://textures/effects/simple_effect_1.png" type="Texture" id=5]
-[ext_resource path="res://src/resources/player/view_model_override_animation_player.scn" type="PackedScene" id=6]
 [ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CapsuleShape" id=1]
@@ -56,8 +55,6 @@ target_position = Vector3( 0, 0, 0 )
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, -1.75638, 7.67738e-08 )
 mesh = SubResource( 3 )
 material/0 = SubResource( 4 )
-
-[node name="AnimationPlayer" parent="." instance=ExtResource( 6 )]
 
 [node name="GameStateComponent" parent="." instance=ExtResource( 7 )]
 save_section_id = 1

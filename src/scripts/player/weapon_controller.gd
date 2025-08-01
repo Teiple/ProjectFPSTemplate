@@ -86,14 +86,17 @@ func get_current_weapon_id() -> String:
 
 
 # Rapid fire will ignore firerate and fire whenever it is possible
-func can_rapid_fire_or_play_empty_click() -> bool:
+func check_and_handle_rapid_fire_attempt() -> bool:
 	if _current_weapon == null || !_current_weapon.get_weapon_stats().allow_rapid_fire:
 		return false
 	# Player usually fires their last shot and continues spamming the fire button.
 	# This prevents playing the empty click sound right before auto-reload.
 	var can_auto_reload = _can_auto_reload_now()
-	if _current_weapon.get_current_ammo() == 0 && !can_auto_reload:
-		_current_weapon.play_empty_click()
+	if _current_weapon.get_current_ammo() == 0:
+		if !can_auto_reload:
+			_current_weapon.play_empty_click()
+		else:
+			emit_signal("auto_reload_requested")
 		return false
 	
 	if can_auto_reload:
@@ -232,14 +235,17 @@ func _can_auto_reload_now() -> bool:
 
 
 # Check if weapon is ready to fire, if weapon has no ammo, an empty click sound is played 
-func can_fire_or_play_empty_click() -> bool:
+func check_and_handle_fire_attempt() -> bool:
 	if _current_weapon == null || !is_current_weapon_firing_cool_down_over():
 		return false
 	# Player usually fires their last shot and continues spamming the fire button.
 	# This prevents playing the empty click sound right before auto-reload.
 	var can_auto_reload = _can_auto_reload_now()
-	if _current_weapon.get_current_ammo() == 0 && !can_auto_reload:
-		_current_weapon.play_empty_click()
+	if _current_weapon.get_current_ammo() == 0:
+		if !can_auto_reload:
+			_current_weapon.play_empty_click()
+		else:
+			emit_signal("auto_reload_requested")
 		return false
 	
 	if can_auto_reload:

@@ -6,7 +6,7 @@
 [ext_resource path="res://src/scripts/effects/decal.gd" type="Script" id=4]
 
 [sub_resource type="CubeMesh" id=6]
-size = Vector3( 0.1, 0.1, 0.02 )
+size = Vector3( 0.2, 0.2, 0.2 )
 
 [sub_resource type="ShaderMaterial" id=5]
 shader = ExtResource( 2 )

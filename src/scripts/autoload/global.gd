@@ -114,7 +114,19 @@ func quit(exit_code : int = -1):
 
 func set_tree_pause(paused : bool):
 	get_tree().paused = paused
+	# Set pausing for particles
+	for particles in get_tree().get_nodes_in_group(GlobalData.Group.PARTICLES):
+		particles = particles as PausableParticles
+		if particles == null:
+			return
+		if paused:
+			particles.pause()
+		else:
+			particles.unpause()
 
+
+func is_tree_paused() -> bool:
+	return get_tree().paused
 
 func save_everything():
 	var saveables = get_tree().get_nodes_in_group(GlobalData.Group.SAVEABLE)
@@ -145,6 +157,10 @@ func save_everything():
 
 
 func load_everything():
+	if Global.is_tree_paused():
+		push_error("Cannot load while the game is paused. Deserialization may immediately return nodes without a frame delay and causes reuse conflicts.")
+		return
+	
 	var saveables = get_tree().get_nodes_in_group(GlobalData.Group.SAVEABLE)
 	var save = GameState.load_save(GameState.SLOT_LATEST)
 	

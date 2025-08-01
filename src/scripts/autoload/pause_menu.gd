@@ -43,7 +43,8 @@ func _on_save_button_pressed():
 
 
 func _on_load_button_pressed():
-	Global.load_everything()
+	Global.call_deferred("load_everything")
+	back()
 
 
 func _on_quit_button_pressed():

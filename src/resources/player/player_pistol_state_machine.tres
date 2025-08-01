@@ -84,4 +84,4 @@ states/reload/position = Vector2( 0, -100 )
 states/unequip/node = SubResource( 6 )
 states/unequip/position = Vector2( 0, 100 )
 transitions = [ "equip", "unequip", SubResource( 7 ), "equip", "idle", SubResource( 8 ), "equip", "fire", SubResource( 9 ), "equip", "reload", SubResource( 10 ), "unequip", "equip", SubResource( 11 ), "unequip", "idle", SubResource( 12 ), "unequip", "fire", SubResource( 13 ), "unequip", "reload", SubResource( 14 ), "idle", "equip", SubResource( 15 ), "idle", "unequip", SubResource( 16 ), "idle", "fire", SubResource( 17 ), "idle", "reload", SubResource( 18 ), "fire", "equip", SubResource( 19 ), "fire", "idle", SubResource( 20 ), "fire", "unequip", SubResource( 21 ), "fire", "reload", SubResource( 22 ), "fire", "fire_intermediate", SubResource( 23 ), "fire_intermediate", "fire", SubResource( 24 ), "reload", "idle", SubResource( 25 ), "reload", "equip", SubResource( 26 ), "reload", "unequip", SubResource( 27 ), "reload", "fire", SubResource( 28 ) ]
-graph_offset = Vector2( -422.791, 0 )
+graph_offset = Vector2( -433.791, -110 )

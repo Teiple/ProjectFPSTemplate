@@ -8,10 +8,25 @@ onready var poolable_node_component : PoolableNodeComponent = $PoolableNodeCompo
 var _start_time : float = 0.0
 
 
+func _ready():
+	poolable_node_component.init_serialization_func(funcref(self, "serialize"))
+	poolable_node_component.init_deserialization_func(funcref(self, "deserialize"))
+
+
+func serialize() -> Dictionary:
+	return {
+		"global_transform": var2str(global_transform),
+	}
+
+
+func deserialize(data : Dictionary):
+	global_transform = Utils.either(str2var(data.get("global_transform")), global_transform)
+	_start_time = FrameTime.process_time()
+
+
 func set_up(position : Vector3, normal : Vector3):
 	global_transform = Transform.IDENTITY
 	global_position = position
-	
 	var dot = Vector3.UP.dot(normal)
 	if abs(dot) > 0.95:
 		if dot > 0:

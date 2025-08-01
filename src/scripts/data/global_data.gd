@@ -37,6 +37,7 @@ enum MenuPauseOption {
 
 class Group:
 	const SAVEABLE := "saveable"
+	const PARTICLES := "particles"
 
 
 enum SaveSectionId {

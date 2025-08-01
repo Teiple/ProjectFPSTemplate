@@ -52,7 +52,7 @@ func _on_return_requested(node : Node, poolable_node_component : PoolableNodeCom
 		return
 	
 	if !is_instance_valid(node) || !is_instance_valid(poolable_node_component):
-		push_error("how could these happen?")
+		push_error("how could this happen?")
 		return
 	
 	if _pool.has(poolable_node_component):
@@ -89,7 +89,7 @@ func take_from_pool(method : String = "", binds : Array = [], out_poolable_comp 
 	var new_node = false
 	# Create new node if the pool is empty/depleted 
 	if _pool.size() == 0:
-		if reusable && _in_use.size() > 0 && _first_in_use_node_valid_or_pop_front():
+		if reusable && _in_use.size() == max_pool_size && _first_in_use_node_valid_or_pop_front():
 			var least_recently_used = _in_use.pop_front()
 			poolable_node_component = least_recently_used
 			_hits += 1
@@ -101,9 +101,9 @@ func take_from_pool(method : String = "", binds : Array = [], out_poolable_comp 
 	else:
 		if !_back_pool_node_valid_or_pop_back():
 			# This shouldn't happen. The way it could happen
-			# is to have "sleeping" pooled node destroyed itself,
+			# is to have a "sleeping" pooled node destroyed itself,
 			# which I didn't remember being done to any of the pooled node
-			print_debug("how could these happen?")
+			print_debug("how could this happen?")
 			return null
 		poolable_node_component = _pool.pop_back()
 		_hits += 1
@@ -189,7 +189,10 @@ func deserialize_state(state : Dictionary):
 	var active_nodes = state.get("active_nodes", [])
 	if !(active_nodes is Array):
 		return
+	
 	_free_all_in_use()
+	
+	var poolable_arr : Dictionary = {}
 	
 	for i in active_nodes.size():
 		var out_poolable_node_comp : Array = []
@@ -199,7 +202,12 @@ func deserialize_state(state : Dictionary):
 		var poolable_node_comp = out_poolable_node_comp[0]
 		if poolable_node_comp == null:
 			continue
-		poolable_node_comp.deserialize(active_nodes[i])
+		
+		# Deserialization must be done later to not conflict with take_from_pool()
+		poolable_arr[poolable_node_comp] = active_nodes[i]
+	
+	for poolable in poolable_arr:
+		poolable.deserialize(poolable_arr[poolable])
 
 
 func get_info_str() -> String:
