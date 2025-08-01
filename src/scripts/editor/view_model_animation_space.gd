@@ -16,7 +16,7 @@ export var config_resource : Resource = null
 # Prevent running other setters/getters when saving this script
 export var editor_save_guard_end : bool = true setget _set_editor_save_guard_end
 
-var _is_script_saving : bool = false
+var _is_saving : bool = false
 
 class MethodTrack:
 	var animation : String = ""
@@ -32,18 +32,18 @@ func _set_editor_save_guard_start(val):
 	# If you are trying to turn this off manually, it won't count 
 	if val == false:
 		return
-	_is_script_saving = true
+	_is_saving = true
 
 
 func _set_editor_save_guard_end(val):
 	# If you are trying to turn this off manually, it won't count 
 	if val == false:
 		return
-	_is_script_saving = false
+	_is_saving = false
 
 
 func _set_reimport_view_model(val):
-	if !Engine.editor_hint || !is_node_ready() || _is_script_saving:
+	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 	
 	var old_view_model = get_node_or_null("ViewModel")
@@ -72,7 +72,7 @@ func _make_local(node : Node):
 	node.owner = self
 
 func _set_clear_callbacks(val):
-	if !Engine.editor_hint || !is_node_ready() || _is_script_saving:
+	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 	
 	var animation_player = get_animation_player()
@@ -99,7 +99,7 @@ func _set_clear_callbacks(val):
 func _set_insert_changes(val):
 	var animation_player = get_animation_player()
 	
-	if !Engine.editor_hint || !is_node_ready() || _is_script_saving || animation_player == null:
+	if !Engine.editor_hint || !is_node_ready() || _is_saving || animation_player == null:
 		return
 	
 	var path = _get_saving_directory() + "/" + _get_saving_name()
@@ -178,7 +178,7 @@ func _set_insert_changes(val):
 func _set_save_animation_player(val):
 	var animation_player = get_animation_player()
 	
-	if !Engine.editor_hint || !is_node_ready() || _is_script_saving || animation_player == null:
+	if !Engine.editor_hint || !is_node_ready() || _is_saving || animation_player == null:
 		return
 	
 	var animation_player_packed = PackedScene.new()

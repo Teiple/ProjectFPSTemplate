@@ -15,23 +15,23 @@ export var create_animation_state_machine : bool = false setget _set_create_anim
 
 export var export_save_guard_end : bool = true setget _set_export_save_guard_end
 
-var  _is_script_saving : bool = false
+var  _is_saving : bool = false
 
 
 func _set_export_save_guard_start(val):
 	if val == false:
 		return
-	_is_script_saving = true
+	_is_saving = true
 
 
 func _set_export_save_guard_end(val):
 	if val == false:
 		return
-	_is_script_saving = false
+	_is_saving = false
 
 
 func _set_create_animation_state_machine(val):
-	if !Engine.editor_hint || !is_node_ready() || _is_script_saving:
+	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 	
 	_create_state_machine(weapon_id, target)
