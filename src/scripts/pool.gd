@@ -72,9 +72,6 @@ func _on_return_requested(node : Node, poolable_node_component : PoolableNodeCom
 	node.get_parent().remove_child(node)
 	# Destroy node if the pool is full
 	if _pool.size() == max_pool_size:
-		if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-			if _pool.has(poolable_node_component):
-				print_debug("overflow deleted: ", poolable_node_component)
 		node.queue_free()
 		_overflows += 1
 		return
@@ -84,8 +81,6 @@ func _on_return_requested(node : Node, poolable_node_component : PoolableNodeCom
 	# Add back to pool
 	add_child(node)
 	_pool.push_back(poolable_node_component)
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug("push back: ", poolable_node_component)
 
 
 func take_from_pool(method : String = "", binds : Array = [], out_poolable_comp = null) -> Node:
@@ -108,11 +103,8 @@ func take_from_pool(method : String = "", binds : Array = [], out_poolable_comp 
 			# This shouldn't happen. The way it could happen
 			# is to have a "sleeping" pooled node destroyed itself,
 			# which I didn't remember being done to any of the pooled node
-			if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-				print_debug("how could this happen?")
+			push_error("how could this happen?")
 			return null
-		if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-			print_debug("popped back: ", _pool.back())
 		poolable_node_component = _pool.pop_back()
 		_hits += 1
 	
@@ -154,8 +146,6 @@ func serialize_state() -> Dictionary:
 
 
 func _free_all_in_use():
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug("_in_use: ", _in_use)
 	for poolable_node_comp in _in_use:
 		if !is_instance_valid(poolable_node_comp):
 			continue
@@ -166,9 +156,6 @@ func _free_all_in_use():
 		var node = poolable_node_comp.get_pooled_node()
 		if node == null:
 			continue
-		
-		if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-			print_debug("freed: ", poolable_node_comp)
 		
 		node.queue_free()
 	
@@ -189,28 +176,19 @@ func _first_in_use_node_valid_or_pop_front() -> bool:
 
 func _back_pool_node_valid_or_pop_back() -> bool:
 	if _pool.empty():
-		print_debug("it's just empty, don't worry")
 		return false
 	if is_instance_valid(_pool.back()):
 		return true
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug(_pool)
 	_pool.pop_back()
 	return false
 
 
 func deserialize_state(state : Dictionary):
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug("deserialize")
 	if state.empty():
 		return
 	var active_nodes = state.get("active_nodes", [])
 	if !(active_nodes is Array):
 		return
-	
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug(_pool)
-		print_debug("free")
 	
 	_free_all_in_use()
 	
@@ -228,14 +206,8 @@ func deserialize_state(state : Dictionary):
 		# Deserialization must be done later to not conflict with take_from_pool()
 		poolable_arr[poolable_node_comp] = active_nodes[i]
 	
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug("end first loop")
-	
 	for poolable in poolable_arr:
 		poolable.deserialize(poolable_arr[poolable])
-	
-	if pool_category == GlobalData.PoolCategory.BULLET_PROJECTILE:
-		print_debug("end deserialize")
 
 
 func get_info_str() -> String:

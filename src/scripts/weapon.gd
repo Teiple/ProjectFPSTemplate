@@ -10,6 +10,7 @@ export var weapon_stats : Resource = null
 var _weapon_model : Spatial = null
 var _weapon_animation_player : AnimationPlayer = null
 var _last_fire : float = -1.0
+var _last_mark_fire : float = -1.0
 
 onready var _animation_tree : AnimationTree = $AnimationTree
 onready var muzzle_position : Spatial = $MuzzlePosition
@@ -39,12 +40,12 @@ func get_current_ammo():
 
 # Ensure firing cool down is over
 func is_firing_cooldown_timeout() -> bool:
-	var time_passed =  FrameTime.process_time() - _last_fire
+	var time_passed =  FrameTime.process_time() - max(_last_fire, _last_mark_fire)
 	return time_passed > weapon_stats.fire_rate
 
 
 func mark_fire():
-	_last_fire = FrameTime.process_time()
+	_last_mark_fire = FrameTime.process_time()
 
 
 func fire():
@@ -52,6 +53,7 @@ func fire():
 		emit_signal("fired")
 		return
 	
+	_last_fire = FrameTime.process_time()
 	var ammo_shot = min(weapon_stats.ammo_per_shot, current_ammo)
 	current_ammo -= ammo_shot
 	
