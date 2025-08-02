@@ -21,6 +21,7 @@ enum BallisticModel {
 enum ConfigId {
 	DEFAULT,
 	ANIMATION_CONFIG,
+	WEAPON_CONFIG,
 }
 
 enum MenuId {

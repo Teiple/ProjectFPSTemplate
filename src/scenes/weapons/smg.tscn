@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/scenes/weapon_models/smg_model.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/scripts/weapon.gd" type="Script" id=2]
 [ext_resource path="res://src/resources/weapon/smg_state_machine.tres" type="AnimationNodeStateMachine" id=3]
 [ext_resource path="res://src/resources/weapon/smg_weapon_stats.tres" type="Resource" id=4]
 [ext_resource path="res://src/scenes/effects/muzzle_flash_1.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=6]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=1]
 
@@ -40,9 +39,6 @@ shape = SubResource( 2 )
 target_position = Vector3( 0, 0, 0 )
 max_results = 1
 collision_mask = 0
-
-[node name="GameStateComponent" parent="." instance=ExtResource( 6 )]
-save_section_id = 1
 
 [editable path="SmgModel"]
 [editable path="SmgModel/smg"]

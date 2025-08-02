@@ -12,7 +12,12 @@ export var damage_per_projectile : float = 10
 export var spread_angle_degrees : float = 2
 export var weapon_slot : int = 1 
 export(GlobalData.BallisticModel) var ballistic_model : int = GlobalData.BallisticModel.HITSCAN
+
+# Relative to view model origin
+export var view_model_relative_transform_from_hand : Transform = Transform.IDENTITY
+
 # Only matter if ballistic_model is Projectile
 export var projectile_speed : float = 30.0
+
 export var allow_rapid_fire : bool = false
 export(int, LAYERS_3D_PHYSICS) var collision_mask : int = 5

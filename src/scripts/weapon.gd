@@ -40,7 +40,7 @@ func get_current_ammo():
 
 # Ensure firing cool down is over
 func is_firing_cooldown_timeout() -> bool:
-	var time_passed =  FrameTime.process_time() - max(_last_fire, _last_mark_fire)
+	var time_passed = max(FrameTime.process_time() - max(_last_fire, _last_mark_fire), 0)
 	return time_passed > weapon_stats.fire_rate
 
 
@@ -83,13 +83,14 @@ func get_last_fire() -> float:
 	return _last_fire
 
 
-func serialize_state() -> Dictionary:
+func serialize_weapon() -> Dictionary:
 	return {
 		"last_fire_offset" : FrameTime.process_time() - _last_fire,
 		"current_ammo" : current_ammo
 	}
 
 
-func deserialize_state(state : Dictionary):
-	_last_fire = FrameTime.process_time() - max(state.get("last_fire_offset", 0.0), 0.0)
-	current_ammo = state.get("current_ammo", 0)
+func deserialize_weapon(data : Dictionary):
+	_last_fire = FrameTime.process_time() - max(data.get("last_fire_offset", 0.0), 0.0)
+	_last_mark_fire = _last_fire
+	current_ammo = data.get("current_ammo", 0)

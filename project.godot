@@ -364,6 +364,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/player/weapon_action_controller.gd"
 }, {
+"base": "Reference",
+"class": "WeaponConfig",
+"language": "GDScript",
+"path": "res://src/scripts/config/weapon_config.gd"
+}, {
 "base": "Node",
 "class": "WeaponController",
 "language": "GDScript",
@@ -378,6 +383,11 @@ _global_script_classes=[ {
 "class": "WeaponRaycastComponent",
 "language": "GDScript",
 "path": "res://src/scripts/components/weapon_raycast_component.gd"
+}, {
+"base": "Node",
+"class": "WeaponRelativeTransformSaver",
+"language": "GDScript",
+"path": "res://src/scripts/editor/weapon_relative_transform_saver.gd"
 }, {
 "base": "Resource",
 "class": "WeaponStats",
@@ -456,9 +466,11 @@ _global_script_class_icons={
 "WaterLayer": "",
 "Weapon": "",
 "WeaponActionController": "",
+"WeaponConfig": "",
 "WeaponController": "",
 "WeaponProjectileComponent": "",
 "WeaponRaycastComponent": "",
+"WeaponRelativeTransformSaver": "",
 "WeaponStats": ""
 }
 

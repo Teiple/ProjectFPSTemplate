@@ -2,6 +2,7 @@ class_name GameConfig
 
 const _config_list : Dictionary = {
 	GlobalData.ConfigId.ANIMATION_CONFIG : AnimationConfig.config,
+	GlobalData.ConfigId.WEAPON_CONFIG : WeaponConfig.config,
 }
 
 

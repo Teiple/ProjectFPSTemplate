@@ -2,6 +2,7 @@ class_name WeaponController
 extends Node
 
 signal weapon_changed
+signal weapon_changed_immediate
 signal auto_reload_requested
 
 enum {
@@ -48,16 +49,18 @@ func _unhandled_input(event):
 func get_available_weapons() -> Array:
 	var weapon_arr = []
 	for weapon in _weapons_node.get_children():
-		if weapon is Weapon:
+		# In case of weapons are freed due to loading, here is an is_instance_valid check
+		if is_instance_valid(weapon) && weapon is Weapon:
 			weapon_arr.push_back(weapon)
 	return weapon_arr
 
 
 func get_available_slots() -> Array:
 	var weapon_slot_arr = []
-	for weapon in _weapons_node.get_children():
+	for weapon in get_available_weapons():
 		if weapon is Weapon:
-			weapon_slot_arr.push_back(weapon.get_weapon_stats().weapon_slot)
+			var wp_slot = weapon.get_weapon_stats().weapon_slot
+			weapon_slot_arr.push_back(wp_slot)
 	weapon_slot_arr.sort()
 	return weapon_slot_arr
 
@@ -105,11 +108,13 @@ func check_and_handle_rapid_fire_attempt() -> bool:
 	return true
 
 
-func select_weapon(weapon_slot : int):
+func select_weapon(weapon_slot : int, immediate : bool = false):
+	var wp_changed_signal = "weapon_changed_immediate" if immediate else "weapon_changed"
+	
 	# -1 for unarmed
 	if weapon_slot == -1:
 		_current_weapon = null
-		emit_signal("weapon_changed")
+		emit_signal(wp_changed_signal)
 		return
 	
 	if weapon_slot < 0 || weapon_slot >= MAX_SLOTS:
@@ -120,18 +125,21 @@ func select_weapon(weapon_slot : int):
 		return
 	
 	# Hide other weapons
-	for wp in _weapons_node.get_children():
+	for wp in get_available_weapons():
 		#wp.visible = wp == weapon
 		wp.set_deferred("visible", wp == weapon)
 	
+	# Set relative transform
+	weapon.transform = weapon.get_weapon_stats().view_model_relative_transform_from_hand
+	
 	_current_weapon = weapon
-	emit_signal("weapon_changed")
+	emit_signal(wp_changed_signal)
 
 
 func _find_weapon_at_slot(slot_number : int) -> Weapon:
-	for weapon in _weapons_node.get_children():
-		if weapon is Weapon && weapon.get_weapon_stats().weapon_slot == slot_number:
-			return weapon as Weapon
+	for wp in get_available_weapons():
+		if wp is Weapon && wp.get_weapon_stats().weapon_slot == slot_number:
+			return wp as Weapon
 	return null
 
 
@@ -166,10 +174,11 @@ func _cycle_weapon(direction : int):
 
 # Assuming new_weapon is not null
 func _duplicate_check(new_weapon : Weapon) -> int:
-	if new_weapon in get_available_weapons():
+	var weapons = get_available_weapons()
+	if new_weapon in weapons:
 		return WEAPON_ERROR_DUPLICATION
 	
-	for weapon in get_available_weapons():
+	for weapon in weapons:
 		if new_weapon.get_weapon_stats().weapon_id == weapon.get_weapon_stats().weapon_id:
 			return WEAPON_ID_DUPLICATION
 		elif new_weapon.get_weapon_stats().weapon_slot == weapon.get_weapon_stats().weapon_slot:
@@ -367,3 +376,54 @@ func fire():
 						result = weapon_projectile_comp.launch(attack)
 	# Calling fire() for the weapon to recalcuate its current weapon
 	_current_weapon.fire()
+
+
+func serialize_available_weapons() -> Dictionary:
+	var data = {}
+	for wp in get_available_weapons():
+		wp = wp as Weapon
+		if wp == null:
+			continue
+		var wp_data = wp.serialize_weapon()
+		var wp_id = wp.get_weapon_stats().weapon_id
+		data[wp_id] = wp_data
+	return data
+
+
+func _remove_all_weapons():
+	for wp in _weapons_node.get_children():
+		_weapons_node.remove_child(wp)
+		wp.queue_free()
+
+
+func serialize_state() -> Dictionary:
+	var cur_wp_slot = -1
+	if _current_weapon != null:
+		cur_wp_slot = _current_weapon.get_weapon_stats().weapon_slot
+	return {
+		"weapons" : serialize_available_weapons(),
+		"current_weapon_slot" : cur_wp_slot,
+	}
+
+
+func deserialize_state(state : Dictionary):
+	var cur_wp_slot = state.get("current_weapon_slot", "")
+	var wps_data = state.get("weapons", {})
+	
+	_remove_all_weapons()
+	
+	for wp_id in wps_data:
+		var wp_packed_scene = GameConfig.get_config_value(GlobalData.ConfigId.WEAPON_CONFIG, [wp_id], null) as PackedScene
+		if wp_packed_scene == null:
+			return
+		var wp = wp_packed_scene.instance() as Weapon
+		if wp == null:
+			wp.queue_free()
+			continue
+		_weapons_node.add_child(wp)
+		
+		var wp_data = wps_data.get(wp_id, {})
+		wp.deserialize_weapon(wp_data)
+	
+	# Equip and change into idle animation immediatly
+	select_weapon(cur_wp_slot, true)

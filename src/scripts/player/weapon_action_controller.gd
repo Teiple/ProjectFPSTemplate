@@ -18,7 +18,12 @@ func set_travel_to_state(to : String):
 	var playback_path = "parameters/playback"
 	var playback : AnimationNodeStateMachinePlayback = animation_tree[playback_path] as AnimationNodeStateMachinePlayback
 	
-	playback.travel(to)
+	# In case of loading, animation tree won't have starting point
+	# so it cannot travel
+	if playback.is_playing():
+		playback.travel(to)
+	else:
+		playback.start(to)
 
 
 func set_immediate_state(to : String):

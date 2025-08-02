@@ -3,6 +3,7 @@ extends Node
 
 const EVENTS_CONFIG : String = "events"
 const ANY_STATE : String= "(any_state)"
+const ANY_STATE_IMMEDIATE : String= "(any_state_immediate)"
 const ANY_STATE_EXCEPT_TARGET : String = "(any_state_except_target)"
 const INTERMEDIATE_SUFFIX : String = "_intermediate"
 const LOCAL_TRANSITIONS : String = "local_animation_transition_subscribers"
@@ -30,6 +31,9 @@ func _ready():
 	_weapon_controller.connect("auto_reload_requested", self, "_on_auto_reload_requested")
 	# Process weapon changed signal from WeaponController
 	_weapon_controller.connect("weapon_changed", self, "_on_weapon_changed")
+	# Used for loading into instant idle animation
+	_weapon_controller.connect("weapon_changed_immediate", self, "_on_weapon_changed_immediate")
+
 
 
 func _process(delta):
@@ -67,6 +71,10 @@ func _on_auto_reload_requested():
 
 func _on_weapon_changed():
 	_trigger_event("equip")
+
+
+func _on_weapon_changed_immediate():
+	_trigger_event("idle")
 
 
 func _trigger_event(event_name : String):
@@ -115,9 +123,12 @@ func _try_local_transition(weapon_id : String, from : String, to : String) -> bo
 	
 	var current_state = weapon_playback.get_current_node()
 	
-	# Special case: "(any_state)" means doing transition right now
-	# Special case: transition from any state other than the next state
-	# BUG: There is a bug(?) where traveling into the same state for both parent and sub statemachine prevents sub statemachine from auto-advance
+	# AVOIDED BUG: There is a bug(?) where traveling into the same state for both parent and sub statemachine prevents sub statemachine from auto-advance
+	
+	if from == ANY_STATE_IMMEDIATE:
+		weapon_playback.start(to)
+		_weapon_action_controller.set_immediate_state(to)
+	
 	if from == ANY_STATE || (from == ANY_STATE_EXCEPT_TARGET && current_state != to):
 		weapon_playback.travel(to)
 		_weapon_action_controller.set_travel_to_state(to)

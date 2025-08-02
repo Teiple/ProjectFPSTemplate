@@ -21,6 +21,15 @@ const config : Dictionary = {
 				],
 				"global_animation_transition_target": "",
 			},
+			# Note: This doesn't mean that transition from any state to idle is immediate
+			# But rather if this event is ever used, it is aimed to get a instant result
+			# Usecase: Loading a save
+			"idle": {
+				"local_animation_transition_subscribers": [
+					"(any_state_immediate)/idle"
+				],
+				"global_animation_transition_target": "idle",
+			}
 		},
 		# Configuration for building animation statemachines for player's view model and weapons 
 		"state_machine" : {
