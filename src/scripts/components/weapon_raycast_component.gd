@@ -2,8 +2,9 @@ class_name WeaponRaycastComponent
 extends Component
 
 
-onready var _raycast : RayCast = $RayCast
+export var physics_body_margin_offset : float = 0.038
 
+onready var _raycast : RayCast = $RayCast
 
 static func get_component_name() -> String:
 	return "WeaponRaycastComponent"
@@ -29,8 +30,10 @@ func cast(attack_origin_info : AttackOriginInfo) -> AttackResultInfo:
 		result.hit_object = _raycast.get_collider()
 
 		_play_bullet_trail(attack_origin_info, result.hit_point)
+		_spawn_impact_effects(result.hit_point, result.hit_normal)
 	else:
-		var furthest_point = attack_origin_info.from + attack_origin_info.direction * attack_origin_info.max_distance
+		var global_dir =( _raycast.to_global(cast_to) - _raycast.global_position).normalized()
+		var furthest_point = attack_origin_info.from + global_dir * attack_origin_info.max_distance
 		_play_bullet_trail(attack_origin_info, furthest_point)
 	
 	return result
@@ -52,3 +55,14 @@ func _play_bullet_trail(origin_info: AttackOriginInfo, end_point: Vector3) -> vo
 func _get_random_spread_angle_radians(angle_deg : float) -> float:
 	var angle_rad = deg2rad(angle_deg)
 	return rand_range(-angle_rad, angle_rad)
+
+
+func _spawn_impact_effects(hit_position : Vector3, hit_normal):
+	var pos = hit_position - hit_normal * physics_body_margin_offset
+	var impact_pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_IMPACT_EFFECT) as Pool
+	if impact_pool != null:
+		impact_pool.take_from_pool("set_up", [pos, hit_normal])
+	
+	var decal_pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_BULLET_HOLE_DECAL) as Pool
+	if decal_pool != null:
+		decal_pool.take_from_pool("set_up", [pos, hit_normal])
