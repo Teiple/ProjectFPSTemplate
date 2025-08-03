@@ -25,9 +25,11 @@ func cast(attack_origin_info : AttackOriginInfo) -> AttackResultInfo:
 	var result : AttackResultInfo = null
 	if _raycast.is_colliding():
 		result = AttackResultInfo.new()
+		result.from = _raycast.global_position
 		result.hit_point = _raycast.get_collision_point()
 		result.hit_normal = _raycast.get_collision_normal()
 		result.hit_object = _raycast.get_collider()
+		result.impact_force = attack_origin_info.impact_force
 
 		_play_bullet_trail(attack_origin_info, result.hit_point)
 		_spawn_impact_effects(result.hit_point, result.hit_normal)

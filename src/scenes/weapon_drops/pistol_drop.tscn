@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/scenes/weapon_models/pistol_model.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/scenes/components/weapon_drop_component.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/scenes/components/physical_object_component.tscn" type="PackedScene" id=3]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.0148388, 0.0241608, 0.0925287 )
@@ -22,6 +23,8 @@ transform = Transform( 1, 0, 0, 0, 0.201813, 0.979424, 0, -0.979424, 0.201813, 0
 shape = SubResource( 2 )
 
 [node name="WeaponDropComponent" parent="." instance=ExtResource( 2 )]
+
+[node name="PhysicalObjectComponent" parent="." instance=ExtResource( 3 )]
 
 [editable path="PistolModel"]
 [editable path="PistolModel/pistol"]

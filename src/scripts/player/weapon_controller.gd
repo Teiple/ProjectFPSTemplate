@@ -115,7 +115,7 @@ func select_weapon(weapon_slot : int, immediate : bool = false):
 		return
 	
 	# Don't choose the same weapon again
-	if _current_weapon != null && _current_weapon.get_weapon_stats().weapon_slot == weapon_slot:
+	if is_instance_valid(_current_weapon) && _current_weapon.get_weapon_stats().weapon_slot == weapon_slot:
 		return
 	
 	var weapon = _find_weapon_at_slot(weapon_slot)
@@ -292,6 +292,7 @@ func fire():
 			attack.damage = stats.damage_per_projectile
 			attack.max_distance = stats.max_distance
 			attack.collision_mask = stats.collision_mask
+			attack.impact_force = stats.impact_force
 			
 			if precise_shot:
 				attack.spread_angle_degrees = 0.0
@@ -305,7 +306,7 @@ func fire():
 					var weapon_raycast_comp : WeaponRaycastComponent = Component.find_component(arms, WeaponRaycastComponent.get_component_name()) as WeaponRaycastComponent
 					
 					attack.from = arms.global_position
-					attack.direction = -arms.global_transform.basis.z
+					attack.base_direction = -arms.global_transform.basis.z
 					attack.use_visual_origin = true
 					attack.visually_from = _current_weapon.get_muzzle_position()
 					attack.attacker_forward = -arms.global_transform.basis.z
@@ -332,13 +333,13 @@ func fire():
 						if aim_raycast.is_colliding():
 							var collision_point = aim_raycast.get_collision_point()
 							attack.max_distance = (collision_point - attack.from).length()
-							attack.direction = (collision_point - attack.from) / attack.max_distance
+							attack.base_direction = (collision_point - attack.from) / attack.max_distance
 						else:
 							attack.max_distance = (furthest_point - attack.from).length()
-							attack.direction = (furthest_point - attack.from) / attack.max_distance
+							attack.base_direction = (furthest_point - attack.from) / attack.max_distance
 					else:
 						attack.from = arms.global_position
-						attack.direction = -arms.global_transform.basis.z
+						attack.base_direction = -arms.global_transform.basis.z
 					
 					attack.projectile_speed = _current_weapon.get_weapon_stats().projectile_speed
 					
@@ -381,6 +382,10 @@ func deserialize_state(state : Dictionary):
 	var wps_data = state.get("weapons", {})
 	
 	_remove_all_weapons()
+	
+	# Must set to null here, or else if select_weapon refuses to change
+	# _current_weapon may reference a deleted object
+	_current_weapon = null
 	
 	for wp_id in wps_data:
 		var wp_packed_scene = GameConfig.get_config_value(GlobalData.ConfigId.WEAPON_CONFIG, ["weapons", wp_id], null) as PackedScene

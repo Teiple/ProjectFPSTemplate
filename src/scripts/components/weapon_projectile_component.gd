@@ -8,12 +8,13 @@ func launch(attack_origin_info : AttackOriginInfo):
 		return
 	
 	var start = attack_origin_info.from
-	var direction = _get_randomized_direction(attack_origin_info.direction, attack_origin_info.spread_angle_degrees)
+	var direction = _get_randomized_direction(attack_origin_info.base_direction, attack_origin_info.spread_angle_degrees)
+	attack_origin_info.direction = direction
 	var speed = attack_origin_info.projectile_speed
 	var max_distance = attack_origin_info.max_distance
 	var collision_mask = attack_origin_info.collision_mask
 	
-	projectile_pool.take_from_pool("set_up", [start, direction, speed, max_distance, collision_mask])
+	projectile_pool.take_from_pool("set_up", [attack_origin_info])
 
 
 func _get_randomized_direction(direction : Vector3, angle_degrees : float) -> Vector3:

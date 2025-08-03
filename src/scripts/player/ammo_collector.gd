@@ -67,9 +67,13 @@ func _try_collect():
 			_ammo_inventory.add_weapon_ammo(weapon_id, add_amount)
 		WEAPON_SLOT_DUPLICATION:
 			var weapon_replacment = weapon_drop_comp.player_take_weapon()
+			if weapon_replacment == null:
+				return
 			_weapon_controller.replace_weapon(weapon_replacment)
 		WEAPON_NO_DUPLICATION:
 			var new_weapon = weapon_drop_comp.player_take_weapon()
+			if new_weapon == null:
+				return
 			_weapon_controller.add_new_weapon(new_weapon)
 		_:
 			pass

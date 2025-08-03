@@ -21,3 +21,5 @@ export var projectile_speed : float = 30.0
 
 export var allow_rapid_fire : bool = false
 export(int, LAYERS_3D_PHYSICS) var collision_mask : int = 5
+
+export var impact_force : float = 1.0
