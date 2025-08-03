@@ -3,7 +3,7 @@
 [ext_resource path="res://src/scripts/player/weapon_controller.gd" type="Script" id=1]
 [ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=2]
 
-[node name="WeaponController" type="Node"]
+[node name="WeaponController" type="Spatial"]
 script = ExtResource( 1 )
 weapons_path = NodePath("../ViewModel/armature/Skeleton/Weapons")
 ammo_inventory_path = NodePath("../AmmoInventory")

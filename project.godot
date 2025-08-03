@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Spatial",
+"class": "AmmoCollector",
+"language": "GDScript",
+"path": "res://src/scripts/player/ammo_collector.gd"
+}, {
 "base": "Node",
 "class": "AmmoInventory",
 "language": "GDScript",
@@ -369,10 +374,15 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/config/weapon_config.gd"
 }, {
-"base": "Node",
+"base": "Spatial",
 "class": "WeaponController",
 "language": "GDScript",
 "path": "res://src/scripts/player/weapon_controller.gd"
+}, {
+"base": "Component",
+"class": "WeaponDropComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/weapon_drop_component.gd"
 }, {
 "base": "Component",
 "class": "WeaponProjectileComponent",
@@ -395,6 +405,7 @@ _global_script_classes=[ {
 "path": "res://src/scripts/resources/weapon_stats.gd"
 } ]
 _global_script_class_icons={
+"AmmoCollector": "",
 "AmmoInventory": "",
 "AnimationConfig": "",
 "AnimationOverride": "",
@@ -468,6 +479,7 @@ _global_script_class_icons={
 "WeaponActionController": "",
 "WeaponConfig": "",
 "WeaponController": "",
+"WeaponDropComponent": "",
 "WeaponProjectileComponent": "",
 "WeaponRaycastComponent": "",
 "WeaponRelativeTransformSaver": "",
@@ -607,6 +619,11 @@ quick_save={
 quick_load={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":16777252,"unicode":0,"echo":false,"script":null)
+ ]
+}
+interact={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":0,"physical_scancode":69,"unicode":0,"echo":false,"script":null)
  ]
 }
 

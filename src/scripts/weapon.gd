@@ -38,6 +38,10 @@ func get_current_ammo():
 	return current_ammo
 
 
+func set_current_ammo(val : int):
+	current_ammo = val
+
+
 # Ensure firing cool down is over
 func is_firing_cooldown_timeout() -> bool:
 	var time_passed = max(FrameTime.process_time() - max(_last_fire, _last_mark_fire), 0)

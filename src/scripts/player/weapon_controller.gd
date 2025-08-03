@@ -1,16 +1,9 @@
 class_name WeaponController
-extends Node
+extends Spatial
 
 signal weapon_changed
 signal weapon_changed_immediate
 signal auto_reload_requested
-
-enum {
-	WEAPON_ID_DUPLICATION,
-	WEAPON_SLOT_DUPLICATION,
-	WEAPON_NO_DUPLICATION,
-	WEAPON_ERROR_DUPLICATION,
-}
 
 const MAX_SLOTS : int = 4
 
@@ -43,7 +36,7 @@ func _unhandled_input(event):
 	
 	for i in MAX_SLOTS:
 		if event.is_action_pressed("weapon_slot_" + str(i+1)):
-			select_weapon(i)
+			select_weapon(i+1)
 
 
 func get_available_weapons() -> Array:
@@ -113,11 +106,16 @@ func select_weapon(weapon_slot : int, immediate : bool = false):
 	
 	# -1 for unarmed
 	if weapon_slot == -1:
-		_current_weapon = null
-		emit_signal(wp_changed_signal)
+		if _current_weapon != null:
+			_current_weapon = null
+			emit_signal(wp_changed_signal)
 		return
 	
 	if weapon_slot < 0 || weapon_slot >= MAX_SLOTS:
+		return
+	
+	# Don't choose the same weapon again
+	if _current_weapon != null && _current_weapon.get_weapon_stats().weapon_slot == weapon_slot:
 		return
 	
 	var weapon = _find_weapon_at_slot(weapon_slot)
@@ -172,50 +170,22 @@ func _cycle_weapon(direction : int):
 	select_weapon(new_slot)
 
 
-# Assuming new_weapon is not null
-func _duplicate_check(new_weapon : Weapon) -> int:
-	var weapons = get_available_weapons()
-	if new_weapon in weapons:
-		return WEAPON_ERROR_DUPLICATION
-	
-	for weapon in weapons:
-		if new_weapon.get_weapon_stats().weapon_id == weapon.get_weapon_stats().weapon_id:
-			return WEAPON_ID_DUPLICATION
-		elif new_weapon.get_weapon_stats().weapon_slot == weapon.get_weapon_stats().weapon_slot:
-			return WEAPON_SLOT_DUPLICATION
-	
-	return WEAPON_NO_DUPLICATION
-
-
-func add_weapon(new_weapon : Weapon):
+func add_new_weapon(new_weapon : Weapon):
 	if new_weapon == null:
-		return 
-	
-	var duplication = _duplicate_check(new_weapon)
-	match duplication:
-		WEAPON_ID_DUPLICATION:
-			_ammo_inventory.take_weapon_ammo(new_weapon)
-		WEAPON_SLOT_DUPLICATION:
-			_replace_weapon(new_weapon)
-		WEAPON_NO_DUPLICATION:
-			_add_new_weapon(new_weapon)
-		_, WEAPON_ERROR_DUPLICATION:
-			pass
-
-
-# Assuming new_weapon is not null
-func _add_new_weapon(new_weapon : Weapon):
+		return
 	_weapons_node.add_child(new_weapon)
 	var new_slot = new_weapon.get_weapon_stats().weapon_slot
-	
 	if auto_equip_new_weapon:
 		select_weapon(new_slot)
 
 
-# Assuming new_weapon is not null, weapon with the same slot exists 
-func _replace_weapon(new_weapon : Weapon):
+func replace_weapon(new_weapon : Weapon):
 	var replaced_slot = new_weapon.get_weapon_stats().weapon_slot
 	var old_weapon = _find_weapon_at_slot(replaced_slot)
+	
+	if old_weapon == null:
+		return
+	
 	_weapons_node.remove_child(old_weapon)
 	_weapons_node.add_child(new_weapon)
 	
@@ -413,9 +383,9 @@ func deserialize_state(state : Dictionary):
 	_remove_all_weapons()
 	
 	for wp_id in wps_data:
-		var wp_packed_scene = GameConfig.get_config_value(GlobalData.ConfigId.WEAPON_CONFIG, [wp_id], null) as PackedScene
+		var wp_packed_scene = GameConfig.get_config_value(GlobalData.ConfigId.WEAPON_CONFIG, ["weapons", wp_id], null) as PackedScene
 		if wp_packed_scene == null:
-			return
+			continue
 		var wp = wp_packed_scene.instance() as Weapon
 		if wp == null:
 			wp.queue_free()
@@ -425,5 +395,12 @@ func deserialize_state(state : Dictionary):
 		var wp_data = wps_data.get(wp_id, {})
 		wp.deserialize_weapon(wp_data)
 	
-	# Equip and change into idle animation immediatly
+	# Equip and change into idle animation immediately
 	select_weapon(cur_wp_slot, true)
+
+
+func get_available_weapon_stats() -> Array:
+	var stats = []
+	for wp in get_available_weapons():
+		stats.push_back(wp.get_weapon_stats())
+	return stats

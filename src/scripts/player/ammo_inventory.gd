@@ -36,12 +36,7 @@ func reload_weapon(weapon: Weapon):
 
 
 # Take ammo from a free weapon and return the amount it take 
-func take_weapon_ammo(weapon : Weapon) -> int:
-	if weapon == null:
-		return 0
-	
-	var weapon_id = weapon.get_weapon_stats().weapon_id
-	var amount =  weapon.get_current_ammo()
+func add_weapon_ammo(weapon_id : String, amount : int) -> int:
 	_add_reserve_ammo(weapon_id, amount)
 	return amount
 
