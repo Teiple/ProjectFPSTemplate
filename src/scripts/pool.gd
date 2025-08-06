@@ -203,7 +203,7 @@ func deserialize_state(state : Dictionary):
 		if poolable_node_comp == null:
 			continue
 		
-		# Deserialization must be done later to not conflict with take_from_pool()
+		# Deserialization must be done later to avoid conflict with take_from_pool()
 		poolable_arr[poolable_node_comp] = active_nodes[i]
 	
 	for poolable in poolable_arr:

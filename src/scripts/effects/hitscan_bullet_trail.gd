@@ -25,8 +25,8 @@ func set_up(start : Vector3, end : Vector3):
 	_direction = (end - start).normalized()
 	
 	# Don't show up if the distance is too short 
-	if (end - start).length_squared() <= length:
-		poolable_node_component.emit_signal("return_requested")
+	if (end - start).length_squared() <= length * length:
+		poolable_node_component.return_to_pool()
 		return
 	
 	_current = _start + _direction * length

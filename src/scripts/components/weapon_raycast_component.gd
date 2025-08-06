@@ -32,7 +32,7 @@ func cast(attack_origin_info : AttackOriginInfo) -> AttackResultInfo:
 		result.impact_force = attack_origin_info.impact_force
 
 		_play_bullet_trail(attack_origin_info, result.hit_point)
-		_spawn_impact_effects(result.hit_point, result.hit_normal)
+		_spawn_impact_effects(result.hit_point, result.hit_normal, result.hit_object)
 	else:
 		var global_dir =( _raycast.to_global(cast_to) - _raycast.global_position).normalized()
 		var furthest_point = attack_origin_info.from + global_dir * attack_origin_info.max_distance
@@ -59,7 +59,7 @@ func _get_random_spread_angle_radians(angle_deg : float) -> float:
 	return rand_range(-angle_rad, angle_rad)
 
 
-func _spawn_impact_effects(hit_position : Vector3, hit_normal):
+func _spawn_impact_effects(hit_position : Vector3, hit_normal : Vector3, hit_object : Spatial):
 	var pos = hit_position - hit_normal * physics_body_margin_offset
 	var impact_pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_IMPACT_EFFECT) as Pool
 	if impact_pool != null:
@@ -67,4 +67,7 @@ func _spawn_impact_effects(hit_position : Vector3, hit_normal):
 	
 	var decal_pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_BULLET_HOLE_DECAL) as Pool
 	if decal_pool != null:
-		decal_pool.take_from_pool("set_up", [pos, hit_normal])
+		if hit_object is RigidBody:
+			decal_pool.take_from_pool("set_up", [pos, hit_normal, hit_object])
+		else:
+			decal_pool.take_from_pool("set_up", [pos, hit_normal, decal_pool])

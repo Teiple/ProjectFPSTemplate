@@ -59,6 +59,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/effects/decal.gd"
 }, {
+"base": "ImmediateGeometry",
+"class": "DecalProjection",
+"language": "GDScript",
+"path": "res://src/scripts/effects/decal_projection.gd"
+}, {
 "base": "Node",
 "class": "FrameDebug",
 "language": "GDScript",
@@ -420,6 +425,7 @@ _global_script_class_icons={
 "BulletProjectile": "",
 "Component": "",
 "Decal": "",
+"DecalProjection": "",
 "FrameDebug": "",
 "GameConfig": "",
 "GameState": "",
@@ -652,6 +658,7 @@ limits/debugger_stdout/max_messages_per_frame=100
 [physics]
 
 common/enable_pause_aware_picking=true
+3d/physics_engine="Bullet"
 
 [rendering]
 

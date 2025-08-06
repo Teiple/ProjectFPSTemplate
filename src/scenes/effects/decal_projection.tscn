@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://src/scripts/effects/decal_projection.gd" type="Script" id=2]
+
+[node name="DecalProjection" type="ImmediateGeometry"]
+script = ExtResource( 2 )
+projection_extents = Vector3( 0.05, 0.05, 0.05 )
+
+[node name="ShapeCast" type="ShapeCast" parent="."]
+enabled = false
+target_position = Vector3( 0, 0, 0 )
+max_results = 8

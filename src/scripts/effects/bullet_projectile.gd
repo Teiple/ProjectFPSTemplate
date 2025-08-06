@@ -7,7 +7,7 @@ export var scale_x_multiplier_min : float = 0.5
 export var scale_x_multiplier_max : float = 1.0  
 export var scale_z_multiplier_min : float = 0.5
 export var scale_z_multiplier_max : float = 1.0  
-export var physics_body_margin_offset : float = 0.038
+export var physics_body_margin_offset : float = 0.04
 
 onready var raycast : RayCast = $RayCast
 onready var poolable_node_component : PoolableNodeComponent = $PoolableNodeComponent
@@ -49,7 +49,9 @@ func deserialize(data : Dictionary):
 	global_transform = Utils.either(str2var(data.get("global_transform")), global_transform)
 	
 	_randomize_visual()
-	_check_and_collide()
+	if _check_and_collide():
+		visible = false
+		poolable_node_component.return_to_pool()
 
 
 func set_up(attack_origin : AttackOriginInfo):
@@ -71,7 +73,9 @@ func set_up(attack_origin : AttackOriginInfo):
 	# Randomize visual
 	_randomize_visual()
 	# Initial check
-	_check_and_collide()
+	if _check_and_collide():
+		visible = false
+		poolable_node_component.return_to_pool()
 
 
 func _randomize_visual():
@@ -80,9 +84,7 @@ func _randomize_visual():
 
 
 func _physics_process(delta):
-	if _check_and_collide():
-		return
-	if _traveled_distance >= _max_distance:
+	if _traveled_distance >= _max_distance || _check_and_collide():
 		poolable_node_component.return_to_pool()
 		return
 	global_position += _direction * _speed * delta
@@ -93,6 +95,7 @@ func _check_and_collide() -> bool:
 	raycast.force_raycast_update()
 	if !raycast.is_colliding():
 		return false
+	visible = false
 	
 	var attack_result = AttackResultInfo.new()
 	attack_result.hit_point = raycast.get_collision_point()
@@ -102,19 +105,28 @@ func _check_and_collide() -> bool:
 	attack_result.impact_force = _impact_force
 	
 	var collider = raycast.get_collider()
-	var physical_comp = Component.find_component(collider, PhysicalObjectComponent.get_component_name()) as PhysicalObjectComponent
-	if physical_comp != null:
-		physical_comp.apply_force(attack_result)
+	var collision_normal = raycast.get_collision_normal()
+	var collision_point = raycast.get_collision_point() - collision_normal * physics_body_margin_offset
 	
-	poolable_node_component.return_to_pool()
+	# Decals
 	var decal_pool : Pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_BULLET_HOLE_DECAL) as Pool
-	var impact_pool : Pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_IMPACT_EFFECT)
-	
-	var normal = raycast.get_collision_normal()
-	var pos = raycast.get_collision_point() - normal * physics_body_margin_offset
-	
 	if decal_pool != null:
-		decal_pool.take_from_pool("set_up", [pos, normal])
+		if collider is RigidBody:
+			decal_pool.take_from_pool("set_up", [collision_point, collision_normal, collider])
+		else:
+			decal_pool.take_from_pool("set_up", [collision_point, collision_normal, decal_pool])
+	
+	# Impact effect
+	var impact_pool : Pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_IMPACT_EFFECT)
 	if impact_pool != null:
-		impact_pool.take_from_pool("set_up", [pos, normal])
+		impact_pool.take_from_pool("set_up", [collision_point, collision_normal])
+	
+	# Impact on physical objects
+	if collider is RigidBody:
+		var physical_comp = Component.find_component(collider, PhysicalObjectComponent.get_component_name()) as PhysicalObjectComponent
+		if physical_comp != null:
+			physical_comp.apply_force(attack_result)
+		
+		poolable_node_component.return_to_pool()
+	
 	return true

@@ -32,4 +32,4 @@ func deserialize_state(state : Dictionary):
 	
 	physical_object.global_transform = Utils.either(str2var(state.get("global_transform")), physical_object.global_transform)
 	physical_object.linear_velocity =  Utils.either(str2var(state.get("linear_velocity")), physical_object.linear_velocity)
-	physical_object.linear_velocity =  Utils.either(str2var(state.get("angular_velocity")), physical_object.angular_velocity)
+	physical_object.angular_velocity =  Utils.either(str2var(state.get("angular_velocity")), physical_object.angular_velocity)
