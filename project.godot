@@ -59,6 +59,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/effects/decal.gd"
 }, {
+"base": "MeshInstance",
+"class": "DecalMeshPreference",
+"language": "GDScript",
+"path": "res://src/scripts/effects/decal_mesh_preference.gd"
+}, {
 "base": "ImmediateGeometry",
 "class": "DecalProjection",
 "language": "GDScript",
@@ -238,6 +243,11 @@ _global_script_classes=[ {
 "class": "QodotMap",
 "language": "GDScript",
 "path": "res://addons/qodot/src/nodes/qodot_map.gd"
+}, {
+"base": "Node",
+"class": "QodotMapDecalMeshBuilder",
+"language": "GDScript",
+"path": "res://src/scripts/editor/qodot_map_decal_mesh_builder.gd"
 }, {
 "base": "EditorPlugin",
 "class": "QodotPlugin",
@@ -425,6 +435,7 @@ _global_script_class_icons={
 "BulletProjectile": "",
 "Component": "",
 "Decal": "",
+"DecalMeshPreference": "",
 "DecalProjection": "",
 "FrameDebug": "",
 "GameConfig": "",
@@ -461,6 +472,7 @@ _global_script_class_icons={
 "QodotFGDSolidClass": "",
 "QodotLight": "",
 "QodotMap": "",
+"QodotMapDecalMeshBuilder": "",
 "QodotPlugin": "",
 "QodotRotateEntity": "",
 "QodotSpatial": "res://addons/qodot/icons/icon_qodot_spatial.svg",

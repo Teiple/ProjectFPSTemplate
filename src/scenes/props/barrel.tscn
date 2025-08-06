@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/models/oil_barrel.glb" type="PackedScene" id=1]
 [ext_resource path="res://assets/materials/barrel.tres" type="Material" id=2]
 [ext_resource path="res://src/scenes/components/physical_object_component.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/scripts/effects/decal_mesh_preference.gd" type="Script" id=4]
+[ext_resource path="res://assets/materials/debug_01_mat.tres" type="Material" id=5]
 
 [sub_resource type="CylinderShape" id=1]
 height = 0.85
@@ -29,6 +31,8 @@ shape = SubResource( 1 )
 [node name="PhysicalObjectComponent" parent="." instance=ExtResource( 3 )]
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="."]
+material_override = ExtResource( 5 )
 mesh = SubResource( 2 )
+script = ExtResource( 4 )
 
 [editable path="oil_barrel"]

@@ -11,6 +11,8 @@ export var project_on_start : bool = false
 
 export var export_save_guard_start : bool = true setget set_export_save_guard_start
 export var preview := false setget set_preview
+export var clipping_replay_step := -1 setget set_clipping_replay_step
+export var clipping_replay_redraw := false setget set_clipping_replay_redraw
 export var export_save_guard_end : bool = true setget set_export_save_guard_end
 
 var _planes : Array = []
@@ -19,6 +21,19 @@ var _all_verts = []
 var _verts_to_norms = {}
 
 var _is_saving := false
+
+var clipping_replay := []
+var _added_verts : Array = []
+
+
+class ClippingStep:
+	var local_triangle = PoolVector3Array()
+	var extra_local_triangle = PoolVector3Array()
+	var next_local_triangle = PoolVector3Array()
+	var current_plane = Plane()
+	var included_verts = PoolVector3Array()
+	var outside = false
+
 
 func _process(delta):
 	if Engine.editor_hint:
@@ -29,6 +44,7 @@ func _process(delta):
 
 
 func perform_projection():
+	clipping_replay.clear()
 	_all_verts.clear()
 	_all_norms.clear()
 	_verts_to_norms.clear()
@@ -119,9 +135,8 @@ func point_to_new_base(from_base, to_base, vert):
 func render_surfaces():
 	clear()
 	begin(Mesh.PRIMITIVE_TRIANGLES)
-	#begin(Mesh.PRIMITIVE_LINE_STRIP)
+	
 	for i in range(0, _all_verts.size(), 3):
-		
 		var vert0 = _all_verts[i]
 		var vert1 = _all_verts[i+1]
 		var vert2 = _all_verts[i+2]
@@ -137,13 +152,29 @@ func render_surfaces():
 			set_uv(get_uv_from_vert(_all_verts[i+2]))
 			add_vertex(_all_verts[i+2])
 		elif vc != 0 || area_overlaps_tri(vert0, vert1, vert2):
-			var clipped_verts = clip_tri_to_area(PoolVector3Array([_all_verts[i], _all_verts[i+1], _all_verts[i+2]]))
-			clipped_verts = double_check_clipped_tris(clipped_verts)
+			var clipped_verts = []
+			clip_tri_to_area(_all_verts[i], _all_verts[i+1], _all_verts[i+2], clipped_verts)
+			_added_verts =  PoolVector3Array(clipped_verts)
+			#_draw_verts(clipped_verts)
+			# clipped_verts = double_check_clipped_tris(clipped_verts)
 			for v in clipped_verts:
 				set_normal(_all_norms[i])
 				set_uv(get_uv_from_vert(v))
 				add_vertex(v)
+	
 	end()
+
+
+func to_global_verts(verts : PoolVector3Array) -> PoolVector3Array:  
+	var global_verts = []
+	for v in verts:
+		global_verts.push_back(to_global(v))
+	return global_verts
+#	for i in range(0, clipped_verts.size(), 3):
+#		DebugDraw.draw_sphere(to_global(clipped_verts[i]), 0.005, Color.green, 10.0)
+#		DebugDraw.draw_sphere(to_global(clipped_verts[i+1]), 0.005, Color.green, 10.0)
+#		DebugDraw.draw_sphere(to_global(clipped_verts[i+2]), 0.005, Color.green, 10.0)
+	#DebugDraw.draw_point_path(global_clipped_verts, 0.01, Color.green, Color.green, 10.0)
 
 
 func get_uv_from_vert(vert):
@@ -246,19 +277,101 @@ func area_overlaps_tri(vert0, vert1, vert2):
 	return false
 
 
-func clip_tri_to_area(tri_arr):
-	var clip_buffer = []
+func clip_tri_to_area(vert1 : Vector3, vert2 : Vector3, vert3 : Vector3, returned_verts : Array):
+	var remainders = PoolVector3Array()
+	
+	var outside = false
+	var cur_tri = PoolVector3Array([vert1, vert2, vert3])
+	
 	for plane in _planes:
-		var tmp_arr = Geometry.clip_polygon(tri_arr, plane)
-		if tmp_arr.size() == 3:
-			tri_arr = tmp_arr
-		if tmp_arr.size() == 4:
-			clip_buffer.append(PoolVector3Array([tmp_arr[0],tmp_arr[2],tmp_arr[3]]))
-			tmp_arr.resize(3)
-			tri_arr = tmp_arr
-	for tri in clip_buffer:
-		tri_arr.append_array(clip_tri_to_area(tri))
-	return tri_arr
+		var clipped_poly = Geometry.clip_polygon(cur_tri, plane)
+		#### Debug
+		var clipping_step = ClippingStep.new()
+		clipping_step.current_plane = plane
+		clipping_step.local_triangle = cur_tri
+		#### Debug
+		if clipped_poly.size() == 3:
+			cur_tri = clipped_poly
+			#### Debug
+			clipping_step.next_local_triangle = cur_tri
+			#### Debug
+		elif clipped_poly.size() == 4:
+			var extra_tri = PoolVector3Array([clipped_poly[0],clipped_poly[1],clipped_poly[2]])
+			remainders.append_array(extra_tri)
+			#### Debug
+			clipping_step.extra_local_triangle = extra_tri
+			#### Debug
+			
+			cur_tri = PoolVector3Array([clipped_poly[0], clipped_poly[2], clipped_poly[3]])
+			
+			#### Debug
+			clipping_step.next_local_triangle = cur_tri
+			#### Debug
+		else:
+			outside = true
+			#### Debug
+			clipping_step.outside = true
+			#### Debug
+		
+		#### Debug
+		# clipping_step.included_verts = PoolVector3Array(returned_verts)
+		clipping_replay.push_back(clipping_step)
+		#### Debug
+		
+		if outside:
+			break
+	
+	var tris = PoolVector3Array()
+	if !outside:
+		tris = PoolVector3Array([cur_tri[0], cur_tri[1], cur_tri[2]])
+	# Process extra triangles
+	for i in range(0, remainders.size(), 3):
+		# var clipped_extra_tris = 
+		clip_tri_to_area(remainders[i], remainders[i+1], remainders[i+2], returned_verts)
+		# tris.append_array(clipped_extra_tris)
+	var clipping_step = ClippingStep.new()
+	clipping_step.included_verts = tris
+	clipping_replay.push_back(clipping_step)
+	
+	returned_verts.append_array(Array(tris))
+
+
+# Not written by me
+func _sort_quad(a: Vector3, b: Vector3, c: Vector3, d: Vector3) -> PoolVector3Array:
+	var points = [a, b, c, d]
+	var centroid = (a + b + c + d) / 4.0
+
+	# Compute the normal of the plane
+	var normal = ((b - a).cross(c - a)).normalized()
+
+	# Choose arbitrary axes on the plane
+	var axis_x = (a - centroid).normalized()
+	var axis_y = normal.cross(axis_x).normalized()
+
+	# Create a list of tuples (angle, point)
+	var angles = []
+	for i in points.size():
+		var p = points[i]
+		
+		var v = p - centroid
+		var x = v.dot(axis_x)
+		var y = v.dot(axis_y)
+		var angle = atan2(y, x)
+		angles.append({ "angle": angle, "point": p, "index": i})
+
+	# Sort by angle
+	angles.sort_custom(self, "_angle_sort")
+
+	# Return sorted points
+	var result := PoolVector3Array()
+	var indices := []
+	for item in angles:
+		result.append(item["point"])
+		indices.append(item["index"])
+	return result
+
+func _angle_sort(a, b) -> bool:
+	return a["angle"] < b["angle"]
 
 
 func double_check_clipped_tris(tri_arr):
@@ -313,3 +426,60 @@ func set_preview(val):
 	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 	perform_projection()
+
+func set_clipping_replay_redraw(val):
+	if !Engine.editor_hint || !is_node_ready() || _is_saving:
+		return
+	_clipping_replay_redraw(clipping_replay_step)
+
+
+func set_clipping_replay_step(val):
+	if !Engine.editor_hint || !is_node_ready() || _is_saving:
+		return
+	clipping_replay_step = max(val, 0)
+	_clipping_replay_redraw(clipping_replay_step)
+
+
+func _clipping_replay_redraw(step_index : int):
+	var duration = 0.5
+	
+	if step_index < clipping_replay.size():
+		var step = clipping_replay[step_index] as ClippingStep
+		var color = Color.red if step.outside else Color.green 
+		
+		if step.current_plane != Plane():
+			DebugDraw.draw_arrow_line(global_position, to_global(step.current_plane.normal), Color.cyan, 0.05, true, duration)
+			DebugDraw.draw_square(to_global(step.current_plane.normal * step.current_plane.d), 0.01, Color.cyan, duration)
+			
+			var pos = to_global(step.current_plane.normal * step.current_plane.d)
+			var normal = (to_global(step.current_plane.normal * (step.current_plane.d + 1.0)) - global_position).normalized()
+			
+			$CutPlane.global_position = pos
+			var dot = Vector3.UP.dot(normal)
+			if abs(dot) > 0.95:
+				if dot > 0:
+					$CutPlane.rotation.x = PI * 0.5
+				else:
+					$CutPlane.rotation.x = -PI * 0.5
+			else:
+				$CutPlane.look_at(pos + normal, Vector3.UP)
+		
+		if !step.local_triangle.empty():
+			var triangle_loop = to_global_verts(step.local_triangle)
+			triangle_loop.append(triangle_loop[0])
+			DebugDraw.draw_point_path(triangle_loop, 0.002, color, color, duration)
+		
+		if !step.next_local_triangle.empty():
+			var next_triangle_loop = to_global_verts(step.next_local_triangle)
+			next_triangle_loop.append(next_triangle_loop[0])
+			DebugDraw.draw_point_path(next_triangle_loop, 0.002, Color.blue, Color.blue, duration)
+		
+		if !step.extra_local_triangle.empty():
+			var extra_triangle_loop = to_global_verts(step.extra_local_triangle)
+			extra_triangle_loop.append(extra_triangle_loop[0])
+			DebugDraw.draw_point_path(extra_triangle_loop, 0.002, Color.yellow, Color.yellow, duration)
+		
+		if !step.included_verts.empty():
+			var global_verts = to_global_verts(step.included_verts)
+			for v in global_verts:
+				DebugDraw.draw_sphere(v, 0.005, Color.purple, duration)
