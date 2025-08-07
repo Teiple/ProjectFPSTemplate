@@ -1,8 +1,6 @@
 class_name Decal
 extends Spatial
 
-const Z_OFFSET : float = 0.05
-
 export var life_time : float = 2.0
 
 onready var poolable_node_component : PoolableNodeComponent = $PoolableNodeComponent
@@ -33,7 +31,7 @@ func deserialize(data : Dictionary):
 
 func set_up(pos : Vector3, normal : Vector3, target : Node):
 	global_transform = Transform.IDENTITY
-	global_position = pos + normal * Z_OFFSET
+	global_position = pos
 	
 	var dot = Vector3.UP.dot(normal)
 	if abs(dot) > 0.95:

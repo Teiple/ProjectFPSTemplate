@@ -19,4 +19,4 @@ view_model_relative_transform_from_hand = Transform( -0.96225, -0.0505844, -0.26
 projectile_speed = 50.0
 allow_rapid_fire = true
 collision_mask = 13
-impact_force = 1.0
+impact_force = 0.0

@@ -2,6 +2,11 @@ tool
 class_name QodotMapDecalMeshBuilder
 extends Node
 
+const DECAL_MESH_INSTANCE_NAME = "DecalMeshPreference"
+
+export var decal_mesh_material : Material = preload("res://assets/materials/debug_02_mat.tres")
+export var debug := false
+export var margin := 0.01
 export var qodot_map_path : NodePath = ""
 export var export_save_guard_start : bool = true setget set_export_save_guard_start
 export var build_decal_meshes := false setget set_build_decal_meshes
@@ -47,13 +52,21 @@ func set_build_decal_meshes(val):
 				continue
 			if !(collision_shape.shape is ConvexPolygonShape):
 				continue
+			
+			var current_mesh_instance = collision_shape.get_node_or_null(DECAL_MESH_INSTANCE_NAME) as MeshInstance
+			if current_mesh_instance != null:
+				current_mesh_instance.queue_free()
+			
 			var shape = collision_shape.shape as ConvexPolygonShape
-			var debug_mesh = shape.get_debug_mesh() as ArrayMesh
-			var mesh_arrays = debug_mesh.surface_get_arrays(0)
-			for i in mesh_arrays.size():
-				print_debug(mesh_arrays[i])
-			print_debug("--")
-
+			var vertices = Array(shape.points)
+			var mesh_instance = MeshInstance.new()
+			mesh_instance.mesh = ConvexHull.create_convex_mesh(vertices, margin)
+			mesh_instance.name = DECAL_MESH_INSTANCE_NAME
+			collision_shape.add_child(mesh_instance, true)
+			mesh_instance.owner = owner
+			if decal_mesh_material != null:
+				mesh_instance.material_override = decal_mesh_material
+			mesh_instance.visible = debug
 
 func get_qodot_map() -> QodotMap:
 	return get_node_or_null(qodot_map_path) as QodotMap
