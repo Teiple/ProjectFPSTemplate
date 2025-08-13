@@ -1,22 +1,12 @@
 tool
 class_name QodotMapCollisionShapeOptimizer
-extends Node
+extends QodotMapPostProcess
 
-export var qodot_map_path : NodePath = ""
 export var export_save_guard_start : bool = true setget set_export_save_guard_start
-export var optimzie := false setget set_optimize
+export var optimize := false setget set_optimize
 export var export_save_guard_end : bool = true setget set_export_save_guard_end
 
 var _is_saving := false
-
-func _ready():
-	if !Engine.editor_hint:
-		queue_free()
-		return
-	var map = get_qodot_map()
-	if !map.is_connected("build_complete", self, "_on_map_build_completed"):
-		map.connect("build_complete", self, "_on_map_build_completed")
-
 
 func set_export_save_guard_start(val):
 	if val == false:
@@ -34,7 +24,7 @@ func set_optimize(val):
 	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 		
-	var map = get_qodot_map()
+	var map = _qodot_map
 	if map == null:
 		return
 	
@@ -47,45 +37,44 @@ func set_optimize(val):
 				continue
 			if !(collision_shape.shape is ConvexPolygonShape):
 				continue
-			
-			var points = collision_shape.shape.points
-			if points.size() != 8:
-				return
-			
-			var centroid = _get_centroid(points)
-			var abs_coord = (points[0] - centroid).abs()
-			var epsilon = 0.05
-			var is_a_box = true
-			
-			for i in range(1, 8):
-				if ((points[i] - centroid).abs() - abs_coord).length_squared() > epsilon * epsilon:
-					is_a_box = false
-					break
-			
-			if !is_a_box:
-				continue
-			
-			var box_shape = BoxShape.new()
-			box_shape.extents = abs_coord
-			
-			collision_shape.shape = box_shape 
-			collision_shape.position = centroid
-			print_debug("Converted %s from ConvexShape to BoxShape" % collision_shape.name)
+			if !_try_convert_to_box_shape(collision_shape):
+				# See: https://github.com/godotengine/godot/issues/27427
+				# Bullet Physics applies big margin on ConvexPolygonShape
+				# So we offset that by reduce the size
+				var convex_shape = ConvexHull.create_convex_shape(collision_shape.shape.points, -collision_shape.shape.margin)
+				collision_shape.shape = convex_shape
+				print_debug("Offset ConvexpolygonShape of %s" % collision_shape)
 
 
-func _get_centroid(points : Array) -> Vector3:
-	if points.empty():
-		return Vector3.ZERO
-	var centroid = Vector3.ZERO
-	for p in points:
-		centroid += p
-	return centroid / points.size()
+func _try_convert_to_box_shape(collision_shape : CollisionShape) -> bool:
+	if collision_shape == null:
+		return false
 	
+	if !(collision_shape.shape is ConvexPolygonShape):
+		return false
+	
+	var points = collision_shape.shape.points
+	if points.size() != 8:
+		return false
+	
+	var centroid = ConvexHull.get_centroid(points)
+	var abs_coord = (points[0] - centroid).abs()
+	var epsilon = 0.05
+	
+	for i in range(1, 8):
+		if ((points[i] - centroid).abs() - abs_coord).length_squared() > epsilon * epsilon:
+			return false
+	
+	var box_shape = BoxShape.new()
+	box_shape.extents = abs_coord
+	
+	collision_shape.shape = box_shape 
+	collision_shape.position = centroid
+	
+	print_debug("Converted %s from ConvexShape to BoxShape" % collision_shape.name)
+	return true
 
 
-func get_qodot_map() -> QodotMap:
-	return get_node_or_null(qodot_map_path) as QodotMap
-
-
-func _on_map_build_completed():
+# Override
+func do_stuff():
 	set_optimize(true)

@@ -99,7 +99,7 @@ static func _to_trig(verts : Array, tri_by_ids : TriByIds) -> Trig:
 	)
 
 
-static func _create_convex_mesh(verts : Array, margin : float, step : int) -> Array:
+static func _create_convex_mesh(verts : Array, step : int) -> Array:
 	if verts.size() < 4 || step == 0:
 		return []
 	
@@ -173,6 +173,13 @@ static func _get_arr_verts(verts : Array, tris_lst: Array) -> Array:
 	return arr_verts
 
 
+static func _get_arr_verts_unique(verts : Array) -> Array:
+	var arr_verts = {}
+	for vert in verts:
+		arr_verts[vec3_to_index(vert)] = vert
+	return arr_verts.values()
+
+
 static func _get_arr_norms(verts : Array, tris_lst : Array) -> Array:
 	var arr_norms = []
 	for tri in tris_lst:
@@ -184,7 +191,7 @@ static func _get_arr_norms(verts : Array, tris_lst : Array) -> Array:
 
 
 static func create_convex_mesh(verts : Array, margin : float = 0.001, step : int = -1) -> Mesh:
-	var tris_list = _create_convex_mesh(verts, margin, step)
+	var tris_list = _create_convex_mesh(verts, step)
 	
 	if tris_list.empty():
 		return null
@@ -203,6 +210,28 @@ static func create_convex_mesh(verts : Array, margin : float = 0.001, step : int
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	
 	return arr_mesh
+
+
+static func create_convex_shape(verts : Array, margin : float = 0.001) -> ConvexPolygonShape:
+	var tris_list = _create_convex_mesh(verts, -1)
+	
+	if tris_list.empty():
+		return null
+	
+	var points = []
+	
+	if abs(margin) > 1e-8:
+		var arr_verts = _get_arr_verts(verts, tris_list)
+		var arr_norms = _get_arr_norms(verts, tris_list)
+		grow_verts_along_norms(arr_verts, arr_norms, margin)
+		points = _get_arr_verts_unique(arr_verts)
+	else:
+		points = _get_arr_verts_unique(verts)
+	
+	var convex_shape = ConvexPolygonShape.new()
+	convex_shape.points = points
+	
+	return convex_shape
 
 
 static func grow_verts_along_norms(arr_verts : Array, arr_norms : Array, amount : float):
@@ -236,4 +265,16 @@ static func grow_verts_along_norms(arr_verts : Array, arr_norms : Array, amount 
 
 
 static func vec3_to_index(v : Vector3):
-	return "(%.4f,%.4f,%.4f)" % [v.x, v.y, v.z]
+	var round_amnt = 1000
+	return "(%d,%d,%d)" % [int(v.x * round_amnt), int(v.y * round_amnt), int(v.z * round_amnt)]
+
+
+
+
+static func get_centroid(points : Array) -> Vector3:
+	if points.empty():
+		return Vector3.ZERO
+	var centroid = Vector3.ZERO
+	for p in points:
+		centroid += p
+	return centroid / points.size()
