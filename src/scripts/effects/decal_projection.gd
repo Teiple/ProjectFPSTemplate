@@ -3,7 +3,7 @@ class_name DecalProjection
 extends ImmediateGeometry
 
 const __Z_FIGHTING_OFFSET = 0.01
-const MIN_ANGLE_DOT = -0.001
+const MIN_ANGLE_DOT = 0.5
 const MESH_INSTANCE_NAME_FILTER := "DecalMeshPreference"
 
 export var projection_extents: Vector3 = Vector3(1, 1, 1) # Half-extents of the box
@@ -16,16 +16,8 @@ export var clipping_replay_step := -1 setget set_clipping_replay_step
 export var clipping_replay_redraw := false setget set_clipping_replay_redraw
 export var export_save_guard_end : bool = true setget set_export_save_guard_end
 
-
-class ClippingStep:
-	var local_triangle = PoolVector3Array()
-	var extra_local_triangle = PoolVector3Array()
-	var next_local_triangle = PoolVector3Array()
-	var current_plane = Plane()
-	var included_verts = PoolVector3Array()
-	var outside = false
-
-onready var shapecast : ShapeCast = $ShapeCast
+# onready var shapecast : ShapeCast = $ShapeCast
+onready var raycast : RayCast = $RayCast
 
 var _planes : Array = []
 var _all_norms : Array = []
@@ -34,6 +26,14 @@ var _box_edges : Array = []
 
 var _is_saving := false
 var clipping_replay : Array = []
+
+class ClippingStep:
+	var local_triangle = PoolVector3Array()
+	var extra_local_triangle = PoolVector3Array()
+	var next_local_triangle = PoolVector3Array()
+	var current_plane = Plane()
+	var included_verts = PoolVector3Array()
+	var outside = false
 
 
 func _ready():
@@ -55,20 +55,58 @@ func fast_perform_projection(collider : CollisionObject, shape_id : int):
 		render_surfaces()
 
 
+func _get_correct_collision_point(ray : RayCast) -> Vector3:
+	if !ray.is_colliding():
+		return Vector3.ZERO
+	var collider = ray.get_collider()
+	var col_point = ray.get_collision_point()
+	var col_norm = ray.get_collision_normal()
+	var shape_id = ray.get_collider_shape()
+	var col_shape = collider.shape_owner_get_owner(collider.shape_find_owner(shape_id))
+	var offset = 0.0
+	if col_shape.shape is ConvexPolygonShape:
+		offset = col_shape.shape.margin
+	return col_point - col_norm * offset
+
+
 func perform_projection():
 	clear_all()
 	
-	if shapecast == null:
-		return
-	shapecast.force_shapecast_update()
+	if raycast == null:
+		raycast = $RayCast
+	raycast.force_raycast_update()
 	
+	if !raycast.is_colliding():
+		return
+	
+#	if shapecast == null:
+#		return
+#	shapecast.force_shapecast_update()
+#
 	var added = 0
-	for i in shapecast.get_collision_count():
-		var collider = shapecast.get_collider(i)
-		var shape_id = shapecast.get_collider_shape(i)
-		if add_surfaces_from_collider(collider, shape_id):
-			added += 1
+	
+	var collider = raycast.get_collider()
+	var collision_normal = raycast.get_collision_normal() 
+	var margin = 0.04
+	var collision_point = _get_correct_collision_point(raycast)
+	global_position = collision_point
+	
+	var shape_id = raycast.get_collider_shape()
+	if add_surfaces_from_collider(collider, shape_id):
+		added += 1
+	
+	if _planes.empty():
+		_planes = Geometry.build_box_planes(projection_extents)
+	if _box_edges.empty():
+		_box_edges = get_box_edges()
+	
+#	for i in shapecast.get_collision_count():
+#		var collider = shapecast.get_collider(i)
+#		var shape_id = shapecast.get_collider_shape(i)
+#		if add_surfaces_from_collider(collider, shape_id):
+#			added += 1
 	#print_debug(added)
+	
 	if added > 0:
 		render_surfaces()
 
@@ -100,7 +138,6 @@ func add_surfaces_from_collider(collider : CollisionObject, shape_id : int) -> b
 
 
 func add_surfaces(base : Spatial, vertices : PoolVector3Array, normals : PoolVector3Array, indices : PoolIntArray):
-	var start_add_func_time = Time.get_ticks_msec()
 	for i in range(0, indices.size(), 3):
 		var n0 = normal_to_new_base(base, self, normals[indices[i]])
 		if n0.dot(Vector3.FORWARD) > MIN_ANGLE_DOT:
@@ -165,35 +202,92 @@ func render_surfaces():
 		var vert2 = _all_verts[i+2]
 		var vert_count = verts_in_area(vert0, vert1, vert2)
 		if vert_count == 3:
-			set_normal(_all_norms[i])
-			set_uv(get_uv_from_vert(_all_verts[i]))
-			add_vertex(_all_verts[i])
-			set_normal(_all_norms[i+1])
-			set_uv(get_uv_from_vert(_all_verts[i+1]))
-			add_vertex(_all_verts[i+1])
-			set_normal(_all_norms[i+2])
-			set_uv(get_uv_from_vert(_all_verts[i+2]))
-			add_vertex(_all_verts[i+2])
+			var norm0 = _all_norms[i]
+			var norm1 = _all_norms[i+1]
+			var norm2 = _all_norms[i+2]
+			
+			var uv0 = get_uv_from_vert(vert0)
+			var uv1 = get_uv_from_vert(vert1)
+			var uv2 = get_uv_from_vert(vert2)
+			
+			set_normal(norm0)
+			set_uv(uv0)
+			add_vertex(vert0)
+			
+			set_normal(norm1)
+			set_uv(uv1)
+			add_vertex(vert1)
+			
+			set_normal(norm2)
+			set_uv(uv2)
+			add_vertex(vert2)
+			
 		elif vert_count > 0 || area_overlaps_tri(vert0, vert1, vert2):
 			var clipped_verts = []
 			clip_tri_to_area(_all_verts[i], _all_verts[i+1], _all_verts[i+2], clipped_verts)
-			for v in clipped_verts:
-				set_normal(_all_norms[i])
-				set_uv(get_uv_from_vert(v))
-				add_vertex(v)
+			for vert in clipped_verts:
+				var norm = _all_norms[i]
+				var uv = get_uv_from_vert(vert)
+				set_normal(norm)
+				set_uv(uv)
+				add_vertex(vert)
 	
 	end()
 
 
-func get_uv_from_vert(vert):
+func get_uv_from_vert(vert : Vector3) -> Vector2:
 	var uv = Vector2(
-		vert.x / projection_extents.x,
+		-vert.x / projection_extents.x,
 		-vert.y / projection_extents.y
 	)
 	uv = uv * 0.5 + Vector2(0.5, 0.5)
 	uv.x = clamp(uv.x, 0.0, 1.0)
 	uv.y = clamp(uv.y, 0.0, 1.0)
 	return uv
+
+
+func get_triplanar_uv(vert: Vector3, normal: Vector3) -> Vector2:
+	var local_pos = vert
+	var uv: Vector2
+	
+	# Pick exact axis by normal direction (6 possibilities)
+	if abs(normal.x) >= abs(normal.y) && abs(normal.x) >= abs(normal.z):
+		if normal.x > 0.0:
+			# +X facing: YZ plane
+			uv = Vector2(local_pos.z, local_pos.y)
+		else:
+			# -X facing: flipped YZ plane
+			uv = Vector2(-local_pos.z, local_pos.y)
+	elif abs(normal.y) >= abs(normal.x) && abs(normal.y) >= abs(normal.z):
+		if normal.y > 0.0:
+			# +Y facing: XZ plane
+			uv = Vector2(local_pos.x, local_pos.z)
+		else:
+			# -Y facing: flipped XZ plane
+			uv = Vector2(local_pos.x, -local_pos.z)
+	elif abs(normal.z) >= abs(normal.x) && abs(normal.z) >= abs(normal.y):
+		if normal.z < 0.0: 
+			# -Z facing: flipped XY plane
+			uv = Vector2(local_pos.x, local_pos.y)
+		else:
+			# +Z facing: XY plane
+			uv = Vector2(-local_pos.x, local_pos.y)
+	
+	# Normalize to 0..1 space using decal extents
+	uv = Vector2(
+		-uv.x / projection_extents.x,
+		-uv.y / projection_extents.y
+	)
+	
+	# Center in 0..1 space
+	uv = uv * 0.5 + Vector2(0.5, 0.5)
+	
+	# Clamp to avoid sampling outside
+	uv.x = clamp(uv.x, 0.0, 1.0)
+	uv.y = clamp(uv.y, 0.0, 1.0)
+	
+	return uv
+
 
 
 func verts_in_area(vert0, vert1, vert2):

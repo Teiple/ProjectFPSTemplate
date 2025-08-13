@@ -42,7 +42,7 @@ func set_up(pos : Vector3, normal : Vector3, target : Node):
 	else:
 		look_at(pos + normal, Vector3.UP)
 	_start_time = FrameTime.process_time()
-	rotate_object_local(Vector3.FORWARD, rand_range(-PI, PI))
+	# rotate_object_local(Vector3.FORWARD, rand_range(-PI, PI))
 	
 	decal_projection.perform_projection()
 	

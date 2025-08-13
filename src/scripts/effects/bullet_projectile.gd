@@ -106,25 +106,19 @@ func _check_and_collide() -> bool:
 	
 	var collider = raycast.get_collider()
 	var collision_normal = raycast.get_collision_normal()
-	# StaticBody uses margin while Rigidbody doesn't, what the heck?
-	var collision_point_rigid = raycast.get_collision_point()
-	var collision_point_static = collision_point_rigid - collision_normal * physics_body_margin_offset
-	
-	# DebugDraw.draw_sphere(collision_point, 0.02, Color.red, 4.0)
+	# Convex Collision Shape uses margin while other shape don't for some reasons
+	var collision_point = raycast.get_collision_point()
 	
 	# Decals
 	var decal_pool : Pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_BULLET_HOLE_DECAL) as Pool
 	if decal_pool != null:
-		if collider is RigidBody:
-			decal_pool.take_from_pool("set_up", [collision_point_rigid, collision_normal, collider])
-		else:
-			decal_pool.take_from_pool("set_up", [collision_point_static, collision_normal, decal_pool])
+		decal_pool.take_from_pool("set_up", [collision_point, collision_normal, collider])
 	
 	# Impact effect
 	var impact_pool : Pool = PoolManager.get_pool_by_category(GlobalData.PoolCategory.DEFAULT_IMPACT_EFFECT)
 	if impact_pool != null:
 		# I use static collision point since if it cane be offseted a bit further in all cases
-		impact_pool.take_from_pool("set_up", [collision_point_rigid, collision_normal])
+		impact_pool.take_from_pool("set_up", [collision_point, collision_normal])
 	
 	# Impact on physical objects
 	if collider is RigidBody:

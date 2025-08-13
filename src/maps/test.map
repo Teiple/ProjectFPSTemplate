@@ -157,3 +157,19 @@
 ( -40 -16 16 ) ( -40 -16 17 ) ( -40 -15 16 ) special/skip 64 0 0 0.25 0.25
 }
 }
+// entity 3
+{
+"classname" "func_group"
+"_tb_type" "_tb_group"
+"_tb_name" "Unnamed"
+"_tb_id" "1"
+// brush 0
+{
+( -20 -88 4 ) ( -20 -87 4 ) ( -20 -88 5 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -32 16 0 0.25 0.25
+( -140 -24 4 ) ( -140 -24 5 ) ( -139 -24 4 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -64 16 0 0.25 0.25
+( -140 -88 4 ) ( -139 -88 4 ) ( -140 -87 4 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -80 32 0 0.25 0.25
+( -124 -24 16 ) ( -124 -23 16 ) ( -123 -24 16 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -80 32 0 0.25 0.25
+( -124 -12 20 ) ( -123 -12 20 ) ( -124 -12 21 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -80 16 0 0.25 0.25
+( -8 -24 20 ) ( -8 -24 21 ) ( -8 -23 20 ) tiny_texture_pack/Bricks/Brick_10_-_128x128 -32 16 0 0.25 0.25
+}
+}
