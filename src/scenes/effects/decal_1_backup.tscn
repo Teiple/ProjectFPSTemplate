@@ -45,8 +45,7 @@ material/0 = SubResource( 5 )
 [node name="DecalProjection" parent="." instance=ExtResource( 5 )]
 material_override = SubResource( 8 )
 
-[node name="ShapeCast" parent="DecalProjection" index="0"]
+[node name="ShapeCast" parent="DecalProjection" index="1"]
 shape = SubResource( 7 )
-collision_mask = 9
 
 [editable path="DecalProjection"]

@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Node",
+"class": "AdjacentCollisionShapeLookup",
+"language": "GDScript",
+"path": "res://src/scripts/adjacent_collision_shape_lookup.gd"
+}, {
 "base": "Spatial",
 "class": "AmmoCollector",
 "language": "GDScript",
@@ -79,6 +84,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/effects/decal_projection_debug.gd"
 }, {
+"base": "Reference",
+"class": "DisjointDataSet",
+"language": "GDScript",
+"path": "res://src/scripts/data/disjoint_data_set.gd"
+}, {
+"base": "Reference",
+"class": "DisjointDataSetNode",
+"language": "GDScript",
+"path": "res://src/scripts/data/disjoint_data_set_node.gd"
+}, {
 "base": "Node",
 "class": "FrameDebug",
 "language": "GDScript",
@@ -87,7 +102,7 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "GameConfig",
 "language": "GDScript",
-"path": "res://src/scripts/autoload/game_config.gd"
+"path": "res://src/scripts/autoloads/game_config.gd"
 }, {
 "base": "Reference",
 "class": "GameState",
@@ -167,7 +182,7 @@ _global_script_classes=[ {
 "base": "Menu",
 "class": "PauseMenu",
 "language": "GDScript",
-"path": "res://src/scripts/autoload/pause_menu.gd"
+"path": "res://src/scripts/autoloads/pause_menu.gd"
 }, {
 "base": "Component",
 "class": "PhysicalObjectComponent",
@@ -450,6 +465,7 @@ _global_script_classes=[ {
 "path": "res://src/scripts/resources/weapon_stats.gd"
 } ]
 _global_script_class_icons={
+"AdjacentCollisionShapeLookup": "",
 "AmmoCollector": "",
 "AmmoInventory": "",
 "AnimationConfig": "",
@@ -464,6 +480,8 @@ _global_script_class_icons={
 "DecalMeshPreference": "",
 "DecalProjection": "",
 "DecalProjectionDebug": "",
+"DisjointDataSet": "",
+"DisjointDataSetNode": "",
 "FrameDebug": "",
 "GameConfig": "",
 "GameState": "",
@@ -548,12 +566,13 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://src/scenes/autoload/global.tscn"
-FrameTime="*res://src/scripts/autoload/frame_time.gd"
-PoolManager="*res://src/scenes/autoload/pool_manager.tscn"
+Global="*res://src/scenes/autoloads/global.tscn"
+FrameTime="*res://src/scripts/autoloads/frame_time.gd"
+PoolManager="*res://src/scenes/autoloads/pool_manager.tscn"
 DebugDraw="*res://addons/debug_draw_3d/debug_draw.gd"
 ShaderCacheManager="*res://addons/gd-shader-cache/src/ShaderCacheManager.gd"
-MenuManager="*res://src/scenes/autoload/menu_manager.tscn"
+MenuManager="*res://src/scenes/autoloads/menu_manager.tscn"
+AttackResolver="*res://src/scripts/autoloads/attack_resolver.gd"
 
 [display]
 

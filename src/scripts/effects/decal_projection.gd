@@ -4,7 +4,6 @@ extends ImmediateGeometry
 
 const __Z_FIGHTING_OFFSET = 0.01
 const MIN_ANGLE_DOT = 0.5
-const MESH_INSTANCE_NAME_FILTER := "DecalMeshPreference"
 
 export var projection_extents: Vector3 = Vector3(1, 1, 1) # Half-extents of the box
 export var project_on_start : bool = false
@@ -17,8 +16,10 @@ export var clipping_replay_redraw := false setget set_clipping_replay_redraw
 export var export_save_guard_end : bool = true setget set_export_save_guard_end
 
 # onready var shapecast : ShapeCast = $ShapeCast
-onready var raycast : RayCast = $RayCast
+onready var _raycast : RayCast = $RayCast
+onready var _shapecast : ShapeCast = $ShapeCast
 
+var _decal_aabb : AABB = AABB()
 var _planes : Array = []
 var _all_norms : Array = []
 var _all_verts : Array = []
@@ -51,73 +52,71 @@ func clear_all():
 
 func fast_perform_projection(collider : CollisionObject, shape_id : int):
 	clear_all()
-	if add_surfaces_from_collider(collider, shape_id):
+	var collision_shape = collider.shape_owner_get_owner(collider.shape_find_owner(shape_id))
+	var added_collision_shapes = []
+	add_surfaces_from_collision_shape(collision_shape, added_collision_shapes)
+	
+	if added_collision_shapes.size() > 0:
 		render_surfaces()
-
-
-func _get_correct_collision_point(ray : RayCast) -> Vector3:
-	if !ray.is_colliding():
-		return Vector3.ZERO
-	var collider = ray.get_collider()
-	var col_point = ray.get_collision_point()
-	var col_norm = ray.get_collision_normal()
-	var shape_id = ray.get_collider_shape()
-	var col_shape = collider.shape_owner_get_owner(collider.shape_find_owner(shape_id))
-	var offset = 0.0
-	if col_shape.shape is ConvexPolygonShape:
-		offset = col_shape.shape.margin
-	return col_point - col_norm * offset
 
 
 func perform_projection():
 	clear_all()
 	
-	if raycast == null:
-		raycast = $RayCast
-	raycast.force_raycast_update()
+	if _raycast == null:
+		_raycast = $RayCast
+	_raycast.force_raycast_update()
 	
-	if !raycast.is_colliding():
+	if !_raycast.is_colliding():
 		return
 	
-#	if shapecast == null:
-#		return
-#	shapecast.force_shapecast_update()
-#
-	var added = 0
+	if _shapecast == null:
+		_shapecast = $ShapeCast
+	_shapecast.force_shapecast_update()
+	if !_shapecast.is_colliding():
+		return
 	
-	var collider = raycast.get_collider()
-	var collision_normal = raycast.get_collision_normal() 
-	var margin = 0.04
-	var collision_point = _get_correct_collision_point(raycast)
+	var collision_point = _raycast.get_collision_point()
 	global_position = collision_point
 	
-	var shape_id = raycast.get_collider_shape()
-	if add_surfaces_from_collider(collider, shape_id):
-		added += 1
+	var added_collision_shapes = []
+	for i in _shapecast.get_collision_count():
+		var collider = _shapecast.get_collider(i)
+		var shape_id = _shapecast.get_collider_shape(i)
+		var collision_shape = collider.shape_owner_get_owner(collider.shape_find_owner(shape_id))
+		add_surfaces_from_collision_shape(collision_shape, added_collision_shapes)
 	
 	if _planes.empty():
 		_planes = Geometry.build_box_planes(projection_extents)
 	if _box_edges.empty():
 		_box_edges = get_box_edges()
 	
-#	for i in shapecast.get_collision_count():
-#		var collider = shapecast.get_collider(i)
-#		var shape_id = shapecast.get_collider_shape(i)
-#		if add_surfaces_from_collider(collider, shape_id):
-#			added += 1
-	#print_debug(added)
-	
-	if added > 0:
+	if added_collision_shapes.size() > 0:
 		render_surfaces()
 
 
-func add_surfaces_from_collider(collider : CollisionObject, shape_id : int) -> bool:
-	var collision_shape = collider.shape_owner_get_owner(collider.shape_find_owner(shape_id))
-	#print_debug(collision_shape)
-	if collision_shape.get_child_count() == 0:
+func add_surfaces_from_collision_shape(collision_shape : CollisionShape, added_collision_shapes : Array) -> void:
+	if !_add_surfaces_from_collision_shape(collision_shape):
+		return
+	added_collision_shapes.push_back(collision_shape)
+	
+	# Adding adjacent collision shapes too, so decal won't be cut off from one's edge to another's face
+	if collision_shape.has_meta(GlobalData.Ref.ADJACENT_COLLISION_SHAPES_META_NAME):
+		var adjacents = collision_shape.get_meta(GlobalData.Ref.ADJACENT_COLLISION_SHAPES_META_NAME)
+		for adjacent_path in adjacents:
+			var adjacent_collision_shape = collision_shape.get_node_or_null(adjacent_path) as CollisionShape
+			if _add_surfaces_from_collision_shape(adjacent_collision_shape):
+				added_collision_shapes.push_back(adjacent_collision_shape)
+
+
+func _add_surfaces_from_collision_shape(collision_shape : CollisionShape):
+	if collision_shape == null || collision_shape.get_child_count() == 0:
 		return false
 	
-	var mesh_instance = collision_shape.get_node_or_null(MESH_INSTANCE_NAME_FILTER) as MeshInstance
+	if !_check_for_overlap(collision_shape):
+		return false
+	
+	var mesh_instance = collision_shape.get_node_or_null(GlobalData.Ref.DECAL_MESH_INSTANCE_NAME) as MeshInstance
 	if mesh_instance == null:
 		return false
 	
@@ -133,9 +132,19 @@ func add_surfaces_from_collider(collider : CollisionObject, shape_id : int) -> b
 		arrays[ArrayMesh.ARRAY_INDEX] = range(arrays[ArrayMesh.ARRAY_VERTEX].size())
 	
 	add_surfaces(mesh_instance, arrays[ArrayMesh.ARRAY_VERTEX], arrays[ArrayMesh.ARRAY_NORMAL], arrays[ArrayMesh.ARRAY_INDEX])
-	
 	return true
 
+
+func _check_for_overlap(collision_shape : CollisionShape) -> bool:
+	if !collision_shape.has_meta(GlobalData.Ref.COLLISION_SHAPE_AABB_META_NAME):
+		return true
+	var aabb = collision_shape.get_meta(GlobalData.Ref.COLLISION_SHAPE_AABB_META_NAME)
+	if aabb.has_point(global_position):
+		return true
+	var radius_sqr = (projection_extents * 2.0).length_squared() / 4.0
+	
+	return Utils.intersects_sphere_radius_sqr(aabb, global_position, radius_sqr)
+ 
 
 func add_surfaces(base : Spatial, vertices : PoolVector3Array, normals : PoolVector3Array, indices : PoolIntArray):
 	for i in range(0, indices.size(), 3):

@@ -9,13 +9,10 @@ func get_physical_object() -> RigidBody:
 	return owner as RigidBody
 
 
-func apply_force(attack_result : AttackResultInfo):
+func apply_force(apply_position : Vector3, apply_direction : Vector3, apply_force : float) -> void:
 	var physical_obj = get_physical_object()
-	var hit_point = attack_result.hit_point
-	var direction = attack_result.hit_direction
-	var force = attack_result.impact_force
-	var local_point = physical_obj.to_local(hit_point)
-	physical_obj.apply_impulse(local_point, direction * force)
+	var local_point = physical_obj.to_local(apply_position)
+	physical_obj.apply_impulse(local_point, apply_direction * apply_force)
 
 
 func serialize_state() -> Dictionary:

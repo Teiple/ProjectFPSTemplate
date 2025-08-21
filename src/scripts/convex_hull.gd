@@ -269,6 +269,39 @@ static func vec3_to_index(v : Vector3):
 	return "(%d,%d,%d)" % [int(v.x * round_amnt), int(v.y * round_amnt), int(v.z * round_amnt)]
 
 
+static func create_bounding_box(points : Array) -> AABB:
+	if points.size() < 2:
+		return AABB()
+	
+	var min_x = points[0].x
+	var min_y = points[0].y
+	var min_z = points[0].z
+	
+	var max_x = points[0].x
+	var max_y = points[0].y
+	var max_z = points[0].z
+	
+	for i in range(1, points.size()):
+		var p = points[i]
+		
+		if p.x > max_x:
+			max_x = p.x
+		elif p.x < min_x:
+			min_x = p.x
+		
+		if p.y > max_y:
+			max_y = p.y
+		elif p.y < min_y:
+			min_y = p.y
+		
+		if p.z > max_z:
+			max_z = p.z
+		elif p.z < min_z:
+			min_z = p.z
+	
+	return AABB(
+		Vector3(min_x, min_y, min_z),
+		Vector3(max_x - min_x, max_y - min_y, max_z - min_z))
 
 
 static func get_centroid(points : Array) -> Vector3:

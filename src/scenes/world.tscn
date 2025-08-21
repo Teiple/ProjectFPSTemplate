@@ -92,43 +92,43 @@ surfaces/3 = {
 extents = Vector3( 0.25, 2, 3.75 )
 
 [sub_resource type="CubeMesh" id=369]
-size = Vector3( 0.52, 4.02, 7.52 )
+size = Vector3( 0.502, 4.002, 7.502 )
 
 [sub_resource type="BoxShape" id=370]
 extents = Vector3( 4, 2, 0.25 )
 
 [sub_resource type="CubeMesh" id=371]
-size = Vector3( 8.02, 4.02, 0.52 )
+size = Vector3( 8.002, 4.002, 0.502 )
 
 [sub_resource type="BoxShape" id=372]
 extents = Vector3( 4, 0.5, 4 )
 
 [sub_resource type="CubeMesh" id=373]
-size = Vector3( 8.02, 1.02, 8.02 )
+size = Vector3( 8.002, 1.002, 8.002 )
 
 [sub_resource type="BoxShape" id=374]
 extents = Vector3( 0.25, 2, 3.5 )
 
 [sub_resource type="CubeMesh" id=375]
-size = Vector3( 0.52, 4.02, 7.02 )
+size = Vector3( 0.502, 4.002, 7.002 )
 
 [sub_resource type="BoxShape" id=376]
 extents = Vector3( 1.75, 2, 0.125 )
 
 [sub_resource type="CubeMesh" id=377]
-size = Vector3( 3.52, 4.02, 0.27 )
+size = Vector3( 3.502, 4.002, 0.252 )
 
 [sub_resource type="BoxShape" id=378]
 extents = Vector3( 3.75, 2, 0.25 )
 
 [sub_resource type="CubeMesh" id=379]
-size = Vector3( 7.52, 4.02, 0.52 )
+size = Vector3( 7.502, 4.002, 0.502 )
 
 [sub_resource type="BoxShape" id=380]
 extents = Vector3( 1, 1, 0.75 )
 
 [sub_resource type="CubeMesh" id=381]
-size = Vector3( 2.02, 2.02, 1.52 )
+size = Vector3( 2.002, 2.002, 1.502 )
 
 [sub_resource type="ArrayMesh" id=382]
 surfaces/0 = {
@@ -148,57 +148,57 @@ surfaces/0 = {
 extents = Vector3( 0.3125, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=384]
-size = Vector3( 0.645, 0.27, 1.02 )
+size = Vector3( 0.627, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=385]
 extents = Vector3( 0.78125, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=386]
-size = Vector3( 1.5825, 0.27, 1.02 )
+size = Vector3( 1.5645, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=387]
 extents = Vector3( 0.15625, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=388]
-size = Vector3( 0.3325, 0.27, 1.02 )
+size = Vector3( 0.3145, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=389]
 extents = Vector3( 1.09375, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=390]
-size = Vector3( 2.2075, 0.27, 1.02 )
+size = Vector3( 2.1895, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=391]
 extents = Vector3( 0.625, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=392]
-size = Vector3( 1.27, 0.27, 1.02 )
+size = Vector3( 1.252, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=393]
 extents = Vector3( 0.46875, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=394]
-size = Vector3( 0.9575, 0.27, 1.02 )
+size = Vector3( 0.9395, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=395]
 extents = Vector3( 0.9375, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=396]
-size = Vector3( 1.895, 0.27, 1.02 )
+size = Vector3( 1.877, 0.252, 1.002 )
 
 [sub_resource type="BoxShape" id=397]
 extents = Vector3( 1.25, 0.125, 0.5 )
 
 [sub_resource type="CubeMesh" id=398]
-size = Vector3( 2.52, 0.27, 1.02 )
+size = Vector3( 2.502, 0.252, 1.002 )
 
 [sub_resource type="ConvexPolygonShape" id=399]
 points = PoolVector3Array( -0.82, -0.653333, -0.486667, 1.65834, -0.663745, -0.486667, -0.828329, 1.32292, -0.486667, -0.828329, 1.32292, 0.486667, -0.82, -0.653333, 0.486667, 1.65834, -0.663745, 0.486667 )
 
 [sub_resource type="ArrayMesh" id=400]
 surfaces/0 = {
-"aabb": AABB( -0.829582, -0.664474, -0.49, 2.49, 1.98999, 0.98 ),
-"array_data": PoolByteArray( 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 190, 255, 127, 255, 127, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 190, 255, 127, 255, 127, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 190, 255, 127, 255, 127, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 190, 139, 128, 119, 255, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 62, 139, 128, 119, 255, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 190, 139, 128, 119, 255, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 62, 216, 56, 38, 71, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 190, 216, 56, 38, 71, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 190, 216, 56, 38, 71, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 190, 139, 128, 119, 255, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 62, 139, 128, 119, 255, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 62, 139, 128, 119, 255, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 190, 119, 255, 139, 128, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 190, 119, 255, 139, 128, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 62, 119, 255, 139, 128, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 62, 216, 56, 38, 71, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 190, 216, 56, 38, 71, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 62, 216, 56, 38, 71, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 190, 119, 255, 139, 128, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 62, 119, 255, 139, 128, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 62, 119, 255, 139, 128, 227, 198, 82, 191, 58, 28, 40, 191, 72, 225, 250, 62, 0, 0, 0, 0, 124, 95, 84, 191, 96, 170, 169, 63, 72, 225, 250, 62, 0, 0, 0, 0, 30, 136, 212, 63, 247, 26, 42, 191, 72, 225, 250, 62, 0, 0, 0, 0 ),
+"aabb": AABB( -0.828455, -0.663818, -0.487, 2.48701, 1.987, 0.974 ),
+"array_data": PoolByteArray( 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 190, 255, 127, 255, 127, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 190, 255, 127, 255, 127, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 190, 255, 127, 255, 127, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 190, 139, 128, 119, 255, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 62, 139, 128, 119, 255, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 190, 139, 128, 119, 255, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 62, 216, 56, 38, 71, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 190, 216, 56, 38, 71, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 190, 216, 56, 38, 71, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 190, 139, 128, 119, 255, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 62, 139, 128, 119, 255, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 62, 139, 128, 119, 255, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 190, 119, 255, 139, 128, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 190, 119, 255, 139, 128, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 62, 119, 255, 139, 128, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 62, 216, 56, 38, 71, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 190, 216, 56, 38, 71, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 62, 216, 56, 38, 71, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 190, 119, 255, 139, 128, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 62, 119, 255, 139, 128, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 62, 119, 255, 139, 128, 117, 1, 82, 191, 203, 86, 39, 191, 17, 88, 249, 62, 0, 0, 0, 0, 153, 21, 84, 191, 253, 93, 169, 63, 17, 88, 249, 62, 0, 0, 0, 0, 44, 75, 212, 63, 247, 239, 41, 191, 17, 88, 249, 62, 0, 0, 0, 0 ),
 "array_index_data": PoolByteArray( 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 10, 0, 11, 0, 12, 0, 13, 0, 14, 0, 15, 0, 16, 0, 17, 0, 18, 0, 19, 0, 20, 0, 21, 0, 22, 0, 23, 0 ),
 "blend_shape_data": [  ],
 "format": 2194691,
@@ -226,7 +226,7 @@ surfaces/0 = {
 extents = Vector3( 0.375, 0.375, 0.375 )
 
 [sub_resource type="CubeMesh" id=403]
-size = Vector3( 0.77, 0.77, 0.77 )
+size = Vector3( 0.752, 0.752, 0.752 )
 
 [sub_resource type="BoxShape" id=225]
 extents = Vector3( 0.4, 0.4, 0.4 )
@@ -275,6 +275,10 @@ mesh = SubResource( 367 )
 [node name="entity_0_brush_0_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -3.75, 2, 0.25 )
 shape = SubResource( 368 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_1_collision_shape"), NodePath("../entity_0_brush_2_collision_shape"), NodePath("../entity_0_brush_5_collision_shape"), NodePath("../entity_0_brush_6_collision_shape") ],
+"CollisionShapeAABB": AABB( -4, 0, -3.5, 0.5, 4, 7.5 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_0_collision_shape"]
 material_override = ExtResource( 15 )
@@ -283,6 +287,10 @@ mesh = SubResource( 369 )
 [node name="entity_0_brush_1_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -3.75 )
 shape = SubResource( 370 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_0_collision_shape"), NodePath("../entity_0_brush_2_collision_shape"), NodePath("../entity_0_brush_3_collision_shape"), NodePath("../entity_0_brush_6_collision_shape") ],
+"CollisionShapeAABB": AABB( -4, 0, -4, 8, 4, 0.5 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_1_collision_shape"]
 material_override = ExtResource( 15 )
@@ -291,6 +299,10 @@ mesh = SubResource( 371 )
 [node name="entity_0_brush_2_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0 )
 shape = SubResource( 372 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_0_collision_shape"), NodePath("../entity_0_brush_1_collision_shape"), NodePath("../entity_0_brush_3_collision_shape"), NodePath("../entity_0_brush_4_collision_shape"), NodePath("../entity_0_brush_5_collision_shape"), NodePath("../entity_0_brush_6_collision_shape") ],
+"CollisionShapeAABB": AABB( -4, -1, -4, 8, 1, 8 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_2_collision_shape"]
 material_override = ExtResource( 15 )
@@ -299,6 +311,10 @@ mesh = SubResource( 373 )
 [node name="entity_0_brush_3_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.75, 2, 0 )
 shape = SubResource( 374 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_1_collision_shape"), NodePath("../entity_0_brush_2_collision_shape"), NodePath("../entity_0_brush_4_collision_shape"), NodePath("../entity_0_brush_5_collision_shape") ],
+"CollisionShapeAABB": AABB( 3.5, 0, -3.5, 0.5, 4, 7 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_3_collision_shape"]
 material_override = ExtResource( 15 )
@@ -307,6 +323,10 @@ mesh = SubResource( 375 )
 [node name="entity_0_brush_4_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2, 0.125 )
 shape = SubResource( 376 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_2_collision_shape"), NodePath("../entity_0_brush_3_collision_shape") ],
+"CollisionShapeAABB": AABB( 0, 0, 0, 3.5, 4, 0.25 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_4_collision_shape"]
 material_override = ExtResource( 15 )
@@ -315,6 +335,10 @@ mesh = SubResource( 377 )
 [node name="entity_0_brush_5_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 2, 3.75 )
 shape = SubResource( 378 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_0_collision_shape"), NodePath("../entity_0_brush_2_collision_shape"), NodePath("../entity_0_brush_3_collision_shape") ],
+"CollisionShapeAABB": AABB( -3.5, 0, 3.5, 7.5, 4, 0.5 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_5_collision_shape"]
 material_override = ExtResource( 15 )
@@ -323,6 +347,10 @@ mesh = SubResource( 379 )
 [node name="entity_0_brush_6_collision_shape" type="CollisionShape" parent="QodotMap/entity_0_worldspawn"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1, -2.75 )
 shape = SubResource( 380 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_0_brush_0_collision_shape"), NodePath("../entity_0_brush_1_collision_shape"), NodePath("../entity_0_brush_2_collision_shape") ],
+"CollisionShapeAABB": AABB( -3.5, 0, -3.5, 2, 2, 1.5 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_0_worldspawn/entity_0_brush_6_collision_shape"]
 material_override = ExtResource( 15 )
@@ -338,6 +366,10 @@ mesh = SubResource( 382 )
 [node name="entity_1_brush_0_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.390625, 0.625, 0 )
 shape = SubResource( 383 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_2_collision_shape"), NodePath("../entity_1_brush_5_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 1.5, -3.5, 0.625, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_0_collision_shape"]
 material_override = ExtResource( 15 )
@@ -346,6 +378,10 @@ mesh = SubResource( 384 )
 [node name="entity_1_brush_1_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.078125, -0.125, 0 )
 shape = SubResource( 385 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_4_collision_shape"), NodePath("../entity_1_brush_6_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 0.75, -3.5, 1.5625, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_1_collision_shape"]
 material_override = ExtResource( 15 )
@@ -354,6 +390,10 @@ mesh = SubResource( 386 )
 [node name="entity_1_brush_2_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.546875, 0.875, 0 )
 shape = SubResource( 387 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_0_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 1.75, -3.5, 0.3125, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_2_collision_shape"]
 material_override = ExtResource( 15 )
@@ -362,6 +402,10 @@ mesh = SubResource( 388 )
 [node name="entity_1_brush_3_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.390625, -0.625, 0 )
 shape = SubResource( 389 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_6_collision_shape"), NodePath("../entity_1_brush_7_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 0.25, -3.5, 2.1875, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_3_collision_shape"]
 material_override = ExtResource( 15 )
@@ -370,6 +414,10 @@ mesh = SubResource( 390 )
 [node name="entity_1_brush_4_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.078125, 0.125, 0 )
 shape = SubResource( 391 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_1_collision_shape"), NodePath("../entity_1_brush_5_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 1, -3.5, 1.25, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_4_collision_shape"]
 material_override = ExtResource( 15 )
@@ -378,6 +426,10 @@ mesh = SubResource( 392 )
 [node name="entity_1_brush_5_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.234375, 0.375, 0 )
 shape = SubResource( 393 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_0_collision_shape"), NodePath("../entity_1_brush_4_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 1.25, -3.5, 0.9375, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_5_collision_shape"]
 material_override = ExtResource( 15 )
@@ -386,6 +438,10 @@ mesh = SubResource( 394 )
 [node name="entity_1_brush_6_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.234375, -0.375, 0 )
 shape = SubResource( 395 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_1_collision_shape"), NodePath("../entity_1_brush_3_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 0.5, -3.5, 1.875, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_6_collision_shape"]
 material_override = ExtResource( 15 )
@@ -394,6 +450,10 @@ mesh = SubResource( 396 )
 [node name="entity_1_brush_7_collision_shape" type="CollisionShape" parent="QodotMap/entity_1_stair_proxy"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.546875, -0.875, 0 )
 shape = SubResource( 397 )
+__meta__ = {
+"AdjacentCollisionShapes": [ NodePath("../entity_1_brush_3_collision_shape") ],
+"CollisionShapeAABB": AABB( -1.5, 0, -3.5, 2.5, 0.25, 1 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_1_stair_proxy/entity_1_brush_7_collision_shape"]
 material_override = ExtResource( 15 )
@@ -405,6 +465,9 @@ script = ExtResource( 7 )
 
 [node name="entity_2_brush_0_collision_shape" type="CollisionShape" parent="QodotMap/entity_2_stair_collision"]
 shape = SubResource( 399 )
+__meta__ = {
+"CollisionShapeAABB": AABB( -1.495, 0.00292176, -3.48667, 2.48667, 1.98667, 0.973333 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_2_stair_collision/entity_2_brush_0_collision_shape"]
 material_override = ExtResource( 15 )
@@ -418,6 +481,9 @@ mesh = SubResource( 401 )
 
 [node name="entity_3_brush_0_collision_shape" type="CollisionShape" parent="QodotMap/entity_3_func_group"]
 shape = SubResource( 402 )
+__meta__ = {
+"CollisionShapeAABB": AABB( -1.5, 0.25, -1.25, 0.75, 0.75, 0.75 )
+}
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="QodotMap/entity_3_func_group/entity_3_brush_0_collision_shape"]
 material_override = ExtResource( 15 )
@@ -433,6 +499,7 @@ script = ExtResource( 18 )
 [node name="QodotMapDecalMeshBuilder" type="Node" parent="QodotMapPostProcesses"]
 script = ExtResource( 16 )
 debug = true
+margin = 0.001
 
 [node name="SmgDrop" parent="." instance=ExtResource( 6 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.66126, -0.670032 )

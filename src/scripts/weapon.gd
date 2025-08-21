@@ -7,15 +7,14 @@ signal reloaded
 export var current_ammo : int = 10
 export var weapon_stats : Resource = null
 
+onready var _animation_tree : AnimationTree = $AnimationTree
+onready var _muzzle_position : Spatial = $MuzzlePosition
+onready var _muzzle_space_check : ShapeCast = $MuzzlePosition/MuzzleSpaceCheck
+
 var _weapon_model : Spatial = null
 var _weapon_animation_player : AnimationPlayer = null
 var _last_fire : float = -1.0
 var _last_mark_fire : float = -1.0
-
-onready var _animation_tree : AnimationTree = $AnimationTree
-onready var muzzle_position : Spatial = $MuzzlePosition
-onready var muzzle_space_check : ShapeCast = $MuzzlePosition/MuzzleSpaceCheck
-
 
 func _ready():
 	_weapon_model = get_child(0) as Spatial
@@ -74,13 +73,13 @@ func play_empty_click():
 
 
 func get_muzzle_position() -> Vector3:
-	return muzzle_position.global_position if muzzle_position != null else global_position
+	return _muzzle_position.global_position if _muzzle_position != null else global_position
 
 
 func can_fire_from_muzzle(collision_mask : int):
-	muzzle_space_check.collision_mask = collision_mask
-	muzzle_space_check.force_shapecast_update()
-	return !muzzle_space_check.is_colliding()
+	_muzzle_space_check.collision_mask = collision_mask
+	_muzzle_space_check.force_shapecast_update()
+	return !_muzzle_space_check.is_colliding()
 
 
 func get_last_fire() -> float:

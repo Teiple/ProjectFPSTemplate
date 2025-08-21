@@ -20,7 +20,7 @@ func set_export_save_guard_end(val):
 	_is_saving = false
 
 
-func set_optimize(val):
+func set_optimize(val) -> void:
 	if !Engine.editor_hint || !is_node_ready() || _is_saving:
 		return
 		
@@ -76,5 +76,5 @@ func _try_convert_to_box_shape(collision_shape : CollisionShape) -> bool:
 
 
 # Override
-func do_stuff():
+func do_stuff() -> void:
 	set_optimize(true)

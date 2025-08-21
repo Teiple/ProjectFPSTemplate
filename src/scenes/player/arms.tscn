@@ -82,6 +82,10 @@ _ammo_inventory_path = NodePath("../AmmoInventory")
 
 [node name="WeaponProjectileComponent" parent="." instance=ExtResource( 11 )]
 
+[node name="WeaponRelativeTransformSaver" type="Node" parent="."]
+script = ExtResource( 14 )
+target_path = NodePath("../ViewModel/armature/Skeleton/Weapons/Pistol")
+
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 30 )
 anim_player = NodePath("../ViewModel/AnimationPlayer")
@@ -90,9 +94,5 @@ process_mode = 0
 parameters/playback = SubResource( 27 )
 parameters/pistol/playback = SubResource( 29 )
 parameters/smg/playback = SubResource( 31 )
-
-[node name="WeaponRelativeTransformSaver" type="Node" parent="."]
-script = ExtResource( 14 )
-target_path = NodePath("../ViewModel/armature/Skeleton/Weapons/Pistol")
 
 [editable path="ViewModel"]

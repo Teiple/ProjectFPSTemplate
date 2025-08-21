@@ -41,6 +41,12 @@ class Group:
 	const PARTICLES := "particles"
 
 
+class Ref:
+	const DECAL_MESH_INSTANCE_NAME = "DecalMeshPreference"
+	const ADJACENT_COLLISION_SHAPES_META_NAME = "AdjacentCollisionShapes"
+	const COLLISION_SHAPE_AABB_META_NAME = "CollisionShapeAABB"
+
+
 enum SaveSectionId {
 	DEFAULT,
 	PLAYER,

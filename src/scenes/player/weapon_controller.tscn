@@ -7,8 +7,6 @@
 script = ExtResource( 1 )
 weapons_path = NodePath("../ViewModel/armature/Skeleton/Weapons")
 ammo_inventory_path = NodePath("../AmmoInventory")
-
-[node name="AimRayCast" type="RayCast" parent="."]
-collision_mask = 9
+aim_layer_mask = 9
 
 [node name="GameStateComponent" parent="." instance=ExtResource( 2 )]

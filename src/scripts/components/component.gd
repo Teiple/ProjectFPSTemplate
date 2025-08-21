@@ -38,6 +38,7 @@ func _ready():
 					if inheritance_arr is Array && !inheritance_arr.has(self):
 						inheritance_arr.push_back(self)
 
+
 # Must override
 static func get_component_name() -> String:
 	return "Component"
@@ -51,6 +52,10 @@ static func find_component(node : Node, component_name : String) -> Component:
 	if !node.has_meta(component_name):
 		return null
 	return node.get_meta(component_name)
+
+
+static func find(node : Node, component_name : String) -> Component:
+	return find_component(node, component_name)
 
 
 static func find_component_array(node : Node, component_name : String) -> Array:

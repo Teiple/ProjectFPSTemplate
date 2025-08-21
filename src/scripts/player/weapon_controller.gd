@@ -13,7 +13,8 @@ export var auto_equip_new_weapon : bool = true
 export var auto_reload : bool = true
 export var precise_shot_cool_down : float = 0.5
 
-onready var aim_raycast : RayCast = $AimRayCast
+# onready var aim_raycast : RayCast = $AimRayCast
+export(int, LAYERS_3D_PHYSICS) var aim_layer_mask : int = 0
 
 var _weapons_node : Spatial = null
 var _current_weapon : Weapon = null
@@ -179,7 +180,7 @@ func add_new_weapon(new_weapon : Weapon):
 		select_weapon(new_slot)
 
 
-func replace_weapon(new_weapon : Weapon):
+func replace_weapon(new_weapon : Weapon) -> void:
 	var replaced_slot = new_weapon.get_weapon_stats().weapon_slot
 	var old_weapon = _find_weapon_at_slot(replaced_slot)
 	
@@ -240,7 +241,7 @@ func can_reload() -> bool:
 
 
 # Assuming weapon is ready to reload: weapon's current ammo is not at mag size and has reserve ammo (see can_reload())
-func reload():
+func reload() -> void:
 	if _current_weapon == null:
 		return
 	
@@ -261,7 +262,7 @@ func get_current_weapon_animation_tree() -> AnimationTree:
 
 
 # Mark the weapon is about to fire next frame
-func mark_fire():
+func mark_fire() -> void:
 	if _current_weapon == null:
 		return
 	_current_weapon.mark_fire()
@@ -270,7 +271,7 @@ func mark_fire():
 # Assuming weapon is ready to fire: has enough ammo and firing cooldown was over
 # This is the most complex function of this class, and it seems to be its responsibility.
 # I didn't know to off-load it else where.
-func fire():
+func fire() -> void:
 	if _current_weapon == null:
 		return
 	
@@ -286,71 +287,64 @@ func fire():
 	for i in ammo_to_fire:
 		for j in stats.projectiles_per_ammo:
 			
-			var attack : AttackOriginInfo = AttackOriginInfo.new()
+			var attack_origin : AttackOriginInfo = AttackOriginInfo.new()
 			
-			attack.attacker = player
-			attack.damage = stats.damage_per_projectile
-			attack.max_distance = stats.max_distance
-			attack.collision_mask = stats.collision_mask
-			attack.impact_force = stats.impact_force
+			attack_origin.attacker = player
+			attack_origin.damage = stats.damage_per_projectile
+			attack_origin.max_distance = stats.max_distance
+			attack_origin.collision_mask = stats.collision_mask
+			attack_origin.impact_force = stats.impact_force
 			
 			if precise_shot:
-				attack.spread_angle_degrees = 0.0
+				attack_origin.spread_angle_degrees = 0.0
 			else:
-				attack.spread_angle_degrees = stats.spread_angle_degrees
+				attack_origin.spread_angle_degrees = stats.spread_angle_degrees
 			
-			var result : AttackResultInfo = null
 			match stats.ballistic_model:
-				
 				GlobalData.BallisticModel.HITSCAN:
-					var weapon_raycast_comp : WeaponRaycastComponent = Component.find_component(arms, WeaponRaycastComponent.get_component_name()) as WeaponRaycastComponent
-					
-					attack.from = arms.global_position
-					attack.base_direction = -arms.global_transform.basis.z
-					attack.use_visual_origin = true
-					attack.visually_from = _current_weapon.get_muzzle_position()
-					attack.attacker_forward = -arms.global_transform.basis.z
-					
-					if weapon_raycast_comp != null:
-						result = weapon_raycast_comp.cast(attack)
-				
+					_fire_hitscan_weapon(attack_origin)
 				GlobalData.BallisticModel.PROJECTILE:
-					var weapon_projectile_comp : WeaponProjectileComponent = Component.find_component(arms, WeaponProjectileComponent.get_component_name()) as WeaponProjectileComponent
-					
-					aim_raycast.global_position = arms.global_position
-					aim_raycast.cast_to = aim_raycast.to_local(_current_weapon.get_muzzle_position())
-					aim_raycast.force_raycast_update()
-					var can_fire_from_muzzle = _current_weapon.can_fire_from_muzzle(aim_raycast.collision_mask)
-					if !aim_raycast.is_colliding() && can_fire_from_muzzle:
-						attack.from = _current_weapon.get_muzzle_position()
-						
-						aim_raycast.global_position = arms.global_position
-						var max_target_range = _current_weapon.get_weapon_stats().max_distance
-						var furthest_point = arms.global_position - arms.global_transform.basis.z * max_target_range
-						aim_raycast.cast_to = aim_raycast.to_local(furthest_point)
-						
-						aim_raycast.force_raycast_update()
-						if aim_raycast.is_colliding():
-							var collision_point = aim_raycast.get_collision_point()
-							attack.max_distance = (collision_point - attack.from).length()
-							attack.base_direction = (collision_point - attack.from) / attack.max_distance
-						else:
-							attack.max_distance = (furthest_point - attack.from).length()
-							attack.base_direction = (furthest_point - attack.from) / attack.max_distance
-					else:
-						attack.from = arms.global_position
-						attack.base_direction = -arms.global_transform.basis.z
-					
-					attack.projectile_speed = _current_weapon.get_weapon_stats().projectile_speed
-					
-					if weapon_projectile_comp != null:
-						result = weapon_projectile_comp.launch(attack)
-	# Calling fire() for the weapon to recalcuate its current weapon
+					_fire_projectile_weapon(attack_origin)
+			
+	# Calling fire() for the weapon to re-calculate its current ammo
 	_current_weapon.fire()
+
+
+func _fire_hitscan_weapon(attack_origin : AttackOriginInfo) -> void:
+	var arms = owner as Spatial
+	
+	attack_origin.aim_from = arms.global_position
+	attack_origin.fire_from = _current_weapon.get_muzzle_position()
+	attack_origin.base_direction = -arms.global_transform.basis.z
+	attack_origin.attacker_forward = -arms.global_transform.basis.z
+	
+	var weapon_raycast_comp = Component.find(arms, WeaponRaycastComponent.get_component_name()) as WeaponRaycastComponent
+	if weapon_raycast_comp != null:
+		weapon_raycast_comp.cast(attack_origin)
+
+
+func _fire_projectile_weapon(attack_origin : AttackOriginInfo) -> void:
+	var arms = owner as Spatial
+	
+	attack_origin.aim_from = arms.global_position
+	attack_origin.base_direction = -arms.global_transform.basis.z
+	
+	var weapon_can_fire_from_muzzle = _current_weapon.can_fire_from_muzzle(aim_layer_mask)
+	if weapon_can_fire_from_muzzle:
+		attack_origin.fire_from = _current_weapon.get_muzzle_position()
+	else:
+		attack_origin.fire_from = arms.global_position
+
+	attack_origin.projectile_speed = _current_weapon.get_weapon_stats().projectile_speed
+	
+	var weapon_projectile_comp = Component.find(arms, WeaponProjectileComponent.get_component_name()) as WeaponProjectileComponent
+	if weapon_projectile_comp != null:
+		weapon_projectile_comp.launch(attack_origin) as AttackResultInfo
 
 
 func serialize_available_weapons() -> Dictionary:
 	var data = {}
+	
 	for wp in get_available_weapons():
 		wp = wp as Weapon
 		if wp == null:
@@ -358,6 +352,7 @@ func serialize_available_weapons() -> Dictionary:
 		var wp_data = wp.serialize_weapon()
 		var wp_id = wp.get_weapon_stats().weapon_id
 		data[wp_id] = wp_data
+	
 	return data
 
 
@@ -369,6 +364,7 @@ func _remove_all_weapons():
 
 func serialize_state() -> Dictionary:
 	var cur_wp_slot = -1
+	
 	if _current_weapon != null:
 		cur_wp_slot = _current_weapon.get_weapon_stats().weapon_slot
 	return {
@@ -406,6 +402,8 @@ func deserialize_state(state : Dictionary):
 
 func get_available_weapon_stats() -> Array:
 	var stats = []
+	
 	for wp in get_available_weapons():
 		stats.push_back(wp.get_weapon_stats())
+	
 	return stats

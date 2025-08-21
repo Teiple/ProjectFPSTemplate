@@ -17,15 +17,23 @@ func _ready():
 func serialize() -> Dictionary:
 	var parent_path = get_parent().get_path()
 	return {
-		"global_transform": var2str(global_transform),
+		"local_transform": var2str(transform),
 		"decal_target": parent_path
 	}
 
 
 func deserialize(data : Dictionary):
-	global_transform = Utils.either(str2var(data.get("global_transform")), global_transform)
-	_start_time = FrameTime.process_time()
+	var decal_target = Utils.either(str2var(data.get("decal_target")), null)
+	if decal_target != null:
+		# Assume decal_target uses global path (with /root/ prefix)
+		var new_parent = get_node_or_null(decal_target)
+		if new_parent != null:
+			get_parent().remove_child(self)
+			new_parent.add_child(self)
 	
+	transform = Utils.either(str2var(data.get("local_transform")), transform)
+	
+	_start_time = FrameTime.process_time()
 	decal_projection.perform_projection()
 
 
