@@ -10,3 +10,7 @@ ammo_inventory_path = NodePath("../AmmoInventory")
 aim_layer_mask = 9
 
 [node name="GameStateComponent" parent="." instance=ExtResource( 2 )]
+
+[node name="ProjectileStartPointCheckRaycast" type="RayCast" parent="."]
+cast_to = Vector3( 0, 0, 0 )
+collision_mask = 0

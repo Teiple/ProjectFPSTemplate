@@ -25,4 +25,4 @@ func resolve(attack_result_info : AttackResultInfo):
 	if collider is RigidBody:
 		var physical_comp = Component.find(collider, PhysicalObjectComponent.get_component_name()) as PhysicalObjectComponent
 		if physical_comp != null:
-			physical_comp.apply_force(hit_point, hit_direction, impact_force)
+			physical_comp.apply_impulse(hit_point, hit_direction, impact_force)

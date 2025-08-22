@@ -54,3 +54,4 @@ func _on_quit_button_pressed():
 
 func _on_reload_without_shader_cache_button_pressed():
 	Global.load_scene("res://src/scenes/world.tscn")
+	back()

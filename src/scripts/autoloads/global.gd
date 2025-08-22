@@ -44,10 +44,10 @@ func _process(delta) -> void:
 
 func load_scene(path : String):
 	var packed_scene = ResourceLoader.load(path)
-	call_deferred("_load_scene", packed_scene, true)
+	call_deferred("_load_scene", packed_scene)
 
 
-func _load_scene(packed_scene : PackedScene, no_shader_cache : bool = false):
+func _load_scene(packed_scene : PackedScene):
 	# Unload current scene
 	if _current_scene == null:
 		return
@@ -60,9 +60,6 @@ func _load_scene(packed_scene : PackedScene, no_shader_cache : bool = false):
 		return
 	
 	_current_scene = scene
-	if no_shader_cache:
-		var shader_cache = _current_scene.get_node_or_null("ShaderCache")
-		shader_cache.queue_free()
 	# Add this last since some _ready() methods may reference _current_scene
 	get_tree().root.add_child(scene)
 

@@ -1,3 +1,6 @@
+# The safe margin needs to be >= 0.06 for infinite_inertia (false) to work
+# See: https://github.com/godotengine/godot/issues/31981 
+
 class_name Player
 extends KinematicBody
 
@@ -71,7 +74,8 @@ func _physics_process(delta) -> void:
 	
 	if is_on_floor():
 		target_h_velocity = direction * move_speed
-		if Input.is_action_pressed("jump") || (_last_jump_pressed_time > 0 && FrameTime.physics_process_time() - _last_jump_pressed_time <= jump_buffer):
+		# Normal jump or apply jump buffer
+		if Input.is_action_just_pressed("jump") || (_last_jump_pressed_time > 0 && FrameTime.physics_process_time() - _last_jump_pressed_time <= jump_buffer):
 			_velocity.y = _get_jump_speed()
 			snap_vector = Vector3.ZERO
 		else:
@@ -85,12 +89,12 @@ func _physics_process(delta) -> void:
 	else:
 		snap_vector = Vector3.ZERO
 		# Coyote time allows to jump if you pressed jump a little too lately
-		if Input.is_action_pressed("jump") && _velocity.y < 0 && _last_time_on_ground > 0 && FrameTime.physics_process_time() - _last_time_on_ground <= coyote_time:
+		if Input.is_action_just_pressed("jump") && _velocity.y < 0 && _last_time_on_ground > 0 && FrameTime.physics_process_time() - _last_time_on_ground <= coyote_time:
 			_velocity.y = _get_jump_speed()
 			_last_time_on_ground = -1
 		else:
 			# Jump buffer allows you to jump if you pressed jump a little too early
-			if Input.is_action_pressed("jump"):
+			if Input.is_action_just_pressed("jump"):
 				_last_jump_pressed_time = FrameTime.physics_process_time()
 			
 			_velocity.y += gravity * delta
@@ -114,7 +118,7 @@ func _physics_process(delta) -> void:
 	var player_last_pos = global_position
 	
 	var old_position = global_position
-	_velocity.y = move_and_slide_with_snap(_velocity, snap_vector, Vector3.UP, true, 4, deg2rad(floor_max_angle), true).y
+	_velocity.y = move_and_slide_with_snap(_velocity, snap_vector, Vector3.UP, true, 4, deg2rad(floor_max_angle), false).y
 	var new_position = global_position
 	
 	if (new_position - old_position).length_squared() > 1e-8:
@@ -201,3 +205,11 @@ func deserialize_state(state: Dictionary) -> void:
 	_current_height = state.get("current_height", _current_height)
 	head.position.y = _current_height - HEAD_OFFSET
 	_resize_capsule_collision(_current_height)
+
+
+func is_crouching() -> bool:
+	return _is_crouching
+
+
+func get_collision_shape() -> CollisionShape:
+	return collision_shape

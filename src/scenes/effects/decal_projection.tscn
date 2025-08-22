@@ -9,11 +9,11 @@ projection_extents = Vector3( 0.25, 0.25, 0.25 )
 [node name="RayCast" type="RayCast" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1 )
 cast_to = Vector3( 0, 0, 1 )
-collision_mask = 9
+collision_mask = 41
 debug_shape_thickness = 1
 
 [node name="ShapeCast" type="ShapeCast" parent="."]
 enabled = false
 target_position = Vector3( 0, 0, 0 )
 max_results = 8
-collision_mask = 9
+collision_mask = 41

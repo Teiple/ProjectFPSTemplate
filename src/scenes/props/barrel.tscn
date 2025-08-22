@@ -17,6 +17,8 @@ radial_segments = 12
 rings = 0
 
 [node name="Barrel" type="RigidBody"]
+collision_layer = 32
+collision_mask = 49
 
 [node name="oil_barrel" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0 )

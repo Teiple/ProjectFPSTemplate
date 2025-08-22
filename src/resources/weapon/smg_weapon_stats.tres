@@ -18,5 +18,5 @@ ballistic_model = 1
 view_model_relative_transform_from_hand = Transform( -0.961474, -0.15163, -0.229294, 0.270137, -0.366644, -0.89028, 0.0509235, -0.917921, 0.39348, 0.00837651, 0.0388536, -0.10513 )
 projectile_speed = 53.0
 allow_rapid_fire = false
-collision_mask = 13
+collision_mask = 45
 impact_force = 1.0

@@ -15,6 +15,7 @@ export var precise_shot_cool_down : float = 0.5
 
 # onready var aim_raycast : RayCast = $AimRayCast
 export(int, LAYERS_3D_PHYSICS) var aim_layer_mask : int = 0
+onready var projectile_start_point_check_raycast: RayCast = $ProjectileStartPointCheckRaycast
 
 var _weapons_node : Spatial = null
 var _current_weapon : Weapon = null
@@ -330,7 +331,12 @@ func _fire_projectile_weapon(attack_origin : AttackOriginInfo) -> void:
 	attack_origin.base_direction = -arms.global_transform.basis.z
 	
 	var weapon_can_fire_from_muzzle = _current_weapon.can_fire_from_muzzle(aim_layer_mask)
-	if weapon_can_fire_from_muzzle:
+	projectile_start_point_check_raycast.collision_mask = attack_origin.collision_mask
+	projectile_start_point_check_raycast.cast_to = projectile_start_point_check_raycast.to_local(_current_weapon.get_muzzle_position())
+	projectile_start_point_check_raycast.force_raycast_update()
+	var is_obstructed = projectile_start_point_check_raycast.is_colliding()
+	
+	if !is_obstructed && weapon_can_fire_from_muzzle:
 		attack_origin.fire_from = _current_weapon.get_muzzle_position()
 	else:
 		attack_origin.fire_from = arms.global_position
