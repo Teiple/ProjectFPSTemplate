@@ -566,11 +566,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
+ShaderCacheManager="*res://addons/gd-shader-cache/src/shader_cache_manager.gd"
 Global="*res://src/scenes/autoloads/global.tscn"
 FrameTime="*res://src/scripts/autoloads/frame_time.gd"
 PoolManager="*res://src/scenes/autoloads/pool_manager.tscn"
 DebugDraw="*res://addons/debug_draw_3d/debug_draw.gd"
-ShaderCacheManager="*res://addons/gd-shader-cache/src/ShaderCacheManager.gd"
 MenuManager="*res://src/scenes/autoloads/menu_manager.tscn"
 AttackResolver="*res://src/scripts/autoloads/attack_resolver.gd"
 
@@ -585,7 +585,7 @@ window/stretch/aspect="keep_width"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/debug_draw_3d/plugin.cfg", "res://addons/gd-shader-cache/plugin.cfg", "res://addons/qodot/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/debug_draw_3d/plugin.cfg", "res://addons/qodot/plugin.cfg" )
 
 [global]
 

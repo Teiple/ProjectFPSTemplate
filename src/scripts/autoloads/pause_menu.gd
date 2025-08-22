@@ -16,6 +16,7 @@ func _ready():
 	connect_button_event("SaveButton", "save")
 	connect_button_event("LoadButton", "load")
 	connect_button_event("QuitButton", "quit")
+	connect_button_event("ReloadWithoutShaderCache", "reload_without_shader_cache")
 
 
 func connect_button_event(node_unique_name : String, button_name : String):
@@ -49,3 +50,7 @@ func _on_load_button_pressed():
 
 func _on_quit_button_pressed():
 	Global.quit()
+
+
+func _on_reload_without_shader_cache_button_pressed():
+	Global.load_scene("res://src/scenes/world.tscn")

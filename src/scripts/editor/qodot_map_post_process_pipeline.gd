@@ -11,23 +11,23 @@ export var export_save_guard_end : bool = true setget set_export_save_guard_end
 var _is_saving := false
 
 
-func set_export_save_guard_start(val):
+func set_export_save_guard_start(val) -> void:
 	if val == false:
 		return
 	_is_saving = true
 
 
-func set_export_save_guard_end(val):
+func set_export_save_guard_end(val) -> void:
 	if val == false:
 		return
 	_is_saving = false
 
 
-func set_rerun_all_post_processes(val):
+func set_rerun_all_post_processes(val) -> void:
 	_on_map_build_completed()
 
 
-func _ready():
+func _ready() -> void:
 	if !Engine.editor_hint:
 		queue_free()
 		return
@@ -41,7 +41,7 @@ func get_qodot_map() -> QodotMap:
 	return get_node_or_null(qodot_map_path) as QodotMap
 
 
-func _on_map_build_completed():
+func _on_map_build_completed() -> void:
 	var map = get_qodot_map()
 	if map == null:
 		return

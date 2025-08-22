@@ -8,13 +8,13 @@ export var export_save_guard_end : bool = true setget set_export_save_guard_end
 
 var _is_saving := false
 
-func set_export_save_guard_start(val):
+func set_export_save_guard_start(val) -> void:
 	if val == false:
 		return
 	_is_saving = true
 
 
-func set_export_save_guard_end(val):
+func set_export_save_guard_end(val) -> void:
 	if val == false:
 		return
 	_is_saving = false

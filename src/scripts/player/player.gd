@@ -34,7 +34,7 @@ onready var collision_shape : CollisionShape = $CollisionShape
 onready var stand_up_shape_cast : ShapeCast = $StandUpShapeCast
 
 
-func _unhandled_input(event):
+func _unhandled_input(event) -> void:
 	if event is InputEventMouseMotion:
 		_rotation_yaw(-event.relative.x * mouse_sensitivity)
 		_rotation_x_degrees -= event.relative.y * mouse_sensitivity
@@ -49,7 +49,7 @@ func _unhandled_input(event):
 				_is_crouching = false
 
 
-func _physics_process(delta):
+func _physics_process(delta) -> void:
 	_update_crouching(delta)
 	
 	## Movement
@@ -123,7 +123,7 @@ func _physics_process(delta):
 		_real_velocity = Vector3.ZERO
 
 
-func _update_crouching(delta : float):
+func _update_crouching(delta : float) -> void:
 	var target_height = CROUCH_HEIGHT if _is_crouching else STAND_HEIGHT
 	_current_height = move_toward(_current_height, target_height, crouch_speed * delta)
 	_resize_capsule_collision(_current_height)
@@ -134,11 +134,11 @@ func _get_jump_speed() -> float:
 	return sqrt(2.0 * jump_height * abs(gravity))
 
 
-func _rotation_yaw(amount):
+func _rotation_yaw(amount) -> void:
 	rotation_degrees.y += amount
 
 
-func _resize_capsule_collision(new_height : float):
+func _resize_capsule_collision(new_height : float) -> void:
 	var capsule_shape : CapsuleShape = collision_shape.shape as CapsuleShape
 	if capsule_shape == null:
 		return
@@ -148,7 +148,7 @@ func _resize_capsule_collision(new_height : float):
 	collision_shape.position.y = new_height * 0.5
 
 
-func get_position_from_last_frame():
+func get_position_from_last_frame() -> Vector3:
 	return _position_last_frame
 
 

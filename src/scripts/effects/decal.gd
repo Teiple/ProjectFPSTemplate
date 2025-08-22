@@ -1,6 +1,7 @@
 class_name Decal
 extends Spatial
 
+export var project_on_start : bool = false
 export var life_time : float = 2.0
 
 onready var poolable_node_component : PoolableNodeComponent = $PoolableNodeComponent
@@ -12,6 +13,9 @@ var _start_time : float = 0.0
 func _ready():
 	poolable_node_component.init_serialization_func(funcref(self, "serialize"))
 	poolable_node_component.init_deserialization_func(funcref(self, "deserialize"))
+	
+	if project_on_start:
+		decal_projection.perform_projection()
 
 
 func serialize() -> Dictionary:

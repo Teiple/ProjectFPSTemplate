@@ -17,7 +17,7 @@ func _on_Button_pressed():
 
 func _process(delta):
 	if Global.is_loading_complete():
-		Global.loading_pending_scene()
+		Global.load_pending_scene()
 		call_deferred("set_process", false)
 		return
 	

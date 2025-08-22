@@ -40,8 +40,8 @@ class ClippingStep:
 func _ready():
 	_box_edges = get_box_edges()
 	_planes = Geometry.build_box_planes(projection_extents)
-	if !debug:
-		$CutPlane.visible = false
+	if project_on_start:
+		perform_projection()
 
 
 func clear_all():
@@ -69,7 +69,6 @@ func perform_projection():
 	
 	if !_raycast.is_colliding():
 		return
-	
 	if _shapecast == null:
 		_shapecast = $ShapeCast
 	_shapecast.force_shapecast_update()
@@ -230,7 +229,6 @@ func render_surfaces():
 			set_normal(norm2)
 			set_uv(uv2)
 			add_vertex(vert2)
-			
 		elif vert_count > 0 || area_overlaps_tri(vert0, vert1, vert2):
 			var clipped_verts = []
 			clip_tri_to_area(_all_verts[i], _all_verts[i+1], _all_verts[i+2], clipped_verts)

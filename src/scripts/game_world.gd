@@ -2,8 +2,9 @@ class_name GameWorld
 extends Node
 
 
-func _ready():
+func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Global.cache_shaders()
 
 
 func get_player_camera() -> Camera:

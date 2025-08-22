@@ -1,5 +1,7 @@
 extends Node
 
+const SHADER_CACHE_SCENE : PackedScene = preload("res://src/scenes/shader_cache.scn")
+
 var _loading_thread : Thread = null
 var _is_loading : bool = false
 var _loading_mutex : Mutex = null
@@ -18,13 +20,13 @@ func get_game_world() -> GameWorld:
 	return _current_scene as GameWorld
 
 
-func _unhandled_input(event):
+func _unhandled_input(event) -> void:
 	if event is InputEventKey && event.is_pressed():
 		_any_key_pressed = true
 		_last_any_key_pressed = FrameTime.process_time()
 
 
-func _ready():
+func _ready() -> void:
 	# Let this node run even when the tree is paused
 	pause_mode = Node.PAUSE_MODE_PROCESS 
 	
@@ -35,12 +37,17 @@ func _ready():
 	_loading_mutex = Mutex.new()
 
 
-func _process(delta):
+func _process(delta) -> void:
 	fps_label.text = str(int(Engine.get_frames_per_second()))
 	pool_info_label.text = PoolManager.get_info_str()
 
 
-func _load_scene(packed_scene : PackedScene):
+func load_scene(path : String):
+	var packed_scene = ResourceLoader.load(path)
+	call_deferred("_load_scene", packed_scene, true)
+
+
+func _load_scene(packed_scene : PackedScene, no_shader_cache : bool = false):
 	# Unload current scene
 	if _current_scene == null:
 		return
@@ -53,6 +60,9 @@ func _load_scene(packed_scene : PackedScene):
 		return
 	
 	_current_scene = scene
+	if no_shader_cache:
+		var shader_cache = _current_scene.get_node_or_null("ShaderCache")
+		shader_cache.queue_free()
 	# Add this last since some _ready() methods may reference _current_scene
 	get_tree().root.add_child(scene)
 
@@ -71,7 +81,11 @@ func load_scene_async(scene_path : String) -> void:
 	_loading_thread.start(self, "_load_scene_interactive")
 
 
-func _load_scene_interactive():
+func cache_shaders() -> void:
+	ShaderCacheManager.compile(SHADER_CACHE_SCENE)
+
+
+func _load_scene_interactive() -> void:
 	var interactive_loader : ResourceInteractiveLoader = ResourceLoader.load_interactive(_loading_data.get_resource_path())
 	_loading_data.set_stage_count(interactive_loader.get_stage_count())
 	# I'm using a custom stage counter here instead of ResourceInteractiveLoader.get_stage() because ResourceInteractiveLoader.get_stage() will never exceed interactive_loader.get_stage_count() - 1
@@ -87,7 +101,7 @@ func _load_scene_interactive():
 	_loading_data.set_result(interactive_loader.get_resource())
 
 
-func loading_pending_scene():
+func load_pending_scene():
 	if _loading_data == null:
 		return
 	call_deferred("_load_scene", _loading_data.get_result())
@@ -127,6 +141,7 @@ func set_tree_pause(paused : bool):
 
 func is_tree_paused() -> bool:
 	return get_tree().paused
+
 
 func save_everything():
 	var saveables = get_tree().get_nodes_in_group(GlobalData.Group.SAVEABLE)

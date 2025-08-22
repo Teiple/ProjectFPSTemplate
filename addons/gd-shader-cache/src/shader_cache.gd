@@ -8,12 +8,10 @@ export var export_save_guard_start : bool = true setget set_export_save_guard_st
 
 export var cache_scene_btn = false setget cache_scene
 export var clear_cache_btn = false setget clear_cache
-
+export var geometry_scale = Vector3(1.0, 1.0, 1.0) setget set_geometry_scale
 export var active = true setget set_active
 
 export var export_save_guard_end : bool = true setget set_export_save_guard_end
-
-#export(String, FILE, "*.tscn, *.scn") var scene_path = ""
 
 export var scene_paths : Array = []
 
@@ -27,6 +25,7 @@ var local_to_scene_materials_node setget, get_local_to_scene_materials_node
 var materials_node setget , get_materials_node
 var particles_materials_node setget , get_particles_materials_node
 var skeleton_node setget , get_skeleton_node
+var decal_canvas_node setget , get_decal_canvas_node
 
 var _virtual_tree
 var _frame_countdown = 0
@@ -119,6 +118,7 @@ func clear_cache(value=true):
 	to_free.append(get_node_or_null("Materials"))
 	to_free.append(get_node_or_null("ParticlesMaterials"))
 	to_free.append(get_node_or_null("Skeleton"))
+	to_free.append(get_node_or_null("DecalCanvas"))
 	for node in to_free:
 		if node == null:
 			continue
@@ -187,6 +187,19 @@ func _cache_node(node, extra={}):
 			var material = node.material_override
 			var proc_mat = node.process_material
 			_cache_particle_material(node, material, proc_mat, extra)
+	
+	if node is CPUParticles:
+		var material = node.material_override
+		var particles = new_cpu_material(node, material)
+		get_particles_materials_node(true).add_child(particles)
+		particles.set_owner(self)
+	
+	if node is DecalProjection:
+		var decal_proj = node.duplicate()
+		get_decal_canvas_node(true).add_child(decal_proj)
+		decal_proj.position = Vector3()
+		decal_proj.project_on_start = true
+		decal_proj.owner = self
 	
 	for child in node.get_children():
 		if node.get_script():
@@ -314,6 +327,19 @@ func new_particles(node, material, proc_mat):
 	return particles
 
 
+func new_cpu_material(node, material):
+	var particles = CPUParticles.new()
+	particles.lifetime = 0.1
+	# For some reason, cpu particles must have emitting set to true and one_shot to false by default to work
+	particles.one_shot = false
+	particles.emitting = true
+	particles.mesh = node.mesh
+	particles.material_override = material
+	particles.name = node.name
+	particles.cast_shadow = node.cast_shadow
+	return particles
+
+
 func set_active(v):
 	active = v
 	visible = active
@@ -372,3 +398,39 @@ func get_skeleton_node(create_if_null=false):
 			move_child(skeleton_node, int(min(get_child_count(), 3)))
 			skeleton_node.owner = self
 	return skeleton_node
+
+
+func get_decal_canvas_node(create_if_null=false):
+	if not is_instance_valid(decal_canvas_node):
+		decal_canvas_node = get_node_or_null("DecalCanvas")
+		if not decal_canvas_node and create_if_null:
+			decal_canvas_node = StaticBody.new()
+			decal_canvas_node.name = "DecalCanvas"
+			add_child(decal_canvas_node)
+			decal_canvas_node.owner = self
+			var collision_shape = CollisionShape.new()
+			collision_shape.shape = BoxShape.new()
+			collision_shape.position.z = 0.51
+			collision_shape.shape.extents = Vector3(0.5, 0.5, 0.5)
+			decal_canvas_node.add_child(collision_shape)
+			collision_shape.owner = self
+			var decal_mesh = MeshInstance.new()
+			decal_mesh.name = GlobalData.Ref.DECAL_MESH_INSTANCE_NAME
+			decal_mesh.mesh = CubeMesh.new()
+			decal_mesh.mesh.size = Vector3(1.0, 1.0, 1.0)
+			collision_shape.add_child(decal_mesh)
+			decal_mesh.owner = self
+	return decal_canvas_node
+
+
+func set_geometry_scale(val):
+	geometry_scale = val
+	for child in get_children():
+		var node = child as Spatial
+		if node == null:
+			continue
+		# DecalCanvas and ParticlesMaterials shouldn't be scale or it won't cache properly if the scale is too small
+		if node.name in ["DecalCanvas", "ParticlesMaterials"] :
+			node.scale = Vector3(1.0, 1.0, 1.0)
+			continue
+		node.scale = geometry_scale
