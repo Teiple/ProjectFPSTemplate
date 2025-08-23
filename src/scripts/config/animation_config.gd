@@ -118,5 +118,12 @@ const config : Dictionary = {
 				"fire": "default",
 				"reload": "default",
 			},
+			"shotgun": {
+				"equip": "default",
+				"unequip": "default",
+				"idle": "default",
+				"fire": "default",
+				"reload": "default",
+			},
 		}
 	}

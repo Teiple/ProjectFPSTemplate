@@ -42,9 +42,10 @@ func _process(delta):
 	
 	# short_press determines rapid firing
 	var short_press = FrameTime.process_time() - _start_press_time < _weapon_controller.get_current_weapon_fire_rate()
+	var rapid_fire = _weapon_controller.is_current_weapon_allowed_rapid_fire()
 	
 	# Rapid fire - fire without cool down due to fire rate
-	if Input.is_action_just_released("fire") && short_press && _weapon_controller.check_and_handle_rapid_fire_attempt():
+	if rapid_fire && Input.is_action_just_released("fire") && short_press && _weapon_controller.check_and_handle_rapid_fire_attempt():
 		# Must mark before fire event
 		_weapon_controller.mark_fire()
 		_trigger_event("fire")
@@ -54,7 +55,7 @@ func _process(delta):
 	if Input.is_action_just_released("fire"):
 		_start_press_time = 0.0
 	
-	if Input.is_action_pressed("fire") && !short_press && _weapon_controller.check_and_handle_fire_attempt():
+	if Input.is_action_pressed("fire") && (!rapid_fire || !short_press) && _weapon_controller.check_and_handle_fire_attempt():
 		# Must mark before fire event. Or else pressing triggers will overlap and anitiomation will always be stuck at the start
 		_weapon_controller.mark_fire()
 		_trigger_event("fire")

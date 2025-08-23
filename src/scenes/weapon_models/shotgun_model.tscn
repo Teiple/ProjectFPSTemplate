@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/models/shotgun.glb" type="PackedScene" id=1]
+[ext_resource path="res://assets/materials/shotgun_view.tres" type="Material" id=2]
+
+[node name="ShotgunModel" type="Spatial"]
+
+[node name="shotgun" parent="." instance=ExtResource( 1 )]
+
+[node name="shotgun_with_animations" parent="shotgun/shotgun_rig_with_animations/Skeleton" index="0"]
+material/0 = ExtResource( 2 )
+
+[editable path="shotgun"]

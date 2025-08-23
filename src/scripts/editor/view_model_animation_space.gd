@@ -11,7 +11,6 @@ export var save_animation_player : bool = false setget _set_save_animation_playe
 export var insert_changes : bool = false setget _set_insert_changes
 export var clear_callbacks : bool = false setget _set_clear_callbacks
 export var reimport_view_model : bool = false setget _set_reimport_view_model
-export var config_resource : Resource = null
 
 # Prevent running other setters/getters when saving this script
 export var editor_save_guard_end : bool = true setget _set_editor_save_guard_end

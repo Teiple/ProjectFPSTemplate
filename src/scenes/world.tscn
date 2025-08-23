@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=2]
+[gd_scene load_steps=78 format=2]
 
 [ext_resource path="res://src/scenes/player/player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://addons/qodot/src/nodes/qodot_map.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://addons/qodot/game_definitions/fgd/solid_classes/stair_proxy_solid_class.gd" type="Script" id=9]
 [ext_resource path="res://src/scenes/weapon_drops/pistol_drop.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/scenes/props/barrel.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/scenes/weapon_drops/shotgun_drop.tscn" type="PackedScene" id=12]
 [ext_resource path="res://src/scripts/game_world.gd" type="Script" id=13]
 [ext_resource path="res://assets/materials/debug_02_mat.tres" type="Material" id=15]
 [ext_resource path="res://src/scripts/editor/qodot_map_decal_mesh_builder.gd" type="Script" id=16]
@@ -630,3 +631,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34551, 0.425, 1.3791 )
 transform = Transform( 0.317269, 0.946996, -0.050386, 0, 0.053131, 0.998588, 0.948336, -0.316821, 0.0168568, -1.26518, 7.57702, 1.0942 )
 shadow_enabled = true
 directional_shadow_mode = 0
+
+[node name="ShotgunDrop" parent="." instance=ExtResource( 12 )]
+transform = Transform( 0.843738, 0.536755, 1.25727e-08, -0.472178, 0.742228, 0.475547, 0.255252, -0.401238, 0.87969, 0.683502, 2.72783, -0.705301 )

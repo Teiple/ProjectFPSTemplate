@@ -298,6 +298,9 @@ func fire() -> void:
 			
 			if precise_shot:
 				attack_origin.spread_angle_degrees = 0.0
+				# Ok, this needs more dicussion in the future
+				# For now, just accept that you can only have one precise projectile
+				precise_shot = false
 			else:
 				attack_origin.spread_angle_degrees = stats.spread_angle_degrees
 			
@@ -413,3 +416,7 @@ func get_available_weapon_stats() -> Array:
 		stats.push_back(wp.get_weapon_stats())
 	
 	return stats
+
+
+func is_current_weapon_allowed_rapid_fire() -> bool:
+	return _current_weapon != null && _current_weapon.get_weapon_stats().allow_rapid_fire

@@ -1,8 +1,7 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://src/resources/player/player_pistol_state_machine.tres" type="AnimationNodeStateMachine" id=1]
 [ext_resource path="res://src/scenes/player/view_model.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/scenes/weapons/pistol.tscn" type="PackedScene" id=3]
 [ext_resource path="res://src/scripts/player/weapon_action_controller.gd" type="Script" id=4]
 [ext_resource path="res://src/scripts/player/view_model_action_controller.gd" type="Script" id=5]
 [ext_resource path="res://src/scenes/player/weapon_controller.tscn" type="PackedScene" id=6]
@@ -12,6 +11,7 @@
 [ext_resource path="res://src/scripts/player/view_model_motion_controller.gd" type="Script" id=10]
 [ext_resource path="res://src/scenes/components/weapon_projectile_component.tscn" type="PackedScene" id=11]
 [ext_resource path="res://src/resources/player/player_smg_state_machine.tres" type="AnimationNodeStateMachine" id=12]
+[ext_resource path="res://src/resources/player/player_shotgun_state_machine.tres" type="AnimationNodeStateMachine" id=13]
 [ext_resource path="res://src/scripts/editor/weapon_relative_transform_saver.gd" type="Script" id=14]
 [ext_resource path="res://src/scenes/player/AmmoCollector.tscn" type="PackedScene" id=15]
 
@@ -19,17 +19,29 @@
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=33]
 
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=35]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=37]
+
 [sub_resource type="AnimationNodeStateMachine" id=30]
 states/pistol/node = ExtResource( 1 )
 states/pistol/position = Vector2( 375, 16.7777 )
+states/shotgun/node = ExtResource( 13 )
+states/shotgun/position = Vector2( 421.667, 133.333 )
 states/smg/node = ExtResource( 12 )
 states/smg/position = Vector2( 551.333, 16.3333 )
-transitions = [ "pistol", "smg", SubResource( 32 ), "smg", "pistol", SubResource( 33 ) ]
-graph_offset = Vector2( -41, -60 )
+transitions = [ "pistol", "smg", SubResource( 32 ), "smg", "pistol", SubResource( 33 ), "pistol", "shotgun", SubResource( 34 ), "shotgun", "pistol", SubResource( 35 ), "smg", "shotgun", SubResource( 36 ), "shotgun", "smg", SubResource( 37 ) ]
+graph_offset = Vector2( 72, -23 )
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=27]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=29]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=38]
 
 [sub_resource type="AnimationNodeStateMachinePlayback" id=31]
 
@@ -44,14 +56,6 @@ transform = Transform( -1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0
 [node name="Weapons" type="BoneAttachment" parent="ViewModel/armature/Skeleton" index="1"]
 transform = Transform( 0.998417, -9.31323e-10, -0.0562501, -0.0255197, -0.891163, -0.452965, -0.050128, 0.453683, -0.889752, -0.247225, 1.00591, -0.0218807 )
 bone_name = "hand.R"
-
-[node name="Pistol" parent="ViewModel/armature/Skeleton/Weapons" instance=ExtResource( 3 )]
-transform = Transform( -0.96225, -0.0505844, -0.267425, 0.2692, -0.321569, -0.907813, -0.0400743, -0.945534, 0.323047, 0.0290166, 0.0849771, -0.0402087 )
-__meta__ = {
-"_editor_description_": "Global Position: (-0.115, -0.500, 1.426)
-Global Rotation (Degrees): (0.000, -0.000, -0.000)
-Global Scale: (1.000, 1.000, 1.000)"
-}
 
 [node name="AnimationOverride" type="Node" parent="."]
 script = ExtResource( 8 )
@@ -77,6 +81,11 @@ _weapon_controller_path = NodePath("../WeaponController")
 _ammo_inventory_path = NodePath("../AmmoInventory")
 
 [node name="AmmoInventory" parent="." instance=ExtResource( 7 )]
+_ammo_pool = {
+"pistol": 120,
+"shotgun": 60,
+"smg": 300
+}
 
 [node name="WeaponRaycastComponent" parent="." instance=ExtResource( 9 )]
 
@@ -84,7 +93,6 @@ _ammo_inventory_path = NodePath("../AmmoInventory")
 
 [node name="WeaponRelativeTransformSaver" type="Node" parent="."]
 script = ExtResource( 14 )
-target_path = NodePath("../ViewModel/armature/Skeleton/Weapons/Pistol")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = SubResource( 30 )
@@ -93,6 +101,10 @@ active = true
 process_mode = 0
 parameters/playback = SubResource( 27 )
 parameters/pistol/playback = SubResource( 29 )
+parameters/shotgun/playback = SubResource( 38 )
 parameters/smg/playback = SubResource( 31 )
+
+[node name="FeetPosition" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.65, 0 )
 
 [editable path="ViewModel"]

@@ -4,7 +4,7 @@
 
 [node name="AnimationStateMachineGenerator" type="Node"]
 script = ExtResource( 1 )
-target = 1
+weapon_id = "shotgun"
 
 [node name="Tips" type="Label3D" parent="."]
 billboard = 1
