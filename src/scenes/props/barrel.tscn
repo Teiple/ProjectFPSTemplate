@@ -5,29 +5,29 @@
 [ext_resource path="res://src/scenes/components/physical_object_component.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/materials/debug_01_mat.tres" type="Material" id=5]
 
-[sub_resource type="CylinderShape" id=1]
-height = 0.85
-radius = 0.31
+[sub_resource type="CylinderShape" id=3]
+height = 0.75
+radius = 0.25
 
 [sub_resource type="CylinderMesh" id=2]
-top_radius = 0.315
-bottom_radius = 0.315
-height = 0.865
+top_radius = 0.26
+bottom_radius = 0.26
+height = 0.75
 radial_segments = 12
 rings = 0
 
 [node name="Barrel" type="RigidBody"]
 collision_layer = 32
-collision_mask = 49
+collision_mask = 41
 
 [node name="oil_barrel" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.425, 0 )
+transform = Transform( 0.85, 0, 0, 0, 0.87, 0, 0, 0, 0.85, 0, -0.371692, 0 )
 
 [node name="oil_barrel" parent="oil_barrel" index="0"]
 material/0 = ExtResource( 2 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-shape = SubResource( 1 )
+shape = SubResource( 3 )
 
 [node name="DecalMeshPreference" type="MeshInstance" parent="CollisionShape"]
 material_override = ExtResource( 5 )

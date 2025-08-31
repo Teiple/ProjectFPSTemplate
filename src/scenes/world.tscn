@@ -624,9 +624,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.66126, -0.670032 )
 [node name="PistolDrop" parent="." instance=ExtResource( 10 )]
 transform = Transform( 0.965259, 0.261296, 0, -0.261296, 0.965259, 0, 0, 0, 1, 0, 1.67075, -1.26485 )
 
-[node name="Barrel" parent="." instance=ExtResource( 11 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.34551, 0.425, 1.3791 )
-
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.317269, 0.946996, -0.050386, 0, 0.053131, 0.998588, 0.948336, -0.316821, 0.0168568, -1.26518, 7.57702, 1.0942 )
 shadow_enabled = true
@@ -634,3 +631,6 @@ directional_shadow_mode = 0
 
 [node name="ShotgunDrop" parent="." instance=ExtResource( 12 )]
 transform = Transform( 0.843738, 0.536755, 1.25727e-08, -0.472178, 0.742228, 0.475547, 0.255252, -0.401238, 0.87969, 0.683502, 2.72783, -0.705301 )
+
+[node name="Barrel" parent="." instance=ExtResource( 11 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2.33446, 0.57787, -1.40192 )

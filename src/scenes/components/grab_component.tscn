@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scripts/components/grab_component.gd" type="Script" id=1]
+
+[sub_resource type="SphereShape" id=1]
+radius = 0.2
+
+[node name="GrabComponent" type="Spatial"]
+script = ExtResource( 1 )
+_max_speed = 20.0
+_follow_speed = 16.0
+_angular_follow_speed = 14.0
+_pin_joint_pin_mask = 41
+
+[node name="RayCast" type="RayCast" parent="."]
+cast_to = Vector3( 0, 0, -1 )
+collision_mask = 49
+debug_shape_thickness = 1
+
+[node name="GrabPosition" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.25 )
+
+[node name="PinJoint" type="PinJoint" parent="GrabPosition"]
+params/bias = 0.2
+params/impulse_clamp = 1.0
+
+[node name="PinJointPin" type="KinematicBody" parent="GrabPosition"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape" parent="GrabPosition/PinJointPin"]
+shape = SubResource( 1 )

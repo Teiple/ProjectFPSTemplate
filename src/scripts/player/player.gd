@@ -37,6 +37,11 @@ onready var collision_shape : CollisionShape = $CollisionShape
 onready var stand_up_shape_cast : ShapeCast = $StandUpShapeCast
 
 
+func _ready() -> void:
+	stand_up_shape_cast.shape = collision_shape.shape.duplicate()
+	stand_up_shape_cast.shape.radius -= 0.01
+
+
 func _unhandled_input(event) -> void:
 	if event is InputEventMouseMotion:
 		_rotation_yaw(-event.relative.x * mouse_sensitivity)
@@ -169,6 +174,10 @@ func get_camera_vertical_fov() -> float:
 
 func get_camera() -> Camera:
 	return player_camera
+
+
+func get_camera_global_transform() -> Transform:
+	return player_camera.global_transform
 
 
 func is_player_on_floor() -> bool:

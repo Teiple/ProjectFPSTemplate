@@ -9,3 +9,4 @@ script = ExtResource( 1 )
 cast_to = Vector3( 0, 0, -1 )
 collision_mask = 5
 collide_with_areas = true
+debug_shape_thickness = 1

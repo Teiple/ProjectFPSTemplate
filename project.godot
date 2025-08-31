@@ -64,6 +64,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/components/component.gd"
 }, {
+"base": "RigidBody",
+"class": "ControlableRigidbody",
+"language": "GDScript",
+"path": "res://src/scripts/controllable_rigidbody.gd"
+}, {
 "base": "Reference",
 "class": "ConvexHull",
 "language": "GDScript",
@@ -128,6 +133,11 @@ _global_script_classes=[ {
 "class": "GlobalData",
 "language": "GDScript",
 "path": "res://src/scripts/data/global_data.gd"
+}, {
+"base": "Spatial",
+"class": "GrabComponent",
+"language": "GDScript",
+"path": "res://src/scripts/components/grab_component.gd"
 }, {
 "base": "Component",
 "class": "HealthComponent",
@@ -481,6 +491,7 @@ _global_script_class_icons={
 "AutoPushComponent": "",
 "BulletProjectile": "",
 "Component": "",
+"ControlableRigidbody": "",
 "ConvexHull": "",
 "Decal": "",
 "DecalMeshPreference": "",
@@ -494,6 +505,7 @@ _global_script_class_icons={
 "GameStateComponent": "",
 "GameWorld": "",
 "GlobalData": "",
+"GrabComponent": "",
 "HealthComponent": "",
 "HitboxComponent": "",
 "HitscanBulletTrail": "",

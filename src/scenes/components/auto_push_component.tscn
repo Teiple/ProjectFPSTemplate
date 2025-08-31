@@ -5,11 +5,17 @@
 [node name="AutoPushComponent" type="Spatial"]
 script = ExtResource( 1 )
 margin = 0.11
-push_force = 6.0
+push_force = 10.0
 
-[node name="ShapeCast" type="ShapeCast" parent="."]
+[node name="TouchingCheck" type="ShapeCast" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
 enabled = false
 target_position = Vector3( 0, 0, 0 )
+margin = 0.1
 max_results = 8
 collision_mask = 32
+
+[node name="GroundCheck" type="ShapeCast" parent="."]
+enabled = false
+max_results = 8
+collision_mask = 0
