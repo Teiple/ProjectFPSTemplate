@@ -5,10 +5,6 @@ const config : Dictionary = {
 		"events" : {
 			# local_animation_transition_subscribers is used for transitions within a specific weapon animation set
 			# global_animation_transition_target is used for transitions between multiple weapons. Specifically when switching from one weapon to another
-			"equip": {
-				"local_animation_transition_subscribers": [],
-				"global_animation_transition_target": "equip",
-			},
 			"fire": {
 				"local_animation_transition_subscribers": [
 					"idle/fire", "fire/fire", "equip/fire"
@@ -29,6 +25,18 @@ const config : Dictionary = {
 					"(any_state_immediate)/idle"
 				],
 				"global_animation_transition_target": "idle",
+			},
+			"equip": {
+				"local_animation_transition_subscribers": [
+					"(any_state_immediate)/equip"
+				],
+				"global_animation_transition_target": "equip",
+			},
+			"unequip": {
+				"local_animation_transition_subscribers": [
+					"(any_state_immediate)/unequip"
+				],
+				"global_animation_transition_target": "unequip",
 			}
 		},
 		# Configuration for building animation statemachines for player's view model and weapons 

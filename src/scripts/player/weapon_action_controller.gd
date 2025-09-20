@@ -1,3 +1,5 @@
+## Receive action event fron ViewModelActionController and sync
+## weapons' animations
 class_name WeaponActionController
 extends Node
 

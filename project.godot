@@ -14,7 +14,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/adjacent_collision_shape_lookup.gd"
 }, {
-"base": "Spatial",
+"base": "Node",
 "class": "AmmoCollector",
 "language": "GDScript",
 "path": "res://src/scripts/player/ammo_collector.gd"
@@ -49,7 +49,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/scripts/data/attack_result_info.gd"
 }, {
-"base": "Spatial",
+"base": "Component",
 "class": "AutoPushComponent",
 "language": "GDScript",
 "path": "res://src/scripts/components/auto_push_component.gd"

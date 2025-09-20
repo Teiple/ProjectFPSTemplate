@@ -1,3 +1,6 @@
+## Require a AutoPushComponent from the player to detect collision
+## between the player and the holding object
+## Require ViewModelActionController to call this
 class_name GrabComponent
 extends Spatial
 
@@ -10,14 +13,16 @@ enum Axis {
 	FORWARD = 5,
 }
 
+signal object_released
+
 export var _drop_distance : float = 1.0
 export var _max_distance : float = 2.0
 export var _max_speed : float = 5.0
 export var _follow_speed : float = 10.0
 export var _angular_follow_speed : float = 10.0
 export var _min_time_before_drop_check : float = 1.0
-export var _auto_push_component_path : NodePath = ""
 export(int, LAYERS_3D_PHYSICS) var _pin_joint_pin_mask : int = 0
+export var _ammo_collector_path : NodePath = ""
 
 onready var _raycast : RayCast = $RayCast
 onready var _grab_position : Spatial = $GrabPosition
@@ -27,30 +32,39 @@ onready var _pin_join_pin: KinematicBody = $GrabPosition/PinJointPin
 var _current_physical_comp : PhysicalObjectComponent = null
 var _grab_start_time : float = 0.0
 var _auto_push_component : AutoPushComponent = null
+var _ammo_collector : AmmoCollector = null
 
 
 func _ready() -> void:
 	_raycast.cast_to = Vector3.FORWARD * _max_distance
-	_auto_push_component = get_node_or_null(_auto_push_component_path) as AutoPushComponent
 	_pin_joint.set_node_a(_pin_joint.get_path_to(_pin_join_pin))
+	_ammo_collector = get_node(_ammo_collector_path) as AmmoCollector
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact"):
-		if _current_physical_comp != null:
-			_release_object()
-			_current_physical_comp = null
-		else:
-			try_grab_object()
+func toggle_grabbing():
+	if _current_physical_comp != null:
+		_release_object()
+		_current_physical_comp = null
+	else:
+		_try_grab_object()
 
 
-func try_grab_object() -> bool:
+func is_grabbing():
+	return _current_physical_comp != null
+
+
+func _try_grab_object() -> bool:
 	_raycast.force_raycast_update()
 	
 	if !_raycast.is_colliding():
 		return false
 	
 	var collider = _raycast.get_collider()
+	# See if AmmoCollector recognize this object as a WeaponDrop
+	if _ammo_collector.try_collect(collider):
+		return false
+	
+	
 	if !(collider is RigidBody):
 		return false
 	
@@ -81,14 +95,11 @@ func try_grab_object() -> bool:
 func _physics_process(delta: float) -> void:
 	global_transform = _get_player().get_camera_global_transform()
 	
-	if _current_physical_comp == null || _auto_push_component == null:
+	if _current_physical_comp == null:
 		return
-	
-	# Objects like weapon drops may trigger an equipment instead,
-	# therefore the their physical objects will be delete
-	if !is_instance_valid(_current_physical_comp):
-		_current_physical_comp = null
-		return
+	# Lazy load this component since we were ready before Player was 
+	if _auto_push_component == null:
+		_auto_push_component = _get_player_auto_push_component()
 	
 	var cur_pin_pos = _pin_join_pin.global_position
 	var cur_phys_obj_pos = _current_physical_comp.get_physical_object_position()
@@ -126,10 +137,21 @@ func _release_object() -> void:
 	
 	_current_physical_comp.set_physical_object_gravity(true)
 	_current_physical_comp = null
+	
+	emit_signal("object_released")
 
 
 func _get_player() -> Player:
-	return owner as Player
+	return Global.get_game_world().get_player()
+
+
+func _get_player_auto_push_component() -> AutoPushComponent:
+	var player = _get_player()
+	var auto_push_comp =  Component.find(_get_player(), AutoPushComponent.get_component_name()) as AutoPushComponent
+	if auto_push_comp == null:
+		push_error("AutoPushComponent couldn't be found on Player. GrabComponent requires AutoPushComponent to check collisions between them and the holding object.")
+		return null
+	return auto_push_comp
 
 
 func _orientate_physical_object() -> Vector3:

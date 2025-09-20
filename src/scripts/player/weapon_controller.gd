@@ -5,26 +5,27 @@ signal weapon_changed
 signal weapon_changed_immediate
 signal auto_reload_requested
 
-const MAX_SLOTS : int = 4
+const MAX_SLOTS : int = 4 
 
-export var weapons_path : NodePath = ""
-export var ammo_inventory_path : NodePath = ""
-export var auto_equip_new_weapon : bool = true
-export var auto_reload : bool = true
-export var precise_shot_cool_down : float = 0.5
+export var _weapons_path : NodePath = ""
+export var _ammo_inventory_path : NodePath = ""
+export var _auto_equip_new_weapon : bool = true
+export var _auto_reload : bool = true
+export var _precise_shot_cool_down : float = 0.5
 
 # onready var aim_raycast : RayCast = $AimRayCast
 export(int, LAYERS_3D_PHYSICS) var aim_layer_mask : int = 0
-onready var projectile_start_point_check_raycast: RayCast = $ProjectileStartPointCheckRaycast
+
+onready var _projectile_start_point_check_raycast: RayCast = $ProjectileStartPointCheckRaycast
 
 var _weapons_node : Spatial = null
 var _current_weapon : Weapon = null
 var _ammo_inventory : AmmoInventory = null
 
 
-func _ready():
-	_weapons_node = get_node(weapons_path)
-	_ammo_inventory = get_node(ammo_inventory_path)
+func _ready() -> void:
+	_weapons_node = get_node(_weapons_path)
+	_ammo_inventory = get_node(_ammo_inventory_path)
 	
 	# Intialize first weapon
 	_cycle_weapon(1)
@@ -177,7 +178,7 @@ func add_new_weapon(new_weapon : Weapon):
 		return
 	_weapons_node.add_child(new_weapon)
 	var new_slot = new_weapon.get_weapon_stats().weapon_slot
-	if auto_equip_new_weapon:
+	if _auto_equip_new_weapon:
 		select_weapon(new_slot)
 
 
@@ -191,7 +192,7 @@ func replace_weapon(new_weapon : Weapon) -> void:
 	_weapons_node.remove_child(old_weapon)
 	_weapons_node.add_child(new_weapon)
 	
-	if auto_equip_new_weapon:
+	if _auto_equip_new_weapon:
 		select_weapon(replaced_slot)
 
 
@@ -212,7 +213,7 @@ func try_auto_load() -> bool:
 
 
 func _can_auto_reload_now() -> bool:
-	return auto_reload && _current_weapon != null && _current_weapon.get_current_ammo() == 0 && _ammo_inventory.can_reload_weapon(_current_weapon) 
+	return _auto_reload && _current_weapon != null && _current_weapon.get_current_ammo() == 0 && _ammo_inventory.can_reload_weapon(_current_weapon) 
 
 
 # Check if weapon is ready to fire, if weapon has no ammo, an empty click sound is played 
@@ -283,7 +284,7 @@ func fire() -> void:
 	
 	var ammo_to_fire = min(stats.ammo_per_shot, _current_weapon.get_current_ammo())
 	
-	var precise_shot = FrameTime.process_time() - _current_weapon.get_last_fire() >= precise_shot_cool_down
+	var precise_shot = FrameTime.process_time() - _current_weapon.get_last_fire() >= _precise_shot_cool_down
 	
 	for i in ammo_to_fire:
 		for j in stats.projectiles_per_ammo:
@@ -334,10 +335,10 @@ func _fire_projectile_weapon(attack_origin : AttackOriginInfo) -> void:
 	attack_origin.base_direction = -arms.global_transform.basis.z
 	
 	var weapon_can_fire_from_muzzle = _current_weapon.can_fire_from_muzzle(aim_layer_mask)
-	projectile_start_point_check_raycast.collision_mask = attack_origin.collision_mask
-	projectile_start_point_check_raycast.cast_to = projectile_start_point_check_raycast.to_local(_current_weapon.get_muzzle_position())
-	projectile_start_point_check_raycast.force_raycast_update()
-	var is_obstructed = projectile_start_point_check_raycast.is_colliding()
+	_projectile_start_point_check_raycast.collision_mask = attack_origin.collision_mask
+	_projectile_start_point_check_raycast.cast_to = _projectile_start_point_check_raycast.to_local(_current_weapon.get_muzzle_position())
+	_projectile_start_point_check_raycast.force_raycast_update()
+	var is_obstructed = _projectile_start_point_check_raycast.is_colliding()
 	
 	if !is_obstructed && weapon_can_fire_from_muzzle:
 		attack_origin.fire_from = _current_weapon.get_muzzle_position()

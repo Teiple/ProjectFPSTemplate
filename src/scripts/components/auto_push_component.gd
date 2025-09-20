@@ -1,5 +1,5 @@
 class_name AutoPushComponent
-extends Spatial
+extends Component
 
 export var margin : float = 0.1
 export var push_force : float = 2.0
@@ -8,6 +8,10 @@ onready var _touching_check: ShapeCast = $TouchingCheck
 onready var _ground_check: ShapeCast = $GroundCheck
 
 var _is_crouching : bool = false
+
+# Override
+static func get_component_name() -> String:
+	return "AutoPushComponent"
 
 
 func _process(delta: float) -> void:

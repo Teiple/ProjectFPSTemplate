@@ -1,3 +1,4 @@
+## Handle activation of weapon-releated actions through input
 class_name ViewModelActionController
 extends Node
 
@@ -9,23 +10,25 @@ const INTERMEDIATE_SUFFIX : String = "_intermediate"
 const LOCAL_TRANSITIONS : String = "local_animation_transition_subscribers"
 const GLOBAL_TRANSITION_TARGET : String = "global_animation_transition_target"
 
-export var weapon_controller_path : NodePath = ""
-export var weapon_action_controller_path : NodePath = ""
-export var animation_tree_path : NodePath = ""
-export var animation_config_resource : Resource = null
+export var _weapon_controller_path : NodePath = ""
+export var _weapon_action_controller_path : NodePath = ""
+export var _animation_tree_path : NodePath = ""
+export var _grab_component_path : NodePath = ""
 
 var _weapon_controller : WeaponController = null
 var _animation_tree : AnimationTree = null
 var _weapon_action_controller : WeaponActionController = null
+var _grab_component : GrabComponent = null
 var _is_processing_pulse : bool = false
 
 var _start_press_time : float = 0.0
 
 
 func _ready():
-	_weapon_controller = get_node(weapon_controller_path)
-	_weapon_action_controller = get_node(weapon_action_controller_path)
-	_animation_tree = get_node(animation_tree_path)
+	_weapon_controller = get_node(_weapon_controller_path)
+	_weapon_action_controller = get_node(_weapon_action_controller_path)
+	_animation_tree = get_node(_animation_tree_path)
+	_grab_component = get_node(_grab_component_path)
 	
 	# Process auto reload signal from WeaponController
 	_weapon_controller.connect("auto_reload_requested", self, "_on_auto_reload_requested")
@@ -33,10 +36,20 @@ func _ready():
 	_weapon_controller.connect("weapon_changed", self, "_on_weapon_changed")
 	# Used for loading into instant idle animation
 	_weapon_controller.connect("weapon_changed_immediate", self, "_on_weapon_changed_immediate")
-
+	# Process object released signal from GrabComponent
+	_grab_component.connect("object_released", self, "_on_grabbing_object_released")
 
 
 func _process(delta):
+	if Input.is_action_just_pressed("interact") && _grab_component.is_grabbing():
+		_grab_component.toggle_grabbing()
+		if !_grab_component.is_grabbing():
+			_trigger_event("equip")
+		return
+	
+	if _grab_component.is_grabbing():
+		return
+	
 	if Input.is_action_just_pressed("fire"):
 		_start_press_time = FrameTime.process_time()
 	
@@ -61,8 +74,15 @@ func _process(delta):
 		_trigger_event("fire")
 		return
 	
-	if Input.is_action_pressed("reload") && _weapon_controller.can_reload():
+	if Input.is_action_just_pressed("reload") && _weapon_controller.can_reload():
 		_trigger_event("reload")
+		return
+	
+	if Input.is_action_just_pressed("interact") && !_grab_component.is_grabbing():
+		_grab_component.toggle_grabbing()
+		# If successfully grab and hold something, unequip weapon until the object is released
+		if _grab_component.is_grabbing():
+			_trigger_event("unequip")
 		return
 
 
@@ -76,6 +96,10 @@ func _on_weapon_changed():
 
 func _on_weapon_changed_immediate():
 	_trigger_event("idle")
+
+
+func _on_grabbing_object_released():
+	_trigger_event("equip")
 
 
 func _trigger_event(event_name : String):
@@ -124,7 +148,9 @@ func _try_local_transition(weapon_id : String, from : String, to : String) -> bo
 	
 	var current_state = weapon_playback.get_current_node()
 	
-	# AVOIDED BUG: There is a bug(?) where traveling into the same state for both parent and sub statemachine prevents sub statemachine from auto-advance
+	# AVOIDED BUG: There is a bug(?) where traveling into the same state
+	# for both parent and sub statemachine prevents sub statemachine
+	# from auto-advance
 	
 	if from == ANY_STATE_IMMEDIATE:
 		weapon_playback.start(to)

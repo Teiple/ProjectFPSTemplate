@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/scripts/player/player.gd" type="Script" id=1]
 [ext_resource path="res://src/scenes/player/arms.tscn" type="PackedScene" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://textures/effects/simple_effect_1.png" type="Texture" id=5]
 [ext_resource path="res://src/scenes/components/auto_push_component.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/scenes/components/game_state_component.tscn" type="PackedScene" id=7]
-[ext_resource path="res://src/scenes/components/grab_component.tscn" type="PackedScene" id=8]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 0.2
@@ -60,6 +59,3 @@ material/0 = SubResource( 4 )
 save_section_id = 1
 
 [node name="AutoPushComponent" parent="." instance=ExtResource( 6 )]
-
-[node name="GrabComponent" parent="." instance=ExtResource( 8 )]
-_auto_push_component_path = NodePath("../AutoPushComponent")

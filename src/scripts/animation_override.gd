@@ -1,7 +1,7 @@
 class_name AnimationOverride
 extends Node
 
-export var animation_player_path : NodePath = ""
+export var _animation_player_path : NodePath = ""
 
 func _ready():
 	var replace_scene_path = GameConfig.get_config_value(GlobalData.ConfigId.ANIMATION_CONFIG, ["animation_player", "saving_directory"], "") \
@@ -22,4 +22,4 @@ func _ready():
 
 
 func get_animation_player() -> AnimationPlayer:
-	return get_node(animation_player_path) as AnimationPlayer
+	return get_node(_animation_player_path) as AnimationPlayer
