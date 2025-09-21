@@ -16,6 +16,11 @@ func apply_impulse(apply_position : Vector3, apply_direction : Vector3, apply_fo
 	physical_obj.apply_impulse(apply_position - global_position, apply_direction * apply_force)
 
 
+func apply_central_impulse(apply_direction : Vector3, apply_force : float) -> void:
+	var physical_obj = get_physical_object()
+	physical_obj.apply_central_impulse(apply_direction * apply_force)
+
+
 func apply_force(apply_position : Vector3, apply_direction : Vector3, apply_force : float) -> void:
 	var physical_obj = get_physical_object()
 	physical_obj.add_force(apply_direction * apply_force, apply_position - global_position)

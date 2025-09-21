@@ -23,6 +23,7 @@ export var _angular_follow_speed : float = 10.0
 export var _min_time_before_drop_check : float = 1.0
 export(int, LAYERS_3D_PHYSICS) var _pin_joint_pin_mask : int = 0
 export var _ammo_collector_path : NodePath = ""
+export var _throw_force : float = 4.0
 
 onready var _raycast : RayCast = $RayCast
 onready var _grab_position : Spatial = $GrabPosition
@@ -141,6 +142,15 @@ func _release_object() -> void:
 	emit_signal("object_released")
 
 
+func throw_object() -> void:
+	if _current_physical_comp == null:
+		return
+	var physical_comp = _current_physical_comp
+	_release_object()
+	var forward_dir = -_grab_position.global_transform.basis.z
+	physical_comp.apply_central_impulse(forward_dir, _throw_force)
+
+
 func _get_player() -> Player:
 	return Global.get_game_world().get_player()
 
@@ -160,7 +170,7 @@ func _orientate_physical_object() -> Vector3:
 	var target_back_axis = _grab_position.global_transform.basis.z
 	var target_up_axis = _grab_position.global_transform.basis.y
 	
-	var axes = {
+	var obj_axes = {
 		Axis.RIGHT : physical_obj.global_transform.basis.x,
 		Axis.LEFT : -physical_obj.global_transform.basis.x,
 		Axis.UP : physical_obj.global_transform.basis.y,
@@ -178,11 +188,13 @@ func _orientate_physical_object() -> Vector3:
 		Axis.BACK : Axis.FORWARD,
 	}
 	
-	var nearest_back_axis = _get_nearest_axis(target_back_axis, axes)
-	axes.erase(nearest_back_axis)
-	axes.erase(opposite_axes[nearest_back_axis])
-	var nearest_up_axis = _get_nearest_axis(target_up_axis, axes)
-	axes.clear()
+	# The axis from the object's basis that is nearest to the
+	# direction from grab position to the view in term of angle  
+	var nearest_back_axis = _get_nearest_axis(target_back_axis, obj_axes)
+	obj_axes.erase(nearest_back_axis)
+	obj_axes.erase(opposite_axes[nearest_back_axis])
+	var nearest_up_axis = _get_nearest_axis(target_up_axis, obj_axes)
+	obj_axes.clear()
 	
 	var current_quat = Quat(physical_obj.global_transform.basis)
 	
@@ -203,7 +215,7 @@ func _orientate_physical_object() -> Vector3:
 		new_basis_axes[opposite_axes[nearest_up_axis]] = -target_up_axis
 	
 	if new_basis_axes[Axis.RIGHT] == null:
-		new_basis_axes[Axis.RIGHT] = new_basis_axes[Axis.BACK].cross(new_basis_axes[Axis.UP]).normalized()
+		new_basis_axes[Axis.RIGHT] = new_basis_axes[Axis.UP].cross(new_basis_axes[Axis.BACK]).normalized()
 	elif new_basis_axes[Axis.UP] == null:
 		new_basis_axes[Axis.UP] = new_basis_axes[Axis.BACK].cross(new_basis_axes[Axis.RIGHT]).normalized()
 	elif new_basis_axes[Axis.BACK] == null:

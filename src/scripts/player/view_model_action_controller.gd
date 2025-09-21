@@ -41,13 +41,14 @@ func _ready():
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("interact") && _grab_component.is_grabbing():
-		_grab_component.toggle_grabbing()
+	if _grab_component.is_grabbing():
+		if Input.is_action_just_pressed("interact"):
+			_grab_component.toggle_grabbing()
+		elif Input.is_action_just_pressed("fire"):
+			_grab_component.throw_object()
+		# If successfully dropped the object
 		if !_grab_component.is_grabbing():
 			_trigger_event("equip")
-		return
-	
-	if _grab_component.is_grabbing():
 		return
 	
 	if Input.is_action_just_pressed("fire"):
